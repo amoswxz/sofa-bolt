@@ -15,9 +15,6 @@
  */
 package com.alipay.remoting.codec;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.CompositeByteBuf;
@@ -28,11 +25,14 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.DecoderException;
 import io.netty.util.internal.RecyclableArrayList;
 import io.netty.util.internal.StringUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * This class mainly hack the {@link io.netty.handler.codec.ByteToMessageDecoder} to provide batch submission capability.
- * This can be used the same way as ByteToMessageDecoder except the case your following inbound handler may get a decoded msg,
- * which actually is an array list, then you can submit the list of msgs to an executor to process. For example
+ * This class mainly hack the {@link io.netty.handler.codec.ByteToMessageDecoder} to provide batch submission
+ * capability. This can be used the same way as ByteToMessageDecoder except the case your following inbound handler may
+ * get a decoded msg, which actually is an array list, then you can submit the list of msgs to an executor to process.
+ * For example
  * <pre>
  *   if (msg instanceof List) {
  *       processorManager.getDefaultExecutor().execute(new Runnable() {
@@ -47,10 +47,11 @@ import io.netty.util.internal.StringUtil;
  *       process(ctx, msg);
  *   }
  * </pre>
- * You can check the method {@link AbstractBatchDecoder#channelRead(ChannelHandlerContext, Object)} ()}
- *   to know the detail modification.
+ * You can check the method {@link AbstractBatchDecoder#channelRead(ChannelHandlerContext, Object)} ()} to know the
+ * detail modification.
  */
 public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter {
+
     /**
      * Cumulate {@link ByteBuf}s by merge them into one {@link ByteBuf}'s, using memory copies.
      */
@@ -139,8 +140,8 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     private int                   numReads;
 
     /**
-     * If set then only one message is decoded on each {@link #channelRead(ChannelHandlerContext, Object)}
-     * call. This may be useful if you need to do some protocol upgrade and want to make sure nothing is mixed up.
+     * If set then only one message is decoded on each {@link #channelRead(ChannelHandlerContext, Object)} call. This
+     * may be useful if you need to do some protocol upgrade and want to make sure nothing is mixed up.
      *
      * Default is {@code false} as this has performance impacts.
      */
@@ -149,8 +150,8 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     }
 
     /**
-     * If {@code true} then only one message is decoded on each
-     * {@link #channelRead(ChannelHandlerContext, Object)} call.
+     * If {@code true} then only one message is decoded on each {@link #channelRead(ChannelHandlerContext, Object)}
+     * call.
      *
      * Default is {@code false} as this has performance impacts.
      */
@@ -169,8 +170,8 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     }
 
     /**
-     * Set the number of reads after which {@link ByteBuf#discardSomeReadBytes()} are called and so free up memory.
-     * The default is {@code 16}.
+     * Set the number of reads after which {@link ByteBuf#discardSomeReadBytes()} are called and so free up memory. The
+     * default is {@code 16}.
      */
     public void setDiscardAfterReads(int discardAfterReads) {
         if (discardAfterReads <= 0) {
@@ -180,19 +181,17 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     }
 
     /**
-     * Returns the actual number of readable bytes in the internal cumulative
-     * buffer of this decoder. You usually do not need to rely on this value
-     * to write a decoder. Use it only when you must use it at your own risk.
-     * This method is a shortcut to {@link #internalBuffer() internalBuffer().readableBytes()}.
+     * Returns the actual number of readable bytes in the internal cumulative buffer of this decoder. You usually do not
+     * need to rely on this value to write a decoder. Use it only when you must use it at your own risk. This method is
+     * a shortcut to {@link #internalBuffer() internalBuffer().readableBytes()}.
      */
     protected int actualReadableBytes() {
         return internalBuffer().readableBytes();
     }
 
     /**
-     * Returns the internal cumulative buffer of this decoder. You usually
-     * do not need to access the internal buffer directly to write a decoder.
-     * Use it only when you must use it at your own risk.
+     * Returns the internal cumulative buffer of this decoder. You usually do not need to access the internal buffer
+     * directly to write a decoder. Use it only when you must use it at your own risk.
      */
     protected ByteBuf internalBuffer() {
         if (cumulation != null) {
@@ -227,9 +226,9 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     }
 
     /**
-     * This method has been modified to check the size of decoded msgs, which is represented by the
-     * local variable {@code RecyclableArrayList out}. If has decoded more than one msg,
-     * then construct an array list to submit all decoded msgs to the pipeline.
+     * This method has been modified to check the size of decoded msgs, which is represented by the local variable
+     * {@code RecyclableArrayList out}. If has decoded more than one msg, then construct an array list to submit all
+     * decoded msgs to the pipeline.
      *
      * @param ctx channel handler context
      * @param msg data
@@ -346,12 +345,12 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     }
 
     /**
-     * Called once data should be decoded from the given {@link ByteBuf}. This method will call
-     * {@link #decode(ChannelHandlerContext, ByteBuf, List)} as long as decoding should take place.
+     * Called once data should be decoded from the given {@link ByteBuf}. This method will call {@link
+     * #decode(ChannelHandlerContext, ByteBuf, List)} as long as decoding should take place.
      *
-     * @param ctx           the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
-     * @param in            the {@link ByteBuf} from which to read data
-     * @param out           the {@link List} to which decoded messages should be added
+     * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
+     * @param in the {@link ByteBuf} from which to read data
+     * @param out the {@link List} to which decoded messages should be added
      */
     protected void callDecode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         try {
@@ -394,11 +393,11 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     }
 
     /**
-     * Is called one last time when the {@link ChannelHandlerContext} goes in-active. Which means the
-     * {@link #channelInactive(ChannelHandlerContext)} was triggered.
+     * Is called one last time when the {@link ChannelHandlerContext} goes in-active. Which means the {@link
+     * #channelInactive(ChannelHandlerContext)} was triggered.
      *
-     * By default this will just call {@link #decode(ChannelHandlerContext, ByteBuf, List)} but sub-classes may
-     * override this for some special cleanup operation.
+     * By default this will just call {@link #decode(ChannelHandlerContext, ByteBuf, List)} but sub-classes may override
+     * this for some special cleanup operation.
      */
     protected void decodeLast(ChannelHandlerContext ctx, ByteBuf in, List<Object> out)
                                                                                       throws Exception {
@@ -417,23 +416,23 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
      * Cumulate {@link ByteBuf}s.
      */
     public interface Cumulator {
+
         /**
-         * Cumulate the given {@link ByteBuf}s and return the {@link ByteBuf} that holds the cumulated bytes.
-         * The implementation is responsible to correctly handle the life-cycle of the given {@link ByteBuf}s and so
-         * call {@link ByteBuf#release()} if a {@link ByteBuf} is fully consumed.
+         * Cumulate the given {@link ByteBuf}s and return the {@link ByteBuf} that holds the cumulated bytes. The
+         * implementation is responsible to correctly handle the life-cycle of the given {@link ByteBuf}s and so call
+         * {@link ByteBuf#release()} if a {@link ByteBuf} is fully consumed.
          */
         ByteBuf cumulate(ByteBufAllocator alloc, ByteBuf cumulation, ByteBuf in);
     }
 
     /**
-     * Decode the from one {@link ByteBuf} to an other. This method will be called till either the input
-     * {@link ByteBuf} has nothing to read when return from this method or till nothing was read from the input
-     * {@link ByteBuf}.
+     * Decode the from one {@link ByteBuf} to an other. This method will be called till either the input {@link ByteBuf}
+     * has nothing to read when return from this method or till nothing was read from the input {@link ByteBuf}.
      *
-     * @param ctx           the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
-     * @param in            the {@link ByteBuf} from which to read data
-     * @param out           the {@link List} to which decoded messages should be added
-     * @throws Exception    is thrown if an error accour
+     * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
+     * @param in the {@link ByteBuf} from which to read data
+     * @param out the {@link List} to which decoded messages should be added
+     * @throws Exception is thrown if an error accour
      */
     protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out)
                                                                                            throws Exception;

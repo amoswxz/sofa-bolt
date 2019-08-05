@@ -16,31 +16,38 @@
  */
 package com.alipay.remoting.codec;
 
-import java.util.List;
-
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.Protocol;
 import com.alipay.remoting.ProtocolCode;
 import com.alipay.remoting.ProtocolManager;
 import com.alipay.remoting.exception.CodecException;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import java.util.List;
 
 /**
- * Protocol code based decoder, the main decoder for a certain protocol, which is lead by one or multi bytes (magic code).
+ * Protocol code based decoder, the main decoder for a certain protocol, which is lead by one or multi bytes (magic
+ * code).
  *
  * Notice: this is not stateless, can not be noted as {@link io.netty.channel.ChannelHandler.Sharable}
+ *
  * @author xiaomin.cxm
  * @version $Id: ProtocolCodeBasedDecoder.java, v0.1 Mar 20, 2017 2:42:46 PM xiaomin.cxm Exp $
  */
 public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
-    /** by default, suggest design a single byte for protocol version. */
+
+    /**
+     * by default, suggest design a single byte for protocol version.
+     */
     public static final int DEFAULT_PROTOCOL_VERSION_LENGTH         = 1;
-    /** protocol version should be a positive number, we use -1 to represent illegal */
+    /**
+     * protocol version should be a positive number, we use -1 to represent illegal
+     */
     public static final int DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH = -1;
 
-    /** the length of protocol code */
+    /**
+     * the length of protocol code
+     */
     protected int           protocolCodeLength;
 
     public ProtocolCodeBasedDecoder(int protocolCodeLength) {
