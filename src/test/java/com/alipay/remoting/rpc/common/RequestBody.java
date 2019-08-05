@@ -21,35 +21,43 @@ import java.util.Random;
 
 /**
  * biz request as a demo
- * 
+ *
  * @author jiangping
  * @version $Id: RequestBody.java, v 0.1 2015-10-19 PM2:32:26 tao Exp $
  */
 public class RequestBody implements Serializable {
 
-    /** for serialization */
-    private static final long  serialVersionUID          = -1288207208017808618L;
+    /**
+     * for serialization
+     */
+    private static final long serialVersionUID = -1288207208017808618L;
 
-    public static final String DEFAULT_CLIENT_STR        = "HELLO WORLD! I'm from client";
-    public static final String DEFAULT_SERVER_STR        = "HELLO WORLD! I'm from server";
+    public static final String DEFAULT_CLIENT_STR = "HELLO WORLD! I'm from client";
+    public static final String DEFAULT_SERVER_STR = "HELLO WORLD! I'm from server";
     public static final String DEFAULT_SERVER_RETURN_STR = "HELLO WORLD! I'm server return";
     public static final String DEFAULT_CLIENT_RETURN_STR = "HELLO WORLD! I'm client return";
 
-    public static final String DEFAULT_ONEWAY_STR        = "HELLO WORLD! I'm oneway req";
-    public static final String DEFAULT_SYNC_STR          = "HELLO WORLD! I'm sync req";
-    public static final String DEFAULT_FUTURE_STR        = "HELLO WORLD! I'm future req";
-    public static final String DEFAULT_CALLBACK_STR      = "HELLO WORLD! I'm call back req";
+    public static final String DEFAULT_ONEWAY_STR = "HELLO WORLD! I'm oneway req";
+    public static final String DEFAULT_SYNC_STR = "HELLO WORLD! I'm sync req";
+    public static final String DEFAULT_FUTURE_STR = "HELLO WORLD! I'm future req";
+    public static final String DEFAULT_CALLBACK_STR = "HELLO WORLD! I'm call back req";
 
-    /** id */
-    private int                id;
+    /**
+     * id
+     */
+    private int id;
 
-    /** msg */
-    private String             msg;
+    /**
+     * msg
+     */
+    private String msg;
 
-    /** body */
-    private byte[]             body;
+    /**
+     * body
+     */
+    private byte[] body;
 
-    private Random             r                         = new Random();
+    private Random r = new Random();
 
     public RequestBody() {
         //json serializer need default constructor
@@ -69,7 +77,7 @@ public class RequestBody implements Serializable {
 
     /**
      * Getter method for property <tt>id</tt>.
-     * 
+     *
      * @return property value of id
      */
     public int getId() {
@@ -78,7 +86,7 @@ public class RequestBody implements Serializable {
 
     /**
      * Setter method for property <tt>id</tt>.
-     * 
+     *
      * @param id value to be assigned to property id
      */
     public void setId(int id) {
@@ -87,7 +95,7 @@ public class RequestBody implements Serializable {
 
     /**
      * Getter method for property <tt>msg</tt>.
-     * 
+     *
      * @return property value of msg
      */
     public String getMsg() {
@@ -96,14 +104,14 @@ public class RequestBody implements Serializable {
 
     /**
      * Setter method for property <tt>msg</tt>.
-     * 
+     *
      * @param msg value to be assigned to property msg
      */
     public void setMsg(String msg) {
         this.msg = msg;
     }
 
-    /** 
+    /**
      * @see java.lang.Object#toString()
      */
     @Override

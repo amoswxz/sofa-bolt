@@ -16,8 +16,6 @@
  */
 package com.alipay.remoting;
 
-import java.net.InetSocketAddress;
-
 import com.alipay.remoting.config.BoltOption;
 import com.alipay.remoting.config.BoltOptions;
 import com.alipay.remoting.config.ConfigManager;
@@ -25,30 +23,30 @@ import com.alipay.remoting.config.Configurable;
 import com.alipay.remoting.config.ConfigurableInstance;
 import com.alipay.remoting.config.configs.ConfigContainer;
 import com.alipay.remoting.config.configs.ConfigItem;
+import com.alipay.remoting.config.configs.ConfigType;
 import com.alipay.remoting.config.configs.DefaultConfigContainer;
 import com.alipay.remoting.config.switches.GlobalSwitch;
-import org.slf4j.Logger;
-
-import com.alipay.remoting.config.configs.ConfigType;
 import com.alipay.remoting.log.BoltLoggerFactory;
+import java.net.InetSocketAddress;
+import org.slf4j.Logger;
 
 /**
  * Server template for remoting.
- * 
+ *
  * @author jiangping
  * @version $Id: AbstractRemotingServer.java, v 0.1 2015-9-5 PM7:37:48 tao Exp $
  */
 public abstract class AbstractRemotingServer extends AbstractLifeCycle implements RemotingServer,
-                                                                      ConfigurableInstance {
+        ConfigurableInstance {
 
-    private static final Logger   logger = BoltLoggerFactory.getLogger("CommonDefault");
+    private static final Logger logger = BoltLoggerFactory.getLogger("CommonDefault");
 
-    private String                ip;
-    private int                   port;
+    private String ip;
+    private int port;
 
-    private final BoltOptions     options;
-    private final ConfigType      configType;
-    private final GlobalSwitch    globalSwitch;
+    private final BoltOptions options;
+    private final ConfigType configType;
+    private final GlobalSwitch globalSwitch;
     private final ConfigContainer configContainer;
 
     public AbstractRemotingServer(int port) {

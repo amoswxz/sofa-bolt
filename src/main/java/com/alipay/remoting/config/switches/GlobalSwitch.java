@@ -16,16 +16,14 @@
  */
 package com.alipay.remoting.config.switches;
 
-import java.util.BitSet;
-
 import com.alipay.remoting.config.ConfigManager;
+import java.util.BitSet;
 
 /**
  * Global switches used in client or server
  * <p>
- * NOTICE:<br>
- * 1. system settings will take effect in all bolt client or server instances in one process<br>
- * 2. user settings will only take effect in the current instance of bolt client or server.
+ * NOTICE:<br> 1. system settings will take effect in all bolt client or server instances in one process<br> 2. user
+ * settings will only take effect in the current instance of bolt client or server.
  * <p/>
  *
  * @author tsui
@@ -34,19 +32,20 @@ import com.alipay.remoting.config.ConfigManager;
 public class GlobalSwitch implements Switch {
 
     // switches
-    public static final int CONN_RECONNECT_SWITCH           = 0;
-    public static final int CONN_MONITOR_SWITCH             = 1;
+    public static final int CONN_RECONNECT_SWITCH = 0;
+    public static final int CONN_MONITOR_SWITCH = 1;
     public static final int SERVER_MANAGE_CONNECTION_SWITCH = 2;
-    public static final int SERVER_SYNC_STOP                = 3;
-
-    /** user settings */
-    private BitSet          userSettings                    = new BitSet();
+    public static final int SERVER_SYNC_STOP = 3;
 
     /**
-     * Init with system default value
-     *   if settings exist by system property then use system property at first;
-     *   if no settings exist by system property then use default value in {@link com.alipay.remoting.config.Configs}
-     * All these settings can be overwrite by user api settings.
+     * user settings
+     */
+    private BitSet userSettings = new BitSet();
+
+    /**
+     * Init with system default value if settings exist by system property then use system property at first; if no
+     * settings exist by system property then use default value in {@link com.alipay.remoting.config.Configs} All these
+     * settings can be overwrite by user api settings.
      */
     public GlobalSwitch() {
         if (ConfigManager.conn_reconnect_switch()) {
