@@ -16,28 +16,26 @@
  */
 package com.alipay.remoting.rpc.common;
 
+import com.alipay.remoting.Connection;
+import com.alipay.remoting.ConnectionEventProcessor;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.junit.Assert;
-
-import com.alipay.remoting.Connection;
-import com.alipay.remoting.ConnectionEventProcessor;
 
 /**
  * ConnectionEventProcessor for ConnectionEventType.CONNECT
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: CONNECTEventProcessor.java, v 0.1 Apr 8, 2016 10:58:48 AM xiaomin.cxm Exp $
  */
 public class CONNECTEventProcessor implements ConnectionEventProcessor {
 
-    private AtomicBoolean  connected    = new AtomicBoolean();
-    private AtomicInteger  connectTimes = new AtomicInteger();
-    private Connection     connection;
-    private String         remoteAddr;
-    private CountDownLatch latch        = new CountDownLatch(1);
+    private AtomicBoolean connected = new AtomicBoolean();
+    private AtomicInteger connectTimes = new AtomicInteger();
+    private Connection connection;
+    private String remoteAddr;
+    private CountDownLatch latch = new CountDownLatch(1);
 
     @Override
     public void onEvent(String remoteAddr, Connection conn) {
@@ -52,7 +50,6 @@ public class CONNECTEventProcessor implements ConnectionEventProcessor {
 
     /**
      * do check connection
-     * @param conn
      */
     private void doCheckConnection(Connection conn) {
         Assert.assertNotNull(conn);

@@ -16,63 +16,61 @@
  */
 package com.alipay.remoting.rpc;
 
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.alipay.remoting.AbstractBoltClient;
-import com.alipay.remoting.ConnectionSelectStrategy;
-import com.alipay.remoting.DefaultClientConnectionManager;
-import com.alipay.remoting.LifeCycleException;
-import com.alipay.remoting.Reconnector;
-import com.alipay.remoting.config.BoltGenericOption;
-import org.slf4j.Logger;
-
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.ConnectionEventHandler;
 import com.alipay.remoting.ConnectionEventListener;
 import com.alipay.remoting.ConnectionEventProcessor;
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.ConnectionMonitorStrategy;
+import com.alipay.remoting.ConnectionSelectStrategy;
+import com.alipay.remoting.DefaultClientConnectionManager;
 import com.alipay.remoting.DefaultConnectionManager;
 import com.alipay.remoting.DefaultConnectionMonitor;
 import com.alipay.remoting.InvokeCallback;
 import com.alipay.remoting.InvokeContext;
+import com.alipay.remoting.LifeCycleException;
 import com.alipay.remoting.RandomSelectStrategy;
 import com.alipay.remoting.ReconnectManager;
+import com.alipay.remoting.Reconnector;
 import com.alipay.remoting.RemotingAddressParser;
 import com.alipay.remoting.ScheduledDisconnectStrategy;
 import com.alipay.remoting.Url;
+import com.alipay.remoting.config.BoltGenericOption;
 import com.alipay.remoting.config.switches.GlobalSwitch;
 import com.alipay.remoting.exception.RemotingException;
 import com.alipay.remoting.log.BoltLoggerFactory;
 import com.alipay.remoting.rpc.protocol.UserProcessor;
 import com.alipay.remoting.rpc.protocol.UserProcessorRegisterHelper;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import org.slf4j.Logger;
 
 /**
  * Client for Rpc.
- * 
+ *
  * @author jiangping
  * @version $Id: RpcClient.java, v 0.1 2015-9-23 PM4:03:28 tao Exp $
  */
 public class RpcClient extends AbstractBoltClient {
 
-    private static final Logger                               logger = BoltLoggerFactory
-                                                                         .getLogger("RpcRemoting");
+    private static final Logger logger = BoltLoggerFactory
+            .getLogger("RpcRemoting");
 
-    private final RpcTaskScanner                              taskScanner;
+    private final RpcTaskScanner taskScanner;
     private final ConcurrentHashMap<String, UserProcessor<?>> userProcessors;
-    private final ConnectionEventHandler                      connectionEventHandler;
-    private final ConnectionEventListener                     connectionEventListener;
+    private final ConnectionEventHandler connectionEventHandler;
+    private final ConnectionEventListener connectionEventListener;
 
-    private DefaultClientConnectionManager                    connectionManager;
-    private Reconnector                                       reconnectManager;
-    private RemotingAddressParser                             addressParser;
-    private DefaultConnectionMonitor                          connectionMonitor;
-    private ConnectionMonitorStrategy                         monitorStrategy;
+    private DefaultClientConnectionManager connectionManager;
+    private Reconnector reconnectManager;
+    private RemotingAddressParser addressParser;
+    private DefaultConnectionMonitor connectionMonitor;
+    private ConnectionMonitorStrategy monitorStrategy;
 
     // used in RpcClientAdapter (bolt-tr-adapter)
-    protected RpcRemoting                                     rpcRemoting;
+    protected RpcRemoting rpcRemoting;
 
     public RpcClient() {
         this.taskScanner = new RpcTaskScanner();
@@ -93,8 +91,8 @@ public class RpcClient extends AbstractBoltClient {
      * Shutdown.
      * <p>
      * Notice:<br>
-     *   <li>Rpc client can not be used any more after shutdown.
-     *   <li>If you need, you should destroy it, and instantiate another one.
+     * <li>Rpc client can not be used any more after shutdown.
+     * <li>If you need, you should destroy it, and instantiate another one.
      */
     @Override
     public void shutdown() {
@@ -125,22 +123,22 @@ public class RpcClient extends AbstractBoltClient {
             connectionSelectStrategy = new RandomSelectStrategy(switches());
         }
         this.connectionManager = new DefaultClientConnectionManager(connectionSelectStrategy,
-            new RpcConnectionFactory(userProcessors, this), connectionEventHandler,
-            connectionEventListener, switches());
+                new RpcConnectionFactory(userProcessors, this), connectionEventHandler,
+                connectionEventListener, switches());
         this.connectionManager.setAddressParser(this.addressParser);
         this.connectionManager.startup();
         this.rpcRemoting = new RpcClientRemoting(new RpcCommandFactory(), this.addressParser,
-            this.connectionManager);
+                this.connectionManager);
         this.taskScanner.add(this.connectionManager);
         this.taskScanner.startup();
 
         if (switches().isOn(GlobalSwitch.CONN_MONITOR_SWITCH)) {
             if (monitorStrategy == null) {
                 connectionMonitor = new DefaultConnectionMonitor(new ScheduledDisconnectStrategy(),
-                    this.connectionManager);
+                        this.connectionManager);
             } else {
                 connectionMonitor = new DefaultConnectionMonitor(monitorStrategy,
-                    this.connectionManager);
+                        this.connectionManager);
             }
             connectionMonitor.startup();
             logger.warn("Switch on connection monitor");
@@ -156,27 +154,27 @@ public class RpcClient extends AbstractBoltClient {
 
     @Override
     public void oneway(final String address, final Object request) throws RemotingException,
-                                                                  InterruptedException {
+            InterruptedException {
         this.rpcRemoting.oneway(address, request, null);
     }
 
     @Override
     public void oneway(final String address, final Object request, final InvokeContext invokeContext)
-                                                                                                     throws RemotingException,
-                                                                                                     InterruptedException {
+            throws RemotingException,
+            InterruptedException {
         this.rpcRemoting.oneway(address, request, invokeContext);
     }
 
     @Override
     public void oneway(final Url url, final Object request) throws RemotingException,
-                                                           InterruptedException {
+            InterruptedException {
         this.rpcRemoting.oneway(url, request, null);
     }
 
     @Override
     public void oneway(final Url url, final Object request, final InvokeContext invokeContext)
-                                                                                              throws RemotingException,
-                                                                                              InterruptedException {
+            throws RemotingException,
+            InterruptedException {
         this.rpcRemoting.oneway(url, request, invokeContext);
     }
 
@@ -187,153 +185,153 @@ public class RpcClient extends AbstractBoltClient {
 
     @Override
     public void oneway(final Connection conn, final Object request,
-                       final InvokeContext invokeContext) throws RemotingException {
+            final InvokeContext invokeContext) throws RemotingException {
         this.rpcRemoting.oneway(conn, request, invokeContext);
     }
 
     @Override
     public Object invokeSync(final String address, final Object request, final int timeoutMillis)
-                                                                                                 throws RemotingException,
-                                                                                                 InterruptedException {
+            throws RemotingException,
+            InterruptedException {
         return this.rpcRemoting.invokeSync(address, request, null, timeoutMillis);
     }
 
     @Override
     public Object invokeSync(final String address, final Object request,
-                             final InvokeContext invokeContext, final int timeoutMillis)
-                                                                                        throws RemotingException,
-                                                                                        InterruptedException {
+            final InvokeContext invokeContext, final int timeoutMillis)
+            throws RemotingException,
+            InterruptedException {
         return this.rpcRemoting.invokeSync(address, request, invokeContext, timeoutMillis);
     }
 
     @Override
     public Object invokeSync(final Url url, final Object request, final int timeoutMillis)
-                                                                                          throws RemotingException,
-                                                                                          InterruptedException {
+            throws RemotingException,
+            InterruptedException {
         return this.invokeSync(url, request, null, timeoutMillis);
     }
 
     @Override
     public Object invokeSync(final Url url, final Object request,
-                             final InvokeContext invokeContext, final int timeoutMillis)
-                                                                                        throws RemotingException,
-                                                                                        InterruptedException {
+            final InvokeContext invokeContext, final int timeoutMillis)
+            throws RemotingException,
+            InterruptedException {
         return this.rpcRemoting.invokeSync(url, request, invokeContext, timeoutMillis);
     }
 
     @Override
     public Object invokeSync(final Connection conn, final Object request, final int timeoutMillis)
-                                                                                                  throws RemotingException,
-                                                                                                  InterruptedException {
+            throws RemotingException,
+            InterruptedException {
         return this.rpcRemoting.invokeSync(conn, request, null, timeoutMillis);
     }
 
     @Override
     public Object invokeSync(final Connection conn, final Object request,
-                             final InvokeContext invokeContext, final int timeoutMillis)
-                                                                                        throws RemotingException,
-                                                                                        InterruptedException {
+            final InvokeContext invokeContext, final int timeoutMillis)
+            throws RemotingException,
+            InterruptedException {
         return this.rpcRemoting.invokeSync(conn, request, invokeContext, timeoutMillis);
     }
 
     @Override
     public RpcResponseFuture invokeWithFuture(final String address, final Object request,
-                                              final int timeoutMillis) throws RemotingException,
-                                                                      InterruptedException {
+            final int timeoutMillis) throws RemotingException,
+            InterruptedException {
         return this.rpcRemoting.invokeWithFuture(address, request, null, timeoutMillis);
     }
 
     @Override
     public RpcResponseFuture invokeWithFuture(final String address, final Object request,
-                                              final InvokeContext invokeContext,
-                                              final int timeoutMillis) throws RemotingException,
-                                                                      InterruptedException {
+            final InvokeContext invokeContext,
+            final int timeoutMillis) throws RemotingException,
+            InterruptedException {
         return this.rpcRemoting.invokeWithFuture(address, request, invokeContext, timeoutMillis);
     }
 
     @Override
     public RpcResponseFuture invokeWithFuture(final Url url, final Object request,
-                                              final int timeoutMillis) throws RemotingException,
-                                                                      InterruptedException {
+            final int timeoutMillis) throws RemotingException,
+            InterruptedException {
         return this.rpcRemoting.invokeWithFuture(url, request, null, timeoutMillis);
     }
 
     @Override
     public RpcResponseFuture invokeWithFuture(final Url url, final Object request,
-                                              final InvokeContext invokeContext,
-                                              final int timeoutMillis) throws RemotingException,
-                                                                      InterruptedException {
+            final InvokeContext invokeContext,
+            final int timeoutMillis) throws RemotingException,
+            InterruptedException {
         return this.rpcRemoting.invokeWithFuture(url, request, invokeContext, timeoutMillis);
     }
 
     @Override
     public RpcResponseFuture invokeWithFuture(final Connection conn, final Object request,
-                                              int timeoutMillis) throws RemotingException {
+            int timeoutMillis) throws RemotingException {
         return this.rpcRemoting.invokeWithFuture(conn, request, null, timeoutMillis);
     }
 
     @Override
     public RpcResponseFuture invokeWithFuture(final Connection conn, final Object request,
-                                              final InvokeContext invokeContext, int timeoutMillis)
-                                                                                                   throws RemotingException {
+            final InvokeContext invokeContext, int timeoutMillis)
+            throws RemotingException {
         return this.rpcRemoting.invokeWithFuture(conn, request, invokeContext, timeoutMillis);
     }
 
     @Override
     public void invokeWithCallback(final String address, final Object request,
-                                   final InvokeCallback invokeCallback, final int timeoutMillis)
-                                                                                                throws RemotingException,
-                                                                                                InterruptedException {
+            final InvokeCallback invokeCallback, final int timeoutMillis)
+            throws RemotingException,
+            InterruptedException {
         this.rpcRemoting.invokeWithCallback(address, request, null, invokeCallback, timeoutMillis);
     }
 
     @Override
     public void invokeWithCallback(final String address, final Object request,
-                                   final InvokeContext invokeContext,
-                                   final InvokeCallback invokeCallback, final int timeoutMillis)
-                                                                                                throws RemotingException,
-                                                                                                InterruptedException {
+            final InvokeContext invokeContext,
+            final InvokeCallback invokeCallback, final int timeoutMillis)
+            throws RemotingException,
+            InterruptedException {
         this.rpcRemoting.invokeWithCallback(address, request, invokeContext, invokeCallback,
-            timeoutMillis);
+                timeoutMillis);
     }
 
     @Override
     public void invokeWithCallback(final Url url, final Object request,
-                                   final InvokeCallback invokeCallback, final int timeoutMillis)
-                                                                                                throws RemotingException,
-                                                                                                InterruptedException {
+            final InvokeCallback invokeCallback, final int timeoutMillis)
+            throws RemotingException,
+            InterruptedException {
         this.rpcRemoting.invokeWithCallback(url, request, null, invokeCallback, timeoutMillis);
     }
 
     @Override
     public void invokeWithCallback(final Url url, final Object request,
-                                   final InvokeContext invokeContext,
-                                   final InvokeCallback invokeCallback, final int timeoutMillis)
-                                                                                                throws RemotingException,
-                                                                                                InterruptedException {
+            final InvokeContext invokeContext,
+            final InvokeCallback invokeCallback, final int timeoutMillis)
+            throws RemotingException,
+            InterruptedException {
         this.rpcRemoting.invokeWithCallback(url, request, invokeContext, invokeCallback,
-            timeoutMillis);
+                timeoutMillis);
     }
 
     @Override
     public void invokeWithCallback(final Connection conn, final Object request,
-                                   final InvokeCallback invokeCallback, final int timeoutMillis)
-                                                                                                throws RemotingException {
+            final InvokeCallback invokeCallback, final int timeoutMillis)
+            throws RemotingException {
         this.rpcRemoting.invokeWithCallback(conn, request, null, invokeCallback, timeoutMillis);
     }
 
     @Override
     public void invokeWithCallback(final Connection conn, final Object request,
-                                   final InvokeContext invokeContext,
-                                   final InvokeCallback invokeCallback, final int timeoutMillis)
-                                                                                                throws RemotingException {
+            final InvokeContext invokeContext,
+            final InvokeCallback invokeCallback, final int timeoutMillis)
+            throws RemotingException {
         this.rpcRemoting.invokeWithCallback(conn, request, invokeContext, invokeCallback,
-            timeoutMillis);
+                timeoutMillis);
     }
 
     @Override
     public void addConnectionEventProcessor(ConnectionEventType type,
-                                            ConnectionEventProcessor processor) {
+            ConnectionEventProcessor processor) {
         this.connectionEventListener.addConnectionEventProcessor(type, processor);
     }
 
@@ -344,13 +342,13 @@ public class RpcClient extends AbstractBoltClient {
 
     @Override
     public Connection createStandaloneConnection(String ip, int port, int connectTimeout)
-                                                                                         throws RemotingException {
+            throws RemotingException {
         return this.connectionManager.create(ip, port, connectTimeout);
     }
 
     @Override
     public Connection createStandaloneConnection(String address, int connectTimeout)
-                                                                                    throws RemotingException {
+            throws RemotingException {
         return this.connectionManager.create(address, connectTimeout);
     }
 
@@ -363,14 +361,14 @@ public class RpcClient extends AbstractBoltClient {
 
     @Override
     public Connection getConnection(String address, int connectTimeout) throws RemotingException,
-                                                                       InterruptedException {
+            InterruptedException {
         Url url = this.addressParser.parse(address);
         return this.getConnection(url, connectTimeout);
     }
 
     @Override
     public Connection getConnection(Url url, int connectTimeout) throws RemotingException,
-                                                                InterruptedException {
+            InterruptedException {
         url.setConnectTimeout(connectTimeout);
         return this.connectionManager.getAndCreateIfAbsent(url);
     }
@@ -395,8 +393,6 @@ public class RpcClient extends AbstractBoltClient {
 
     /**
      * Close all connections of a address
-     * 
-     * @param addr
      */
     public void closeConnection(String addr) {
         Url url = this.addressParser.parse(addr);

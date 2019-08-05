@@ -17,6 +17,7 @@
 package com.alipay.remoting;
 
 /**
+ * 链接状态触发的枚举
  * Event triggered by connection state.
  * 
  * @author jiangping
