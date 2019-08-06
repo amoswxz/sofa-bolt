@@ -110,11 +110,7 @@ public class RpcServer extends AbstractRemotingServer {
      * boss event loop group, boss group should not be daemon, need shutdown manually
      */
     private final EventLoopGroup bossGroup = NettyEventLoopUtil
-            .newEventLoopGroup(
-                    1,
-                    new NamedThreadFactory(
-                            "Rpc-netty-server-boss",
-                            false));
+            .newEventLoopGroup(1, new NamedThreadFactory("Rpc-netty-server-boss", false));
     /**
      * rpc remoting
      */
