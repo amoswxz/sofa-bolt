@@ -20,6 +20,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 线程工厂名称
  * Thread factory to name the thread purposely
  *
  * @author jiangping

@@ -100,6 +100,7 @@ public class RpcServer extends AbstractRemotingServer {
 
     static {
         if (workerGroup instanceof NioEventLoopGroup) {
+            //默认值为 50，即 I/O 操作和用户自定义任务的执行时间比为 1：1。
             ((NioEventLoopGroup) workerGroup).setIoRatio(ConfigManager.netty_io_ratio());
         } else if (workerGroup instanceof EpollEventLoopGroup) {
             ((EpollEventLoopGroup) workerGroup).setIoRatio(ConfigManager.netty_io_ratio());
