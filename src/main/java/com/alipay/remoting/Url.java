@@ -16,57 +16,78 @@
  */
 package com.alipay.remoting;
 
+import com.alipay.remoting.config.Configs;
+import com.alipay.remoting.log.BoltLoggerFactory;
+import com.alipay.remoting.rpc.protocol.RpcProtocolV2;
 import java.lang.ref.SoftReference;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.alipay.remoting.log.BoltLoggerFactory;
 import org.slf4j.Logger;
-
-import com.alipay.remoting.config.Configs;
-import com.alipay.remoting.rpc.protocol.RpcProtocolV2;
 
 /**
  * URL definition.
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: Url.java, v 0.1 Mar 11, 2016 6:01:59 PM xiaomin.cxm Exp $
  */
 public class Url {
-    /** origin url */
-    private String     originUrl;
 
-    /** ip, can be number format or hostname format*/
-    private String     ip;
-
-    /** port, should be integer between (0, 65535]*/
-    private int        port;
-
-    /** unique key of this url */
-    private String     uniqueKey;
-
-    /** URL args: timeout value when do connect */
-    private int        connectTimeout;
-
-    /** URL args: protocol */
-    private byte       protocol;
-
-    /** URL args: version */
-    private byte       version = RpcProtocolV2.PROTOCOL_VERSION_1;
-
-    /** URL agrs: connection number */
-    private int        connNum;
-
-    /** URL agrs: whether need warm up connection */
-    private boolean    connWarmup;
-
-    /** URL agrs: all parsed args of each originUrl */
+    /**
+     * logger
+     */
+    private static final Logger logger = BoltLoggerFactory
+            .getLogger("RpcRemoting");
+    /**
+     * Use {@link SoftReference} to cache parsed urls. Key is the original url.
+     */
+    public static ConcurrentHashMap<String, SoftReference<Url>> parsedUrls = new ConcurrentHashMap<String, SoftReference<Url>>();
+    /**
+     * for unit test only, indicate this object have already been GCed
+     */
+    public static volatile boolean isCollected = false;
+    /**
+     * origin url
+     */
+    private String originUrl;
+    /**
+     * ip, can be number format or hostname format
+     */
+    private String ip;
+    /**
+     * port, should be integer between (0, 65535]
+     */
+    private int port;
+    /**
+     * unique key of this url
+     */
+    private String uniqueKey;
+    /**
+     * URL args: timeout value when do connect
+     */
+    private int connectTimeout;
+    /**
+     * URL args: protocol
+     */
+    private byte protocol;
+    /**
+     * URL args: version
+     */
+    private byte version = RpcProtocolV2.PROTOCOL_VERSION_1;
+    /**
+     * URL agrs: connection number
+     */
+    private int connNum;
+    /**
+     * URL agrs: whether need warm up connection
+     */
+    private boolean connWarmup;
+    /**
+     * URL agrs: all parsed args of each originUrl
+     */
     private Properties properties;
 
     /**
      * Constructor with originUrl
-     * 
-     * @param originUrl
      */
     protected Url(String originUrl) {
         this.originUrl = originUrl;
@@ -77,10 +98,7 @@ public class Url {
      * <ul>
      * <li>Initialize ip:port as {@link Url#originUrl} </li>
      * <li>Initialize {@link Url#originUrl} as {@link Url#uniqueKey} </li>
-     * </ul> 
-     * 
-     * @param ip
-     * @param port
+     * </ul>
      */
     public Url(String ip, int port) {
         this(ip + RemotingAddressParser.COLON + port);
@@ -91,15 +109,11 @@ public class Url {
 
     /**
      * Constructor with originUrl, ip and port
-     * 
+     *
      * <ul>
      * <li>Initialize @param originUrl as {@link Url#originUrl} </li>
      * <li>Initialize ip:port as {@link Url#uniqueKey} </li>
-     * </ul> 
-     * 
-     * @param originUrl
-     * @param ip
-     * @param port
+     * </ul>
      */
     public Url(String originUrl, String ip, int port) {
         this(originUrl);
@@ -110,17 +124,12 @@ public class Url {
 
     /**
      * Constructor with originUrl, ip, port and properties
-     * 
+     *
      * <ul>
      * <li>Initialize @param originUrl as {@link Url#originUrl} </li>
      * <li>Initialize ip:port as {@link Url#uniqueKey} </li>
      * <li>Initialize @param properties as {@link Url#properties} </li>
-     * </ul> 
-     * 
-     * @param originUrl
-     * @param ip
-     * @param port
-     * @param properties
+     * </ul>
      */
     public Url(String originUrl, String ip, int port, Properties properties) {
         this(originUrl, ip, port);
@@ -129,18 +138,12 @@ public class Url {
 
     /**
      * Constructor with originUrl, ip, port, uniqueKey and properties
-     * 
+     *
      * <ul>
      * <li>Initialize @param originUrl as {@link Url#originUrl} </li>
      * <li>Initialize @param uniqueKey as {@link Url#uniqueKey} </li>
      * <li>Initialize @param properties as {@link Url#properties} </li>
      * </ul>
-     * 
-     * @param originUrl
-     * @param ip
-     * @param port
-     * @param uniqueKey
-     * @param properties
      */
     public Url(String originUrl, String ip, int port, String uniqueKey, Properties properties) {
         this(originUrl, ip, port);
@@ -150,7 +153,7 @@ public class Url {
 
     /**
      * Get property value according to property key
-     * 
+     *
      * @param key property key
      * @return property value
      */
@@ -184,7 +187,7 @@ public class Url {
     public void setConnectTimeout(int connectTimeout) {
         if (connectTimeout <= 0) {
             throw new IllegalArgumentException("Illegal value of connection number [" + connNum
-                                               + "], must be a positive integer].");
+                    + "], must be a positive integer].");
         }
         this.connectTimeout = connectTimeout;
     }
@@ -204,9 +207,9 @@ public class Url {
     public void setConnNum(int connNum) {
         if (connNum <= 0 || connNum > Configs.MAX_CONN_NUM_PER_URL) {
             throw new IllegalArgumentException("Illegal value of connection number [" + connNum
-                                               + "], must be an integer between ["
-                                               + Configs.DEFAULT_CONN_NUM_PER_URL + ", "
-                                               + Configs.MAX_CONN_NUM_PER_URL + "].");
+                    + "], must be an integer between ["
+                    + Configs.DEFAULT_CONN_NUM_PER_URL + ", "
+                    + Configs.MAX_CONN_NUM_PER_URL + "].");
         }
         this.connNum = connNum;
     }
@@ -247,7 +250,7 @@ public class Url {
         final int prime = 31;
         int result = 1;
         result = prime * result
-                 + ((this.getOriginUrl() == null) ? 0 : this.getOriginUrl().hashCode());
+                + ((this.getOriginUrl() == null) ? 0 : this.getOriginUrl().hashCode());
         return result;
     }
 
@@ -255,19 +258,9 @@ public class Url {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Origin url [").append(this.originUrl).append("], Unique key [")
-            .append(this.uniqueKey).append("].");
+                .append(this.uniqueKey).append("].");
         return sb.toString();
     }
-
-    /** Use {@link SoftReference} to cache parsed urls. Key is the original url. */
-    public static ConcurrentHashMap<String, SoftReference<Url>> parsedUrls  = new ConcurrentHashMap<String, SoftReference<Url>>();
-
-    /** for unit test only, indicate this object have already been GCed */
-    public static volatile boolean                              isCollected = false;
-
-    /** logger */
-    private static final Logger                                 logger      = BoltLoggerFactory
-                                                                                .getLogger("RpcRemoting");
 
     @Override
     protected void finalize() {
@@ -276,7 +269,7 @@ public class Url {
             parsedUrls.remove(this.getOriginUrl());
         } catch (Exception e) {
             logger.error("Exception occurred when do finalize for Url [{}].", this.getOriginUrl(),
-                e);
+                    e);
         }
     }
 

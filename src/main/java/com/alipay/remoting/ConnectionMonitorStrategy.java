@@ -16,10 +16,9 @@
  */
 package com.alipay.remoting;
 
+import com.alipay.remoting.util.RunStateRecordedFutureTask;
 import java.util.List;
 import java.util.Map;
-
-import com.alipay.remoting.util.RunStateRecordedFutureTask;
 
 /**
  * The strategy of connection monitor
@@ -42,8 +41,7 @@ public interface ConnectionMonitorStrategy {
     /**
      * Add a set of connections to monitor.
      * <p>
-     * The previous connections in monitor of this protocol,
-     * will be dropped by monitor automatically.
+     * The previous connections in monitor of this protocol, will be dropped by monitor automatically.
      *
      * @param connPools connection pools
      */

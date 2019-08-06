@@ -16,19 +16,6 @@
  */
 package com.alipay.remoting.rpc.prehandle;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.InvokeCallback;
 import com.alipay.remoting.exception.RemotingException;
@@ -41,32 +28,44 @@ import com.alipay.remoting.rpc.common.DISCONNECTEventProcessor;
 import com.alipay.remoting.rpc.common.PortScan;
 import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.common.SimpleClientUserProcessor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * test pre handle usage of UserProcessor
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: PrehandleTest.java, v 0.1 Jan 7, 2016 1:49:05 PM xiaomin.cxm Exp $
  */
 public class PrehandleTest {
-    static Logger             logger                    = LoggerFactory
-                                                            .getLogger(BasicUsageTest.class);
 
-    BoltServer                server;
-    RpcClient                 client;
+    static Logger logger = LoggerFactory
+            .getLogger(BasicUsageTest.class);
 
-    int                       port                      = PortScan.select();
-    String                    ip                        = "127.0.0.1";
-    String                    addr                      = "127.0.0.1:" + port;
+    BoltServer server;
+    RpcClient client;
 
-    int                       invokeTimes               = 5;
+    int port = PortScan.select();
+    String ip = "127.0.0.1";
+    String addr = "127.0.0.1:" + port;
 
-    PreHandleUserProcessor    serverUserProcessor       = new PreHandleUserProcessor();
-    SimpleClientUserProcessor clientUserProcessor       = new SimpleClientUserProcessor();
-    CONNECTEventProcessor     clientConnectProcessor    = new CONNECTEventProcessor();
-    CONNECTEventProcessor     serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor  clientDisConnectProcessor = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor  serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    int invokeTimes = 5;
+
+    PreHandleUserProcessor serverUserProcessor = new PreHandleUserProcessor();
+    SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor();
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
 
     @Before
     public void init() {

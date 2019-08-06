@@ -16,31 +16,29 @@
  */
 package com.alipay.remoting.rpc;
 
+import com.alipay.remoting.AbstractLifeCycle;
+import com.alipay.remoting.LifeCycleException;
+import com.alipay.remoting.NamedThreadFactory;
+import com.alipay.remoting.Scannable;
+import com.alipay.remoting.log.BoltLoggerFactory;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import com.alipay.remoting.AbstractLifeCycle;
-import com.alipay.remoting.LifeCycleException;
 import org.slf4j.Logger;
-
-import com.alipay.remoting.NamedThreadFactory;
-import com.alipay.remoting.Scannable;
-import com.alipay.remoting.log.BoltLoggerFactory;
 
 /**
  * Scanner is used to do scan task.
- * 
+ *
  * @author jiangping
  * @version $Id: RpcTaskScanner.java, v 0.1 Mar 4, 2016 3:30:52 PM tao Exp $
  */
 public class RpcTaskScanner extends AbstractLifeCycle {
 
-    private static final Logger      logger = BoltLoggerFactory.getLogger("RpcRemoting");
+    private static final Logger logger = BoltLoggerFactory.getLogger("RpcRemoting");
 
-    private final List<Scannable>    scanList;
+    private final List<Scannable> scanList;
 
     private ScheduledExecutorService scheduledService;
 
@@ -53,7 +51,7 @@ public class RpcTaskScanner extends AbstractLifeCycle {
         super.startup();
 
         scheduledService = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory(
-            "RpcTaskScannerThread", true));
+                "RpcTaskScannerThread", true));
         scheduledService.scheduleWithFixedDelay(new Runnable() {
 
             @Override

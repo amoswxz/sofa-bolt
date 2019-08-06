@@ -55,34 +55,34 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     /**
      * Cumulate {@link ByteBuf}s by merge them into one {@link ByteBuf}'s, using memory copies.
      */
-    public static final Cumulator MERGE_CUMULATOR     = new Cumulator() {
-                                                          @Override
-                                                          public ByteBuf cumulate(ByteBufAllocator alloc,
-                                                                                  ByteBuf cumulation,
-                                                                                  ByteBuf in) {
-                                                              ByteBuf buffer;
-                                                              if (cumulation.writerIndex() > cumulation
-                                                                  .maxCapacity()
-                                                                                             - in.readableBytes()
-                                                                  || cumulation.refCnt() > 1) {
-                                                                  // Expand cumulation (by replace it) when either there is not more room in the buffer
-                                                                  // or if the refCnt is greater then 1 which may happen when the user use slice().retain() or
-                                                                  // duplicate().retain().
-                                                                  //
-                                                                  // See:
-                                                                  // - https://github.com/netty/netty/issues/2327
-                                                                  // - https://github.com/netty/netty/issues/1764
-                                                                  buffer = expandCumulation(alloc,
-                                                                      cumulation,
-                                                                      in.readableBytes());
-                                                              } else {
-                                                                  buffer = cumulation;
-                                                              }
-                                                              buffer.writeBytes(in);
-                                                              in.release();
-                                                              return buffer;
-                                                          }
-                                                      };
+    public static final Cumulator MERGE_CUMULATOR = new Cumulator() {
+        @Override
+        public ByteBuf cumulate(ByteBufAllocator alloc,
+                ByteBuf cumulation,
+                ByteBuf in) {
+            ByteBuf buffer;
+            if (cumulation.writerIndex() > cumulation
+                    .maxCapacity()
+                    - in.readableBytes()
+                    || cumulation.refCnt() > 1) {
+                // Expand cumulation (by replace it) when either there is not more room in the buffer
+                // or if the refCnt is greater then 1 which may happen when the user use slice().retain() or
+                // duplicate().retain().
+                //
+                // See:
+                // - https://github.com/netty/netty/issues/2327
+                // - https://github.com/netty/netty/issues/1764
+                buffer = expandCumulation(alloc,
+                        cumulation,
+                        in.readableBytes());
+            } else {
+                buffer = cumulation;
+            }
+            buffer.writeBytes(in);
+            in.release();
+            return buffer;
+        }
+    };
 
     /**
      * Cumulate {@link ByteBuf}s by add them to a {@link CompositeByteBuf} and so do no memory copy whenever possible.
@@ -90,63 +90,61 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
      * and the decoder implementation this may be slower then just use the {@link #MERGE_CUMULATOR}.
      */
     public static final Cumulator COMPOSITE_CUMULATOR = new Cumulator() {
-                                                          @Override
-                                                          public ByteBuf cumulate(ByteBufAllocator alloc,
-                                                                                  ByteBuf cumulation,
-                                                                                  ByteBuf in) {
-                                                              ByteBuf buffer;
-                                                              if (cumulation.refCnt() > 1) {
-                                                                  // Expand cumulation (by replace it) when the refCnt is greater then 1 which may happen when the user
-                                                                  // use slice().retain() or duplicate().retain().
-                                                                  //
-                                                                  // See:
-                                                                  // - https://github.com/netty/netty/issues/2327
-                                                                  // - https://github.com/netty/netty/issues/1764
-                                                                  buffer = expandCumulation(alloc,
-                                                                      cumulation,
-                                                                      in.readableBytes());
-                                                                  buffer.writeBytes(in);
-                                                                  in.release();
-                                                              } else {
-                                                                  CompositeByteBuf composite;
-                                                                  if (cumulation instanceof CompositeByteBuf) {
-                                                                      composite = (CompositeByteBuf) cumulation;
-                                                                  } else {
-                                                                      int readable = cumulation
-                                                                          .readableBytes();
-                                                                      composite = alloc
-                                                                          .compositeBuffer();
-                                                                      composite.addComponent(
-                                                                          cumulation).writerIndex(
-                                                                          readable);
-                                                                  }
-                                                                  composite
-                                                                      .addComponent(in)
-                                                                      .writerIndex(
-                                                                          composite.writerIndex()
-                                                                                  + in.readableBytes());
-                                                                  buffer = composite;
-                                                              }
-                                                              return buffer;
-                                                          }
-                                                      };
+        @Override
+        public ByteBuf cumulate(ByteBufAllocator alloc,
+                ByteBuf cumulation,
+                ByteBuf in) {
+            ByteBuf buffer;
+            if (cumulation.refCnt() > 1) {
+                // Expand cumulation (by replace it) when the refCnt is greater then 1 which may happen when the user
+                // use slice().retain() or duplicate().retain().
+                //
+                // See:
+                // - https://github.com/netty/netty/issues/2327
+                // - https://github.com/netty/netty/issues/1764
+                buffer = expandCumulation(alloc,
+                        cumulation,
+                        in.readableBytes());
+                buffer.writeBytes(in);
+                in.release();
+            } else {
+                CompositeByteBuf composite;
+                if (cumulation instanceof CompositeByteBuf) {
+                    composite = (CompositeByteBuf) cumulation;
+                } else {
+                    int readable = cumulation
+                            .readableBytes();
+                    composite = alloc
+                            .compositeBuffer();
+                    composite.addComponent(
+                            cumulation).writerIndex(
+                            readable);
+                }
+                composite
+                        .addComponent(in)
+                        .writerIndex(
+                                composite.writerIndex()
+                                        + in.readableBytes());
+                buffer = composite;
+            }
+            return buffer;
+        }
+    };
 
-    ByteBuf                       cumulation;
-    private Cumulator             cumulator           = MERGE_CUMULATOR;
-    private boolean               singleDecode;
-    private boolean               decodeWasNull;
-    private boolean               first;
-    private int                   discardAfterReads   = 16;
-    private int                   numReads;
+    ByteBuf cumulation;
+    private Cumulator cumulator = MERGE_CUMULATOR;
+    private boolean singleDecode;
+    private boolean decodeWasNull;
+    private boolean first;
+    private int discardAfterReads = 16;
+    private int numReads;
 
-    /**
-     * If set then only one message is decoded on each {@link #channelRead(ChannelHandlerContext, Object)} call. This
-     * may be useful if you need to do some protocol upgrade and want to make sure nothing is mixed up.
-     *
-     * Default is {@code false} as this has performance impacts.
-     */
-    public void setSingleDecode(boolean singleDecode) {
-        this.singleDecode = singleDecode;
+    static ByteBuf expandCumulation(ByteBufAllocator alloc, ByteBuf cumulation, int readable) {
+        ByteBuf oldCumulation = cumulation;
+        cumulation = alloc.buffer(oldCumulation.readableBytes() + readable);
+        cumulation.writeBytes(oldCumulation);
+        oldCumulation.release();
+        return cumulation;
     }
 
     /**
@@ -157,6 +155,16 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
      */
     public boolean isSingleDecode() {
         return singleDecode;
+    }
+
+    /**
+     * If set then only one message is decoded on each {@link #channelRead(ChannelHandlerContext, Object)} call. This
+     * may be useful if you need to do some protocol upgrade and want to make sure nothing is mixed up.
+     *
+     * Default is {@code false} as this has performance impacts.
+     */
+    public void setSingleDecode(boolean singleDecode) {
+        this.singleDecode = singleDecode;
     }
 
     /**
@@ -377,8 +385,8 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
 
                 if (oldInputLength == in.readableBytes()) {
                     throw new DecoderException(
-                        StringUtil.simpleClassName(getClass())
-                                + ".decode() did not read anything but decoded a message.");
+                            StringUtil.simpleClassName(getClass())
+                                    + ".decode() did not read anything but decoded a message.");
                 }
 
                 if (isSingleDecode()) {
@@ -400,17 +408,21 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
      * this for some special cleanup operation.
      */
     protected void decodeLast(ChannelHandlerContext ctx, ByteBuf in, List<Object> out)
-                                                                                      throws Exception {
+            throws Exception {
         decode(ctx, in, out);
     }
 
-    static ByteBuf expandCumulation(ByteBufAllocator alloc, ByteBuf cumulation, int readable) {
-        ByteBuf oldCumulation = cumulation;
-        cumulation = alloc.buffer(oldCumulation.readableBytes() + readable);
-        cumulation.writeBytes(oldCumulation);
-        oldCumulation.release();
-        return cumulation;
-    }
+    /**
+     * Decode the from one {@link ByteBuf} to an other. This method will be called till either the input {@link ByteBuf}
+     * has nothing to read when return from this method or till nothing was read from the input {@link ByteBuf}.
+     *
+     * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
+     * @param in the {@link ByteBuf} from which to read data
+     * @param out the {@link List} to which decoded messages should be added
+     * @throws Exception is thrown if an error accour
+     */
+    protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out)
+            throws Exception;
 
     /**
      * Cumulate {@link ByteBuf}s.
@@ -424,16 +436,4 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
          */
         ByteBuf cumulate(ByteBufAllocator alloc, ByteBuf cumulation, ByteBuf in);
     }
-
-    /**
-     * Decode the from one {@link ByteBuf} to an other. This method will be called till either the input {@link ByteBuf}
-     * has nothing to read when return from this method or till nothing was read from the input {@link ByteBuf}.
-     *
-     * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
-     * @param in the {@link ByteBuf} from which to read data
-     * @param out the {@link List} to which decoded messages should be added
-     * @throws Exception is thrown if an error accour
-     */
-    protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out)
-                                                                                           throws Exception;
 }

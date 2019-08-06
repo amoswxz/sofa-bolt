@@ -16,29 +16,28 @@
  */
 package com.alipay.remoting.rpc.serializer;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.alipay.remoting.CustomSerializer;
 import com.alipay.remoting.DefaultCustomSerializer;
 import com.alipay.remoting.InvokeContext;
 import com.alipay.remoting.exception.DeserializationException;
 import com.alipay.remoting.exception.SerializationException;
 import com.alipay.remoting.rpc.ResponseCommand;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * a String serializer throw exception
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: NormalStringCustomSerializer.java, v 0.1 Apr 11, 2016 10:18:59 PM xiaomin.cxm Exp $
  */
 public class ExceptionStringCustomSerializer extends DefaultCustomSerializer {
 
-    private AtomicBoolean serialFlag               = new AtomicBoolean();
-    private AtomicBoolean deserialFlag             = new AtomicBoolean();
-    private boolean       serialException          = false;
-    private boolean       serialRuntimeException   = true;
-    private boolean       deserialException        = false;
-    private boolean       deserialRuntimeException = true;
+    private AtomicBoolean serialFlag = new AtomicBoolean();
+    private AtomicBoolean deserialFlag = new AtomicBoolean();
+    private boolean serialException = false;
+    private boolean serialRuntimeException = true;
+    private boolean deserialException = false;
+    private boolean deserialRuntimeException = true;
 
     public ExceptionStringCustomSerializer(boolean serialException, boolean deserialException) {
         this.serialException = serialException;
@@ -46,20 +45,20 @@ public class ExceptionStringCustomSerializer extends DefaultCustomSerializer {
     }
 
     public ExceptionStringCustomSerializer(boolean serialException, boolean serialRuntimeException,
-                                           boolean deserialException,
-                                           boolean deserialRuntimeException) {
+            boolean deserialException,
+            boolean deserialRuntimeException) {
         this.serialException = serialException;
         this.serialRuntimeException = serialRuntimeException;
         this.deserialException = deserialException;
         this.deserialRuntimeException = deserialRuntimeException;
     }
 
-    /** 
+    /**
      * @see CustomSerializer#serializeContent(ResponseCommand)
      */
     @Override
     public <T extends ResponseCommand> boolean serializeContent(T response)
-                                                                           throws SerializationException {
+            throws SerializationException {
         serialFlag.set(true);
         if (serialRuntimeException) {
             throw new RuntimeException("serialRuntimeException in ExceptionStringCustomSerializer!");
@@ -70,20 +69,20 @@ public class ExceptionStringCustomSerializer extends DefaultCustomSerializer {
         }
     }
 
-    /** 
+    /**
      * @see CustomSerializer#deserializeContent(ResponseCommand, InvokeContext)
      */
     @Override
     public <T extends ResponseCommand> boolean deserializeContent(T response,
-                                                                  InvokeContext invokeContext)
-                                                                                              throws DeserializationException {
+            InvokeContext invokeContext)
+            throws DeserializationException {
         deserialFlag.set(true);
         if (deserialRuntimeException) {
             throw new RuntimeException(
-                "deserialRuntimeException in ExceptionStringCustomSerializer!");
+                    "deserialRuntimeException in ExceptionStringCustomSerializer!");
         } else if (deserialException) {
             throw new DeserializationException(
-                "deserialException in ExceptionStringCustomSerializer!");
+                    "deserialException in ExceptionStringCustomSerializer!");
         } else {
             return false;// use default codec 
         }

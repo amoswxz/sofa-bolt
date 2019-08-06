@@ -16,44 +16,50 @@
  */
 package com.alipay.remoting.rpc.common;
 
+import com.alipay.remoting.AsyncContext;
+import com.alipay.remoting.BizContext;
+import com.alipay.remoting.NamedThreadFactory;
+import com.alipay.remoting.rpc.protocol.AsyncUserProcessor;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alipay.remoting.AsyncContext;
-import com.alipay.remoting.BizContext;
-import com.alipay.remoting.NamedThreadFactory;
-import com.alipay.remoting.rpc.protocol.AsyncUserProcessor;
-
 /**
  * a demo user processor
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: SimpleUserProcessor.java, v 0.1 Jan 7, 2016 3:01:49 PM xiaomin.cxm Exp $
  */
 public class AsyncExceptionUserProcessor extends AsyncUserProcessor<RequestBody> {
 
-    /** logger */
-    private static final Logger logger      = LoggerFactory
-                                                .getLogger(AsyncExceptionUserProcessor.class);
+    /**
+     * logger
+     */
+    private static final Logger logger = LoggerFactory
+            .getLogger(AsyncExceptionUserProcessor.class);
 
-    /** delay milliseconds */
-    private long                delayMs;
+    /**
+     * delay milliseconds
+     */
+    private long delayMs;
 
-    /** whether delay or not */
-    private boolean             delaySwitch;
+    /**
+     * whether delay or not
+     */
+    private boolean delaySwitch;
 
-    /** executor */
-    private ThreadPoolExecutor  executor    = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
-                                                new ArrayBlockingQueue<Runnable>(4),
-                                                new NamedThreadFactory("Request-process-pool"));
+    /**
+     * executor
+     */
+    private ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<Runnable>(4),
+            new NamedThreadFactory("Request-process-pool"));
 
-    private AtomicInteger       invokeTimes = new AtomicInteger();
+    private AtomicInteger invokeTimes = new AtomicInteger();
 
     public AsyncExceptionUserProcessor() {
         this.delaySwitch = false;

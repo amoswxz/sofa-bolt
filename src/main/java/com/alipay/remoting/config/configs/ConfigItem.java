@@ -19,11 +19,11 @@ package com.alipay.remoting.config.configs;
 /**
  * Items of config.
  *
- * Mainly used to define some config items managed by {@link ConfigContainer}.
- * You can define new config items based on this if need.
+ * Mainly used to define some config items managed by {@link ConfigContainer}. You can define new config items based on
+ * this if need.
  *
  * @author tsui
- * @version $Id: ConfigItem.java, v 0.1 2018-07-28 17:43 tsui Exp $$ 
+ * @version $Id: ConfigItem.java, v 0.1 2018-07-28 17:43 tsui Exp $$
  */
 public enum ConfigItem {
     // ~~~ netty related

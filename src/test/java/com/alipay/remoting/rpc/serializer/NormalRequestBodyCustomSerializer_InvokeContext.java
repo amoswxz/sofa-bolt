@@ -16,10 +16,6 @@
  */
 package com.alipay.remoting.rpc.serializer;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.alipay.remoting.CustomSerializer;
 import com.alipay.remoting.DefaultCustomSerializer;
 import com.alipay.remoting.InvokeContext;
@@ -29,30 +25,31 @@ import com.alipay.remoting.rpc.RequestCommand;
 import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.protocol.RpcRequestCommand;
 import com.alipay.remoting.util.StringUtils;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * a custom serialize demo
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: NormalRequestBodyCustomSerializer.java, v 0.1 Apr 11, 2016 10:18:59 PM xiaomin.cxm Exp $
  */
 public class NormalRequestBodyCustomSerializer_InvokeContext extends DefaultCustomSerializer {
 
-    private AtomicBoolean      serialFlag        = new AtomicBoolean();
-    private AtomicBoolean      deserialFlag      = new AtomicBoolean();
-
-    public static final String UNIVERSAL_REQ     = "UNIVERSAL REQUEST";
-
-    public static final String SERIALTYPE_KEY    = "serial.type";
+    public static final String UNIVERSAL_REQ = "UNIVERSAL REQUEST";
+    public static final String SERIALTYPE_KEY = "serial.type";
     public static final String SERIALTYPE1_value = "SERIAL1";
     public static final String SERIALTYPE2_value = "SERIAL2";
+    private AtomicBoolean serialFlag = new AtomicBoolean();
+    private AtomicBoolean deserialFlag = new AtomicBoolean();
 
     /**
      * @see CustomSerializer#serializeContent(RequestCommand, InvokeContext)
      */
     @Override
     public <T extends RequestCommand> boolean serializeContent(T req, InvokeContext invokeContext)
-                                                                                                  throws SerializationException {
+            throws SerializationException {
         serialFlag.set(true);
         RpcRequestCommand rpcReq = (RpcRequestCommand) req;
         if (StringUtils.equals(SERIALTYPE1_value, (String) invokeContext.get(SERIALTYPE_KEY))) {
@@ -84,7 +81,7 @@ public class NormalRequestBodyCustomSerializer_InvokeContext extends DefaultCust
      */
     @Override
     public <T extends RequestCommand> boolean deserializeContent(T req)
-                                                                       throws DeserializationException {
+            throws DeserializationException {
         deserialFlag.set(true);
         RpcRequestCommand rpcReq = (RpcRequestCommand) req;
         byte[] content = rpcReq.getContent();

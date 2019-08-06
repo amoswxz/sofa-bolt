@@ -16,11 +16,6 @@
  */
 package com.alipay.remoting.rpc.protocol;
 
-import java.net.InetSocketAddress;
-import java.util.List;
-
-import org.slf4j.Logger;
-
 import com.alipay.remoting.CommandCode;
 import com.alipay.remoting.CommandDecoder;
 import com.alipay.remoting.ResponseStatus;
@@ -30,13 +25,15 @@ import com.alipay.remoting.rpc.HeartbeatCommand;
 import com.alipay.remoting.rpc.RequestCommand;
 import com.alipay.remoting.rpc.ResponseCommand;
 import com.alipay.remoting.rpc.RpcCommandType;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import java.net.InetSocketAddress;
+import java.util.List;
+import org.slf4j.Logger;
 
 /**
  * Command decoder for Rpc.
- * 
+ *
  * @author jiangping
  * @version $Id: RpcCommandDecoder.java, v 0.1 2015-10-14 PM5:15:26 tao Exp $
  */
@@ -44,15 +41,16 @@ public class RpcCommandDecoder implements CommandDecoder {
 
     private static final Logger logger = BoltLoggerFactory.getLogger("RpcRemoting");
 
-    private int                 lessLen;
+    private int lessLen;
 
     {
         lessLen = RpcProtocol.getResponseHeaderLength() < RpcProtocol.getRequestHeaderLength() ? RpcProtocol
-            .getResponseHeaderLength() : RpcProtocol.getRequestHeaderLength();
+                .getResponseHeaderLength() : RpcProtocol.getRequestHeaderLength();
     }
 
     /**
-     * @see com.alipay.remoting.CommandDecoder#decode(io.netty.channel.ChannelHandlerContext, io.netty.buffer.ByteBuf, java.util.List)
+     * @see com.alipay.remoting.CommandDecoder#decode(io.netty.channel.ChannelHandlerContext, io.netty.buffer.ByteBuf,
+     * java.util.List)
      */
     @Override
     public void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
@@ -180,7 +178,7 @@ public class RpcCommandDecoder implements CommandDecoder {
                             command.setContent(content);
                             command.setResponseTimeMillis(System.currentTimeMillis());
                             command.setResponseHost((InetSocketAddress) ctx.channel()
-                                .remoteAddress());
+                                    .remoteAddress());
                             out.add(command);
                         } else {
                             in.resetReaderIndex();

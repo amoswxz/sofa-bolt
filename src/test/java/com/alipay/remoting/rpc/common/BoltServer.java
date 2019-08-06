@@ -23,15 +23,20 @@ import com.alipay.remoting.rpc.protocol.UserProcessor;
 
 /**
  * Demo for bolt server
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: BoltServer.java, v 0.1 Apr 6, 2016 3:33:51 PM xiaomin.cxm Exp $
  */
 public class BoltServer {
-    /** port */
-    private int       port;
 
-    /** rpc server */
+    /**
+     * port
+     */
+    private int port;
+
+    /**
+     * rpc server
+     */
     private RpcServer server;
 
     // ~~~ constructors
@@ -68,7 +73,7 @@ public class BoltServer {
     }
 
     public void addConnectionEventProcessor(ConnectionEventType type,
-                                            ConnectionEventProcessor processor) {
+            ConnectionEventProcessor processor) {
         this.server.addConnectionEventProcessor(type, processor);
     }
 }

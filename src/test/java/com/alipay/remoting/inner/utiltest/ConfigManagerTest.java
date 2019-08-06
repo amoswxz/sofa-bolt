@@ -16,6 +16,8 @@
  */
 package com.alipay.remoting.inner.utiltest;
 
+import com.alipay.remoting.config.ConfigManager;
+import com.alipay.remoting.config.Configs;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -23,18 +25,20 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.alipay.remoting.config.ConfigManager;
-import com.alipay.remoting.config.Configs;
-
 /**
  * test ConfigManager get config
- * 
+ *
  * @author tsui
  * @version $Id: ConfigManagerTest.java, v 0.1 2017-08-03 21:51 tsui Exp $
  */
 public class ConfigManagerTest {
+
     @BeforeClass
     public static void initClass() {
+    }
+
+    @AfterClass
+    public static void afterClass() {
     }
 
     @Before
@@ -43,10 +47,6 @@ public class ConfigManagerTest {
 
     @After
     public void stop() {
-    }
-
-    @AfterClass
-    public static void afterClass() {
     }
 
     @Test

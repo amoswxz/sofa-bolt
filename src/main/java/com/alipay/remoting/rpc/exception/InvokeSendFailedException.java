@@ -26,7 +26,9 @@ import com.alipay.remoting.exception.RemotingException;
  */
 public class InvokeSendFailedException extends RemotingException {
 
-    /** For serialization  */
+    /**
+     * For serialization
+     */
     private static final long serialVersionUID = 4832257777758730796L;
 
     /**

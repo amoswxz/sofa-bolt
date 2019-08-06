@@ -16,13 +16,6 @@
  */
 package com.alipay.remoting.rpc.heartbeat;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.CommonCommandCode;
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.config.Configs;
@@ -35,36 +28,43 @@ import com.alipay.remoting.rpc.common.PortScan;
 import com.alipay.remoting.rpc.common.SimpleClientUserProcessor;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
 import com.alipay.remoting.rpc.protocol.RpcProtocol;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Heart beat disable test
- * 
+ *
  * mode: disable heart beat (test no heart beat triggered, and the connection will not be closed)
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: HeartBeatTest.java, v 0.1 Apr 12, 2016 11:13:10 AM xiaomin.cxm Exp $
  */
 public class HeartBeatDisableTest {
-    static Logger             logger                    = LoggerFactory
-                                                            .getLogger(HeartBeatDisableTest.class);
 
-    BoltServer                server;
-    RpcClient                 client;
+    static Logger logger = LoggerFactory
+            .getLogger(HeartBeatDisableTest.class);
 
-    int                       port                      = PortScan.select();
-    String                    ip                        = "127.0.0.1";
-    String                    addr                      = "127.0.0.1:" + port;
+    BoltServer server;
+    RpcClient client;
 
-    int                       invokeTimes               = 5;
+    int port = PortScan.select();
+    String ip = "127.0.0.1";
+    String addr = "127.0.0.1:" + port;
 
-    SimpleServerUserProcessor serverUserProcessor       = new SimpleServerUserProcessor();
-    SimpleClientUserProcessor clientUserProcessor       = new SimpleClientUserProcessor();
-    CONNECTEventProcessor     clientConnectProcessor    = new CONNECTEventProcessor();
-    CONNECTEventProcessor     serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor  clientDisConnectProcessor = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor  serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    int invokeTimes = 5;
 
-    CustomHeartBeatProcessor  heartBeatProcessor        = new CustomHeartBeatProcessor();
+    SimpleServerUserProcessor serverUserProcessor = new SimpleServerUserProcessor();
+    SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor();
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
+
+    CustomHeartBeatProcessor heartBeatProcessor = new CustomHeartBeatProcessor();
 
     @Before
     public void init() {
@@ -97,7 +97,7 @@ public class HeartBeatDisableTest {
     @Test
     public void testClientHeartBeatNotTrigger() throws InterruptedException {
         server.getRpcServer().registerProcessor(RpcProtocol.PROTOCOL_CODE,
-            CommonCommandCode.HEARTBEAT, heartBeatProcessor);
+                CommonCommandCode.HEARTBEAT, heartBeatProcessor);
         try {
             client.createStandaloneConnection(addr, 1000);
         } catch (RemotingException e) {
@@ -114,7 +114,7 @@ public class HeartBeatDisableTest {
     @Test
     public void testClientHeartBeatTriggerExceed3Times() throws InterruptedException {
         server.getRpcServer().registerProcessor(RpcProtocol.PROTOCOL_CODE,
-            CommonCommandCode.HEARTBEAT, heartBeatProcessor);
+                CommonCommandCode.HEARTBEAT, heartBeatProcessor);
         try {
             client.createStandaloneConnection(addr, 1000);
         } catch (RemotingException e) {

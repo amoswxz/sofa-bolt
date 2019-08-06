@@ -16,19 +16,6 @@
  */
 package com.alipay.remoting.rpc;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.InvokeCallback;
@@ -42,34 +29,46 @@ import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.common.SimpleClientUserProcessor;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
 import com.alipay.remoting.util.RemotingUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * basic usage test for protocol v2.2
- * 
+ *
  * basic usage of rpc client and rpc server
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: BasicUsage_ProtocolV2_2_Test.java, v 0.1 Oct 10, 2017 12:58:36 PM xiaomin.cxm Exp $
  */
 public class BasicUsage_ProtocolV1_Test {
-    static Logger             logger                    = LoggerFactory
-                                                            .getLogger(BasicUsage_ProtocolV1_Test.class);
 
-    BoltServer                server;
-    RpcClient                 client;
+    static Logger logger = LoggerFactory
+            .getLogger(BasicUsage_ProtocolV1_Test.class);
 
-    int                       port                      = PortScan.select();
-    String                    ip                        = "127.0.0.1";
-    String                    addr                      = "127.0.0.1:" + port;
+    BoltServer server;
+    RpcClient client;
 
-    int                       invokeTimes               = 5;
+    int port = PortScan.select();
+    String ip = "127.0.0.1";
+    String addr = "127.0.0.1:" + port;
 
-    SimpleServerUserProcessor serverUserProcessor       = new SimpleServerUserProcessor();
-    SimpleClientUserProcessor clientUserProcessor       = new SimpleClientUserProcessor();
-    CONNECTEventProcessor     clientConnectProcessor    = new CONNECTEventProcessor();
-    CONNECTEventProcessor     serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor  clientDisConnectProcessor = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor  serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    int invokeTimes = 5;
+
+    SimpleServerUserProcessor serverUserProcessor = new SimpleServerUserProcessor();
+    SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor();
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
 
     @Before
     public void init() {
@@ -197,7 +196,7 @@ public class BasicUsage_ProtocolV1_Test {
                     InvokeContext invokeContext = new InvokeContext();
                     invokeContext.putIfAbsent(InvokeContext.BOLT_CRC_SWITCH, false);
                     client.invokeWithCallback(addr, req, invokeContext, new InvokeCallBackImpl(
-                        rets, latch), 1000);
+                            rets, latch), 1000);
                 }
             } catch (RemotingException e) {
                 latch.countDown();
@@ -222,35 +221,6 @@ public class BasicUsage_ProtocolV1_Test {
         Assert.assertTrue(serverConnectProcessor.isConnected());
         Assert.assertEquals(1, serverConnectProcessor.getConnectTimes());
         Assert.assertEquals(invokeTimes, serverUserProcessor.getInvokeTimes());
-    }
-
-    private class InvokeCallBackImpl implements InvokeCallback {
-        Executor       executor = Executors.newCachedThreadPool();
-        List<String>   rets;
-        CountDownLatch latch;
-
-        InvokeCallBackImpl(List<String> rets, CountDownLatch latch) {
-            this.rets = rets;
-            this.latch = latch;
-        }
-
-        @Override
-        public void onResponse(Object result) {
-            logger.warn("Result received in callback: " + result);
-            rets.add((String) result);
-            latch.countDown();
-        }
-
-        @Override
-        public void onException(Throwable e) {
-            logger.error("Process exception in callback.", e);
-            latch.countDown();
-        }
-
-        @Override
-        public Executor getExecutor() {
-            return executor;
-        }
     }
 
     @Test
@@ -299,5 +269,35 @@ public class BasicUsage_ProtocolV1_Test {
         Assert.assertTrue(serverConnectProcessor.isConnected());
         Assert.assertEquals(1, serverConnectProcessor.getConnectTimes());
         Assert.assertEquals(invokeTimes, serverUserProcessor.getInvokeTimes());
+    }
+
+    private class InvokeCallBackImpl implements InvokeCallback {
+
+        Executor executor = Executors.newCachedThreadPool();
+        List<String> rets;
+        CountDownLatch latch;
+
+        InvokeCallBackImpl(List<String> rets, CountDownLatch latch) {
+            this.rets = rets;
+            this.latch = latch;
+        }
+
+        @Override
+        public void onResponse(Object result) {
+            logger.warn("Result received in callback: " + result);
+            rets.add((String) result);
+            latch.countDown();
+        }
+
+        @Override
+        public void onException(Throwable e) {
+            logger.error("Process exception in callback.", e);
+            latch.countDown();
+        }
+
+        @Override
+        public Executor getExecutor() {
+            return executor;
+        }
     }
 }

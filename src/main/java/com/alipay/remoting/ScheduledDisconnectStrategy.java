@@ -16,36 +16,35 @@
  */
 package com.alipay.remoting;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.slf4j.Logger;
-
 import com.alipay.remoting.config.ConfigManager;
 import com.alipay.remoting.config.Configs;
 import com.alipay.remoting.log.BoltLoggerFactory;
 import com.alipay.remoting.util.FutureTaskUtil;
 import com.alipay.remoting.util.RemotingUtil;
 import com.alipay.remoting.util.RunStateRecordedFutureTask;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import org.slf4j.Logger;
 
 /**
  * An implemented strategy to monitor connections:
- *   <lu>
- *       <li>each time scheduled, filter connections with {@link Configs#CONN_SERVICE_STATUS_OFF} at first.</li>
- *       <li>then close connections.</li>
- *   </lu>
+ * <lu>
+ * <li>each time scheduled, filter connections with {@link Configs#CONN_SERVICE_STATUS_OFF} at first.</li>
+ * <li>then close connections.</li>
+ * </lu>
  *
  * @author tsui
  * @version $Id: ScheduledDisconnectStrategy.java, v 0.1 2017-02-21 14:14 tsui Exp $
  */
 public class ScheduledDisconnectStrategy implements ConnectionMonitorStrategy {
+
     private static final Logger logger = BoltLoggerFactory.getLogger("CommonDefault");
 
-    private final int           connectionThreshold;
-    private final Random        random;
+    private final int connectionThreshold;
+    private final Random random;
 
     public ScheduledDisconnectStrategy() {
         this.connectionThreshold = ConfigManager.conn_threshold();
@@ -53,8 +52,8 @@ public class ScheduledDisconnectStrategy implements ConnectionMonitorStrategy {
     }
 
     /**
-     * This method only invoked in ScheduledDisconnectStrategy, so no need to be exposed.
-     * This method will be remove in next version, do not use this method.
+     * This method only invoked in ScheduledDisconnectStrategy, so no need to be exposed. This method will be remove in
+     * next version, do not use this method.
      *
      * The user cannot call ScheduledDisconnectStrategy#filter, so modifying the implementation of this method is safe.
      *
@@ -88,7 +87,7 @@ public class ScheduledDisconnectStrategy implements ConnectionMonitorStrategy {
             }
 
             for (Map.Entry<String, RunStateRecordedFutureTask<ConnectionPool>> entry : connPools
-                .entrySet()) {
+                    .entrySet()) {
                 String poolKey = entry.getKey();
                 ConnectionPool pool = FutureTaskUtil.getFutureTaskResult(entry.getValue(), logger);
 
@@ -104,14 +103,14 @@ public class ScheduledDisconnectStrategy implements ConnectionMonitorStrategy {
 
                 if (serviceOnConnections.size() > connectionThreshold) {
                     Connection freshSelectConnect = serviceOnConnections.get(random
-                        .nextInt(serviceOnConnections.size()));
+                            .nextInt(serviceOnConnections.size()));
                     freshSelectConnect.setAttribute(Configs.CONN_SERVICE_STATUS,
-                        Configs.CONN_SERVICE_STATUS_OFF);
+                            Configs.CONN_SERVICE_STATUS_OFF);
                     serviceOffConnections.add(freshSelectConnect);
                 } else {
                     if (logger.isInfoEnabled()) {
                         logger.info("serviceOnConnections({}) size[{}], CONNECTION_THRESHOLD[{}].",
-                            poolKey, serviceOnConnections.size(), connectionThreshold);
+                                poolKey, serviceOnConnections.size(), connectionThreshold);
                     }
                 }
 
@@ -123,7 +122,7 @@ public class ScheduledDisconnectStrategy implements ConnectionMonitorStrategy {
                     } else {
                         if (logger.isInfoEnabled()) {
                             logger.info("Address={} won't close at this schedule turn",
-                                RemotingUtil.parseRemoteAddress(offConn.getChannel()));
+                                    RemotingUtil.parseRemoteAddress(offConn.getChannel()));
                         }
                     }
                 }

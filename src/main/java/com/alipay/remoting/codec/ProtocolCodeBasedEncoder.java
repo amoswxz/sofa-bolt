@@ -51,7 +51,7 @@ public class ProtocolCodeBasedEncoder extends MessageToByteEncoder<Serializable>
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Serializable msg, ByteBuf out)
-                                                                                   throws Exception {
+            throws Exception {
         Attribute<ProtocolCode> att = ctx.channel().attr(Connection.PROTOCOL);
         ProtocolCode protocolCode;
         if (att == null || att.get() == null) {

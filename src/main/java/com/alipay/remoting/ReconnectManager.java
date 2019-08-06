@@ -16,32 +16,30 @@
  */
 package com.alipay.remoting;
 
+import com.alipay.remoting.log.BoltLoggerFactory;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import org.slf4j.Logger;
-
-import com.alipay.remoting.log.BoltLoggerFactory;
 
 /**
  * Reconnect manager.
- * 
+ *
  * @author yunliang.shi
  * @version $Id: ReconnectManager.java, v 0.1 Mar 11, 2016 5:20:50 PM yunliang.shi Exp $
  */
 public class ReconnectManager extends AbstractLifeCycle implements Reconnector {
 
-    private static final Logger                      logger                   = BoltLoggerFactory
-                                                                                  .getLogger("CommonDefault");
+    private static final Logger logger = BoltLoggerFactory
+            .getLogger("CommonDefault");
 
-    private static final int                         HEAL_CONNECTION_INTERVAL = 1000;
+    private static final int HEAL_CONNECTION_INTERVAL = 1000;
 
-    private final ConnectionManager                  connectionManager;
+    private final ConnectionManager connectionManager;
     private final LinkedBlockingQueue<ReconnectTask> tasks;
-    private final List<Url>                          canceled;
+    private final List<Url> canceled;
 
-    private Thread                                   healConnectionThreads;
+    private Thread healConnectionThreads;
 
     public ReconnectManager(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
@@ -114,6 +112,7 @@ public class ReconnectManager extends AbstractLifeCycle implements Reconnector {
     }
 
     private final class HealConnectionRunner implements Runnable {
+
         private long lastConnectTime = -1;
 
         @Override
@@ -141,7 +140,7 @@ public class ReconnectManager extends AbstractLifeCycle implements Reconnector {
                         task.run();
                     } else {
                         logger.warn("Invalid reconnect request task {}, cancel list size {}",
-                            task.url, canceled.size());
+                                task.url, canceled.size());
                     }
                     this.lastConnectTime = System.currentTimeMillis() - start;
                 } catch (Exception e) {
@@ -159,6 +158,7 @@ public class ReconnectManager extends AbstractLifeCycle implements Reconnector {
     }
 
     private class ReconnectTask implements Runnable {
+
         Url url;
 
         public ReconnectTask(Url url) {

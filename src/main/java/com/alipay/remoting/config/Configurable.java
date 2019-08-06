@@ -32,8 +32,8 @@ public interface Configurable {
     <T> T option(BoltOption<T> option);
 
     /**
-     * Allow to specify a {@link BoltOption} which is used for the {@link Configurable} instances once they got
-     * created. Use a value of {@code null} to remove a previous set {@link BoltOption}.
+     * Allow to specify a {@link BoltOption} which is used for the {@link Configurable} instances once they got created.
+     * Use a value of {@code null} to remove a previous set {@link BoltOption}.
      *
      * @param option target option
      * @param value option value, null to remove the previous option

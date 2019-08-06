@@ -16,23 +16,21 @@
  */
 package com.alipay.remoting.rpc.common;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.junit.Assert;
-
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.ConnectionEventProcessor;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.Assert;
 
 /**
  * ConnectionEventProcessor for ConnectionEventType.CLOSE
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: DISCONNECTEventProcessor.java, v 0.1 Apr 8, 2016 10:58:48 AM xiaomin.cxm Exp $
  */
 public class DISCONNECTEventProcessor implements ConnectionEventProcessor {
 
-    private AtomicBoolean dicConnected    = new AtomicBoolean();
+    private AtomicBoolean dicConnected = new AtomicBoolean();
     private AtomicInteger disConnectTimes = new AtomicInteger();
 
     @Override

@@ -16,18 +16,6 @@
  */
 package com.alipay.remoting.rpc.exception;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.InvokeCallback;
 import com.alipay.remoting.exception.RemotingException;
@@ -41,38 +29,48 @@ import com.alipay.remoting.rpc.common.PortScan;
 import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.common.SimpleClientUserProcessor;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * 
  * @author jiangping
  * @version $Id: ServerBusyTest.java, v 0.1 2015-10-20 PM2:48:57 tao Exp $
  */
 public class ServerBusyTest {
-    static Logger             logger                    = LoggerFactory
-                                                            .getLogger(BasicUsageTest.class);
 
-    BoltServer                server;
-    RpcClient                 client;
+    static Logger logger = LoggerFactory
+            .getLogger(BasicUsageTest.class);
 
-    int                       port                      = PortScan.select();
-    String                    ip                        = "127.0.0.1";
-    String                    addr                      = "127.0.0.1:" + port;
+    BoltServer server;
+    RpcClient client;
 
-    int                       invokeTimes               = 5;
-    int                       timeout                   = 15000;
+    int port = PortScan.select();
+    String ip = "127.0.0.1";
+    String addr = "127.0.0.1:" + port;
 
-    int                       coreThread                = 1;
-    int                       maxThread                 = 3;
-    int                       workQueue                 = 4;
-    int                       concurrent                = maxThread + workQueue;
+    int invokeTimes = 5;
+    int timeout = 15000;
 
-    SimpleServerUserProcessor serverUserProcessor       = new SimpleServerUserProcessor(timeout,
-                                                            coreThread, maxThread, 60, workQueue);
-    SimpleClientUserProcessor clientUserProcessor       = new SimpleClientUserProcessor();
-    CONNECTEventProcessor     clientConnectProcessor    = new CONNECTEventProcessor();
-    CONNECTEventProcessor     serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor  clientDisConnectProcessor = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor  serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    int coreThread = 1;
+    int maxThread = 3;
+    int workQueue = 4;
+    int concurrent = maxThread + workQueue;
+
+    SimpleServerUserProcessor serverUserProcessor = new SimpleServerUserProcessor(timeout,
+            coreThread, maxThread, 60, workQueue);
+    SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor();
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
 
     @Before
     public void init() throws InterruptedException {
@@ -106,8 +104,8 @@ public class ServerBusyTest {
                         Assert.assertNull(obj);
                     } catch (RemotingException e) {
                         logger.error(
-                            "Other RemotingException but InvokeTimeoutException occurred in sync",
-                            e);
+                                "Other RemotingException but InvokeTimeoutException occurred in sync",
+                                e);
                         Assert.fail("Should not reach here!");
                     } catch (InterruptedException e) {
                         logger.error("InterruptedException in sync", e);
@@ -144,7 +142,7 @@ public class ServerBusyTest {
             Assert.assertNull(obj);
         } catch (RemotingException e) {
             logger.error("Other RemotingException but InvokeServerBusyException occurred in sync",
-                e);
+                    e);
             Assert.fail("Should not reach here!");
         } catch (InterruptedException e) {
             logger.error("InterruptedException in sync", e);
@@ -164,7 +162,7 @@ public class ServerBusyTest {
             Assert.assertNull(obj);
         } catch (RemotingException e) {
             logger.error(
-                "Other RemotingException but InvokeServerBusyException occurred in future", e);
+                    "Other RemotingException but InvokeServerBusyException occurred in future", e);
             Assert.fail("Should not reach here!");
         } catch (InterruptedException e) {
             logger.error("InterruptedException in future", e);
@@ -201,7 +199,7 @@ public class ServerBusyTest {
 
         } catch (RemotingException e) {
             logger.error(
-                "Other RemotingException but InvokeServerBusyException occurred in callback", e);
+                    "Other RemotingException but InvokeServerBusyException occurred in callback", e);
             Assert.fail("Should not reach here!");
         }
         latch.await();

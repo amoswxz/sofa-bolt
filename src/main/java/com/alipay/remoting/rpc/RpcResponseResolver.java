@@ -16,8 +16,6 @@
  */
 package com.alipay.remoting.rpc;
 
-import org.slf4j.Logger;
-
 import com.alipay.remoting.ResponseStatus;
 import com.alipay.remoting.exception.CodecException;
 import com.alipay.remoting.exception.ConnectionClosedException;
@@ -32,14 +30,16 @@ import com.alipay.remoting.rpc.exception.InvokeServerException;
 import com.alipay.remoting.rpc.exception.InvokeTimeoutException;
 import com.alipay.remoting.rpc.protocol.RpcResponseCommand;
 import com.alipay.remoting.util.StringUtils;
+import org.slf4j.Logger;
 
 /**
  * Resolve response object from response command.
- * 
+ *
  * @author jiangping
  * @version $Id: RpcResponseResolver.java, v 0.1 2015-10-8 PM2:47:29 tao Exp $
  */
 public class RpcResponseResolver {
+
     private static final Logger logger = BoltLoggerFactory.getLogger("RpcRemoting");
 
     /**
@@ -50,13 +50,13 @@ public class RpcResponseResolver {
      * @return response object
      */
     public static Object resolveResponseObject(ResponseCommand responseCommand, String addr)
-                                                                                            throws RemotingException {
+            throws RemotingException {
         preProcess(responseCommand, addr);
         if (responseCommand.getResponseStatus() == ResponseStatus.SUCCESS) {
             return toResponseObject(responseCommand);
         } else {
             String msg = String.format("Rpc invocation exception: %s, the address is %s, id=%s",
-                responseCommand.getResponseStatus(), addr, responseCommand.getId());
+                    responseCommand.getResponseStatus(), addr, responseCommand.getId());
             logger.warn(msg);
             if (responseCommand.getCause() != null) {
                 throw new InvokeException(msg, responseCommand.getCause());
@@ -68,18 +68,18 @@ public class RpcResponseResolver {
     }
 
     private static void preProcess(ResponseCommand responseCommand, String addr)
-                                                                                throws RemotingException {
+            throws RemotingException {
         RemotingException e = null;
         String msg = null;
         if (responseCommand == null) {
             msg = String.format("Rpc invocation timeout[responseCommand null]! the address is %s",
-                addr);
+                    addr);
             e = new InvokeTimeoutException(msg);
         } else {
             switch (responseCommand.getResponseStatus()) {
                 case TIMEOUT:
                     msg = String.format(
-                        "Rpc invocation timeout[responseCommand TIMEOUT]! the address is %s", addr);
+                            "Rpc invocation timeout[responseCommand TIMEOUT]! the address is %s", addr);
                     e = new InvokeTimeoutException(msg);
                     break;
                 case CLIENT_SEND_ERROR:
@@ -92,36 +92,36 @@ public class RpcResponseResolver {
                     break;
                 case SERVER_THREADPOOL_BUSY:
                     msg = String.format("Server thread pool busy! the address is %s, id=%s", addr,
-                        responseCommand.getId());
+                            responseCommand.getId());
                     e = new InvokeServerBusyException(msg);
                     break;
                 case CODEC_EXCEPTION:
                     msg = String.format("Codec exception! the address is %s, id=%s", addr,
-                        responseCommand.getId());
+                            responseCommand.getId());
                     e = new CodecException(msg);
                     break;
                 case SERVER_SERIAL_EXCEPTION:
                     msg = String
-                        .format(
-                            "Server serialize response exception! the address is %s, id=%s, serverSide=true",
-                            addr, responseCommand.getId());
+                            .format(
+                                    "Server serialize response exception! the address is %s, id=%s, serverSide=true",
+                                    addr, responseCommand.getId());
                     e = new SerializationException(detailErrMsg(msg, responseCommand),
-                        toThrowable(responseCommand), true);
+                            toThrowable(responseCommand), true);
                     break;
                 case SERVER_DESERIAL_EXCEPTION:
                     msg = String
-                        .format(
-                            "Server deserialize request exception! the address is %s, id=%s, serverSide=true",
-                            addr, responseCommand.getId());
+                            .format(
+                                    "Server deserialize request exception! the address is %s, id=%s, serverSide=true",
+                                    addr, responseCommand.getId());
                     e = new DeserializationException(detailErrMsg(msg, responseCommand),
-                        toThrowable(responseCommand), true);
+                            toThrowable(responseCommand), true);
                     break;
                 case SERVER_EXCEPTION:
                     msg = String.format(
-                        "Server exception! Please check the server log, the address is %s, id=%s",
-                        addr, responseCommand.getId());
+                            "Server exception! Please check the server log, the address is %s, id=%s",
+                            addr, responseCommand.getId());
                     e = new InvokeServerException(detailErrMsg(msg, responseCommand),
-                        toThrowable(responseCommand));
+                            toThrowable(responseCommand));
                     break;
                 default:
                     break;

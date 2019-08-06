@@ -20,16 +20,20 @@ import com.alipay.remoting.CommandCode;
 
 /**
  * Command of request.
- * 
+ *
  * @author jiangping
  * @version $Id: RequestCommand.java, v 0.1 2015-9-10 AM10:27:59 tao Exp $
  */
 public abstract class RequestCommand extends RpcCommand {
 
-    /** For serialization  */
+    /**
+     * For serialization
+     */
     private static final long serialVersionUID = -3457717009326601317L;
-    /** timeout, -1 stands for no timeout */
-    private int               timeout          = -1;
+    /**
+     * timeout, -1 stands for no timeout
+     */
+    private int timeout = -1;
 
     public RequestCommand() {
         super(RpcCommandType.REQUEST);
@@ -49,7 +53,7 @@ public abstract class RequestCommand extends RpcCommand {
 
     /**
      * Getter method for property <tt>timeout</tt>.
-     * 
+     *
      * @return property value of timeout
      */
     public int getTimeout() {
@@ -58,7 +62,7 @@ public abstract class RequestCommand extends RpcCommand {
 
     /**
      * Setter method for property <tt>timeout</tt>.
-     * 
+     *
      * @param timeout value to be assigned to property timeout
      */
     public void setTimeout(int timeout) {

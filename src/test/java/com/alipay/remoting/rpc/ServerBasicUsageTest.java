@@ -16,19 +16,6 @@
  */
 package com.alipay.remoting.rpc;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.InvokeCallback;
 import com.alipay.remoting.exception.RemotingException;
@@ -39,32 +26,44 @@ import com.alipay.remoting.rpc.common.PortScan;
 import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.common.SimpleClientUserProcessor;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Basic usage test of Rpc Server invoke apis
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: ServerBasicUsageTest.java, v 0.1 Apr 14, 2016 10:00:48 AM xiaomin.cxm Exp $
  */
 public class ServerBasicUsageTest {
-    static Logger             logger                    = LoggerFactory
-                                                            .getLogger(BasicUsageTest.class);
 
-    BoltServer                server;
-    RpcClient                 client;
+    static Logger logger = LoggerFactory
+            .getLogger(BasicUsageTest.class);
 
-    int                       port                      = PortScan.select();
-    String                    ip                        = "127.0.0.1";
-    String                    addr                      = "127.0.0.1:" + port;
+    BoltServer server;
+    RpcClient client;
 
-    int                       invokeTimes               = 5;
+    int port = PortScan.select();
+    String ip = "127.0.0.1";
+    String addr = "127.0.0.1:" + port;
 
-    SimpleServerUserProcessor serverUserProcessor       = new SimpleServerUserProcessor();
-    SimpleClientUserProcessor clientUserProcessor       = new SimpleClientUserProcessor();
-    CONNECTEventProcessor     clientConnectProcessor    = new CONNECTEventProcessor();
-    CONNECTEventProcessor     serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor  clientDisConnectProcessor = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor  serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    int invokeTimes = 5;
+
+    SimpleServerUserProcessor serverUserProcessor = new SimpleServerUserProcessor();
+    SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor();
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
 
     @Before
     public void init() {
@@ -161,7 +160,7 @@ public class ServerBasicUsageTest {
                 remoteAddr = serverConnectProcessor.getRemoteAddr();
                 Assert.assertNotNull(remoteAddr);
                 RpcResponseFuture future = server.getRpcServer().invokeWithFuture(remoteAddr, req,
-                    1000);
+                        1000);
                 String clientres = (String) future.get(1000);
                 Assert.assertEquals(clientres, RequestBody.DEFAULT_CLIENT_RETURN_STR);
             } catch (RemotingException e) {

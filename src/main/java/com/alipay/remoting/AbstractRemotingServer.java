@@ -40,14 +40,12 @@ public abstract class AbstractRemotingServer extends AbstractLifeCycle implement
         ConfigurableInstance {
 
     private static final Logger logger = BoltLoggerFactory.getLogger("CommonDefault");
-
-    private String ip;
-    private int port;
-
     private final BoltOptions options;
     private final ConfigType configType;
     private final GlobalSwitch globalSwitch;
     private final ConfigContainer configContainer;
+    private String ip;
+    private int port;
 
     public AbstractRemotingServer(int port) {
         this(new InetSocketAddress(port).getAddress().getHostAddress(), port);

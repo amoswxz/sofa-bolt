@@ -18,8 +18,6 @@ package com.alipay.remoting.rpc.userprocessor.executorselector;
 
 import static com.alipay.remoting.rpc.userprocessor.executorselector.DefaultExecutorSelector.EXECUTOR1;
 
-import java.io.UnsupportedEncodingException;
-
 import com.alipay.remoting.DefaultCustomSerializer;
 import com.alipay.remoting.InvokeContext;
 import com.alipay.remoting.exception.DeserializationException;
@@ -28,19 +26,20 @@ import com.alipay.remoting.rpc.RequestCommand;
 import com.alipay.remoting.rpc.ResponseCommand;
 import com.alipay.remoting.rpc.protocol.RpcRequestCommand;
 import com.alipay.remoting.rpc.protocol.RpcResponseCommand;
+import java.io.UnsupportedEncodingException;
 
 /**
- *
  * @author tsui
  * @version $Id: CustomHeaderSerializer.java, v 0.1 2017-04-24 11:48 tsui Exp $
  */
 public class CustomHeaderSerializer extends DefaultCustomSerializer {
+
     /**
      * @see com.alipay.remoting.CustomSerializer#serializeHeader(com.alipay.remoting.rpc.RequestCommand, InvokeContext)
      */
     @Override
     public <T extends RequestCommand> boolean serializeHeader(T request, InvokeContext invokeContext)
-                                                                                                     throws SerializationException {
+            throws SerializationException {
         if (request instanceof RpcRequestCommand) {
             RpcRequestCommand requestCommand = (RpcRequestCommand) request;
             try {
@@ -58,7 +57,7 @@ public class CustomHeaderSerializer extends DefaultCustomSerializer {
      */
     @Override
     public <T extends RequestCommand> boolean deserializeHeader(T request)
-                                                                          throws DeserializationException {
+            throws DeserializationException {
         if (request instanceof RpcRequestCommand) {
             RpcRequestCommand requestCommand = (RpcRequestCommand) request;
             byte[] header = requestCommand.getHeader();
@@ -77,7 +76,7 @@ public class CustomHeaderSerializer extends DefaultCustomSerializer {
      */
     @Override
     public <T extends ResponseCommand> boolean serializeHeader(T response)
-                                                                          throws SerializationException {
+            throws SerializationException {
         if (response instanceof RpcResponseCommand) {
             RpcResponseCommand responseCommand = (RpcResponseCommand) response;
             try {
@@ -91,12 +90,13 @@ public class CustomHeaderSerializer extends DefaultCustomSerializer {
     }
 
     /**
-     * @see com.alipay.remoting.CustomSerializer#deserializeHeader(com.alipay.remoting.rpc.ResponseCommand, InvokeContext)
+     * @see com.alipay.remoting.CustomSerializer#deserializeHeader(com.alipay.remoting.rpc.ResponseCommand,
+     * InvokeContext)
      */
     @Override
     public <T extends ResponseCommand> boolean deserializeHeader(T response,
-                                                                 InvokeContext invokeContext)
-                                                                                             throws DeserializationException {
+            InvokeContext invokeContext)
+            throws DeserializationException {
         if (response instanceof RpcResponseCommand) {
             RpcResponseCommand responseCommand = (RpcResponseCommand) response;
             byte[] header = responseCommand.getHeader();

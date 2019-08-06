@@ -16,74 +16,73 @@
  */
 package com.alipay.remoting.config;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.alipay.remoting.config.configs.ConfigContainer;
 import com.alipay.remoting.config.configs.ConfigItem;
 import com.alipay.remoting.config.configs.ConfigType;
 import com.alipay.remoting.config.configs.DefaultConfigContainer;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- *
  * @author tsui
- * @version $Id: DefaultConfigContainerTest.java, v 0.1 2018-07-30 10:53 tsui Exp $$ 
+ * @version $Id: DefaultConfigContainerTest.java, v 0.1 2018-07-30 10:53 tsui Exp $$
  */
 public class DefaultConfigContainerTest {
+
     @Test
     public void testNormalArgs() {
         ConfigContainer configContainer = new DefaultConfigContainer();
         // test set one
         int expected_int = 123;
         configContainer.set(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK,
-            expected_int);
+                expected_int);
         Assert.assertEquals(expected_int,
-            configContainer.get(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
+                configContainer.get(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
         Assert.assertNull(configContainer.get(ConfigType.CLIENT_SIDE,
-            ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
+                ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
         Assert.assertNull(configContainer.get(ConfigType.SERVER_SIDE,
-            ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
+                ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
         Assert.assertNull(configContainer.get(ConfigType.SERVER_SIDE,
-            ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
+                ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
 
         Assert.assertTrue(configContainer.contains(ConfigType.CLIENT_SIDE,
-            ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
+                ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
         Assert.assertFalse(configContainer.contains(ConfigType.CLIENT_SIDE,
-            ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
+                ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
         Assert.assertFalse(configContainer.contains(ConfigType.SERVER_SIDE,
-            ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
+                ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
         Assert.assertFalse(configContainer.contains(ConfigType.SERVER_SIDE,
-            ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
+                ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
 
         // test set all
         configContainer.set(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK,
-            expected_int);
+                expected_int);
         configContainer.set(ConfigType.SERVER_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK,
-            expected_int);
+                expected_int);
         configContainer.set(ConfigType.SERVER_SIDE, ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK,
-            expected_int);
+                expected_int);
 
         Assert.assertTrue(configContainer.contains(ConfigType.CLIENT_SIDE,
-            ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
+                ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
         Assert.assertTrue(configContainer.contains(ConfigType.CLIENT_SIDE,
-            ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
+                ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
         Assert.assertTrue(configContainer.contains(ConfigType.SERVER_SIDE,
-            ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
+                ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
         Assert.assertTrue(configContainer.contains(ConfigType.SERVER_SIDE,
-            ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
+                ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
 
         // test overwrite
         int expected_int_overwrite = 456;
         configContainer.set(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK,
-            expected_int_overwrite);
+                expected_int_overwrite);
         Assert.assertEquals(expected_int_overwrite,
-            configContainer.get(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
+                configContainer.get(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
         Assert.assertEquals(expected_int,
-            configContainer.get(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
+                configContainer.get(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
         Assert.assertEquals(expected_int,
-            configContainer.get(ConfigType.SERVER_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
+                configContainer.get(ConfigType.SERVER_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
         Assert.assertEquals(expected_int,
-            configContainer.get(ConfigType.SERVER_SIDE, ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
+                configContainer.get(ConfigType.SERVER_SIDE, ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
     }
 
     @Test
@@ -116,7 +115,7 @@ public class DefaultConfigContainerTest {
 
         try {
             configContainer.set(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK,
-                null);
+                    null);
             Assert.fail("Should not reach here!");
         } catch (IllegalArgumentException e) {
         }

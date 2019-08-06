@@ -16,36 +16,40 @@
  */
 package com.alipay.remoting.rpc.userprocessor.executorselector;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.BizContext;
 import com.alipay.remoting.InvokeContext;
 import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.protocol.SyncUserProcessor;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * a demo specific user processor for rpc client
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: SimpleClientUserProcessor.java, v 0.1 Jan 7, 2016 3:01:49 PM xiaomin.cxm Exp $
  */
 public class SpecificClientUserProcessor extends SyncUserProcessor<RequestBody> {
 
-    /** logger */
-    private static final Logger logger      = LoggerFactory
-                                                .getLogger(SpecificClientUserProcessor.class);
+    /**
+     * logger
+     */
+    private static final Logger logger = LoggerFactory
+            .getLogger(SpecificClientUserProcessor.class);
 
-    /** delay milliseconds */
-    private long                delayMs;
+    /**
+     * delay milliseconds
+     */
+    private long delayMs;
 
-    /** whether delay or not */
-    private boolean             delaySwitch;
+    /**
+     * whether delay or not
+     */
+    private boolean delaySwitch;
 
-    private AtomicInteger       invokeTimes = new AtomicInteger();
+    private AtomicInteger invokeTimes = new AtomicInteger();
 
     public SpecificClientUserProcessor() {
         this.delaySwitch = false;

@@ -17,9 +17,8 @@
 package com.alipay.remoting;
 
 /**
- * 链接状态触发的枚举
- * Event triggered by connection state.
- * 
+ * 链接状态触发的枚举 Event triggered by connection state.
+ *
  * @author jiangping
  * @version $Id: ConnectionEventType.java, v 0.1 Mar 4, 2016 8:03:27 PM tao Exp $
  */

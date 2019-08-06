@@ -17,7 +17,6 @@
 package com.alipay.remoting.util;
 
 import java.util.concurrent.ExecutionException;
-
 import org.slf4j.Logger;
 
 /**
@@ -27,14 +26,11 @@ import org.slf4j.Logger;
  * @version $Id: FutureTaskUtil.java, v 0.1 2017-07-24 17:07 tsui Exp $
  */
 public class FutureTaskUtil {
+
     /**
      * get the result of a future task
      *
      * Notice: the run method of this task should have been called at first.
-     *
-     * @param task
-     * @param <T>
-     * @return
      */
     public static <T> T getFutureTaskResult(RunStateRecordedFutureTask<T> task, Logger logger) {
         T t = null;
@@ -56,8 +52,6 @@ public class FutureTaskUtil {
 
     /**
      * launder the throwable
-     *
-     * @param t
      */
     public static void launderThrowable(Throwable t) {
         if (t instanceof RuntimeException) {

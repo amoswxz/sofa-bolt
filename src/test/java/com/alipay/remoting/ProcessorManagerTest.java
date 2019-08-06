@@ -16,17 +16,16 @@
  */
 package com.alipay.remoting;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.alipay.remoting.rpc.protocol.RpcCommandCode;
 import com.alipay.remoting.rpc.protocol.RpcRequestProcessor;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * test processor manager
  *
  * @author tsui
- * @version $Id: ProcessorManagerTest.java, v 0.1 2018-07-06 12:19 tsui Exp $$ 
+ * @version $Id: ProcessorManagerTest.java, v 0.1 2018-07-06 12:19 tsui Exp $$
  */
 public class ProcessorManagerTest {
 

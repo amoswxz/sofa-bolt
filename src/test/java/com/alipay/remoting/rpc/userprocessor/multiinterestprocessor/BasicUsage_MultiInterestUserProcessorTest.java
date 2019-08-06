@@ -16,19 +16,6 @@
  */
 package com.alipay.remoting.rpc.userprocessor.multiinterestprocessor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.InvokeCallback;
 import com.alipay.remoting.exception.RemotingException;
@@ -38,29 +25,41 @@ import com.alipay.remoting.rpc.common.BoltServer;
 import com.alipay.remoting.rpc.common.CONNECTEventProcessor;
 import com.alipay.remoting.rpc.common.DISCONNECTEventProcessor;
 import com.alipay.remoting.rpc.common.PortScan;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @antuor muyun.cyt (muyun.cyt@antfin.com)  2018/7/5   11:20 AM
  */
 public class BasicUsage_MultiInterestUserProcessorTest {
-    static Logger                          logger                    = LoggerFactory
-                                                                         .getLogger(BasicUsage_MultiInterestUserProcessorTest.class);
 
-    BoltServer                             server;
-    RpcClient                              client;
+    static Logger logger = LoggerFactory
+            .getLogger(BasicUsage_MultiInterestUserProcessorTest.class);
 
-    int                                    port                      = PortScan.select();
-    String                                 ip                        = "127.0.0.1";
-    String                                 addr                      = "127.0.0.1:" + port;
+    BoltServer server;
+    RpcClient client;
 
-    int                                    invokeTimes               = 5;
+    int port = PortScan.select();
+    String ip = "127.0.0.1";
+    String addr = "127.0.0.1:" + port;
 
-    SimpleServerMultiInterestUserProcessor serverUserProcessor       = new SimpleServerMultiInterestUserProcessor();
-    SimpleClientMultiInterestUserProcessor clientUserProcessor       = new SimpleClientMultiInterestUserProcessor();
-    CONNECTEventProcessor                  clientConnectProcessor    = new CONNECTEventProcessor();
-    CONNECTEventProcessor                  serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor               clientDisConnectProcessor = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor               serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    int invokeTimes = 5;
+
+    SimpleServerMultiInterestUserProcessor serverUserProcessor = new SimpleServerMultiInterestUserProcessor();
+    SimpleClientMultiInterestUserProcessor clientUserProcessor = new SimpleClientMultiInterestUserProcessor();
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
 
     @Before
     public void init() {

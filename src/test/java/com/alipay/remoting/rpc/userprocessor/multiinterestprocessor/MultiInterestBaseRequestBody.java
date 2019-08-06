@@ -22,6 +22,7 @@ import java.io.Serializable;
  * @antuor muyun.cyt (muyun.cyt@antfin.com)  2018/7/5   11:20 AM
  */
 public interface MultiInterestBaseRequestBody extends Serializable {
+
     /**
      * Getter method for property <tt>id</tt>.
      *

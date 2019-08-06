@@ -19,12 +19,11 @@ package com.alipay.remoting.rpc;
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.ConnectionEventHandler;
 import com.alipay.remoting.config.switches.GlobalSwitch;
-
 import io.netty.channel.ChannelHandlerContext;
 
 /**
  * ConnectionEventHandler for Rpc.
- * 
+ *
  * @author jiangping
  * @version $Id: RpcConnectionEventHandler.java, v 0.1 2015-10-16 PM4:41:29 tao Exp $
  */

@@ -24,8 +24,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class RpcConfigManagerTest {
+
     @BeforeClass
     public static void initClass() {
+    }
+
+    @AfterClass
+    public static void afterClass() {
     }
 
     @Before
@@ -34,10 +39,6 @@ public class RpcConfigManagerTest {
 
     @After
     public void stop() {
-    }
-
-    @AfterClass
-    public static void afterClass() {
     }
 
     @Test

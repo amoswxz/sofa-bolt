@@ -16,57 +16,61 @@
  */
 package com.alipay.remoting.rpc.userprocessor.processinio;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.BizContext;
 import com.alipay.remoting.InvokeContext;
 import com.alipay.remoting.NamedThreadFactory;
 import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.protocol.SyncUserProcessor;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * a demo user processor for rpc server
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: SimpleServerUserProcessor.java, v 0.1 Jan 7, 2016 3:01:49 PM xiaomin.cxm Exp $
  */
 public class SpecificServerUserProcessor extends SyncUserProcessor<RequestBody> {
 
-    /** logger */
-    private static final Logger logger        = LoggerFactory
-                                                  .getLogger(SpecificServerUserProcessor.class);
+    /**
+     * logger
+     */
+    private static final Logger logger = LoggerFactory
+            .getLogger(SpecificServerUserProcessor.class);
 
-    /** delay milliseconds */
-    private long                delayMs;
+    /**
+     * delay milliseconds
+     */
+    private long delayMs;
 
-    /** whether delay or not */
-    private boolean             delaySwitch;
+    /**
+     * whether delay or not
+     */
+    private boolean delaySwitch;
 
-    private AtomicInteger       invokeTimes   = new AtomicInteger();
+    private AtomicInteger invokeTimes = new AtomicInteger();
 
-    private AtomicInteger       onewayTimes   = new AtomicInteger();
-    private AtomicInteger       syncTimes     = new AtomicInteger();
-    private AtomicInteger       futureTimes   = new AtomicInteger();
-    private AtomicInteger       callbackTimes = new AtomicInteger();
+    private AtomicInteger onewayTimes = new AtomicInteger();
+    private AtomicInteger syncTimes = new AtomicInteger();
+    private AtomicInteger futureTimes = new AtomicInteger();
+    private AtomicInteger callbackTimes = new AtomicInteger();
 
-    private ThreadPoolExecutor  executor;
+    private ThreadPoolExecutor executor;
 
-    private String              remoteAddr;
-    private CountDownLatch      latch         = new CountDownLatch(1);
+    private String remoteAddr;
+    private CountDownLatch latch = new CountDownLatch(1);
 
     public SpecificServerUserProcessor() {
         this.delaySwitch = false;
         this.delayMs = 0;
         this.executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(4), new NamedThreadFactory("Rpc-common-executor"));
+                new ArrayBlockingQueue<Runnable>(4), new NamedThreadFactory("Rpc-common-executor"));
     }
 
     public SpecificServerUserProcessor(long delay) {
@@ -132,8 +136,8 @@ public class SpecificServerUserProcessor extends SyncUserProcessor<RequestBody> 
     }
 
     public int getInvokeTimesEachCallType(RequestBody.InvokeType type) {
-        return new int[] { this.onewayTimes.get(), this.syncTimes.get(), this.futureTimes.get(),
-                this.callbackTimes.get() }[type.ordinal()];
+        return new int[]{this.onewayTimes.get(), this.syncTimes.get(), this.futureTimes.get(),
+                this.callbackTimes.get()}[type.ordinal()];
     }
 
     public String getRemoteAddr() throws InterruptedException {

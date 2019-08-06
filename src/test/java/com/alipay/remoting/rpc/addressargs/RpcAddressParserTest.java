@@ -16,23 +16,23 @@
  */
 package com.alipay.remoting.rpc.addressargs;
 
+import com.alipay.remoting.Url;
+import com.alipay.remoting.exception.RemotingException;
+import com.alipay.remoting.rpc.RpcAddressParser;
+import com.alipay.remoting.rpc.RpcConfigs;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alipay.remoting.Url;
-import com.alipay.remoting.exception.RemotingException;
-import com.alipay.remoting.rpc.RpcAddressParser;
-import com.alipay.remoting.rpc.RpcConfigs;
-
 /**
  * rpc address parser test
- * 
+ *
  * @author jiangping
  * @version $Id: RpcAddressParserTest.java, v 0.1 2015-12-11 PM10:04:21 tao Exp $
  */
 public class RpcAddressParserTest {
+
     static Logger logger = LoggerFactory.getLogger(RpcAddressParserTest.class);
 
     @Test

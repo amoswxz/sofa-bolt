@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class StringUtils {
 
-    public static final String   EMPTY              = "";
+    public static final String EMPTY = "";
 
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
@@ -65,7 +65,7 @@ public class StringUtils {
     }
 
     private static String[] splitWorker(final String str, final char separatorChar,
-                                        final boolean preserveAllTokens) {
+            final boolean preserveAllTokens) {
         // Performance tuned for 2.0 (JDK1.4)
 
         if (str == null) {

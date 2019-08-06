@@ -17,7 +17,6 @@
 package com.alipay.remoting.rpc.protocol;
 
 import com.alipay.remoting.codec.ProtocolCodeBasedDecoder;
-
 import io.netty.buffer.ByteBuf;
 
 /**
@@ -27,6 +26,7 @@ import io.netty.buffer.ByteBuf;
  * @version $Id: RpcProtocolDecoder.java, v 0.1 2018-03-27 19:28 tsui Exp $
  */
 public class RpcProtocolDecoder extends ProtocolCodeBasedDecoder {
+
     public static final int MIN_PROTOCOL_CODE_WITH_VERSION = 2;
 
     public RpcProtocolDecoder(int protocolCodeLength) {

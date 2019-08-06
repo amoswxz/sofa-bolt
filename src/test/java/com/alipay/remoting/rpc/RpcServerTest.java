@@ -26,10 +26,11 @@ import org.slf4j.LoggerFactory;
 /**
  * test rpc server and stop logic
  *
- * @author tsui  
- * @version $Id: RpcServerTest.java, v 0.1 2018-05-29 15:27 tsui Exp $$ 
+ * @author tsui
+ * @version $Id: RpcServerTest.java, v 0.1 2018-05-29 15:27 tsui Exp $$
  */
 public class RpcServerTest {
+
     static Logger logger = LoggerFactory.getLogger(RpcServerTest.class);
 
     @Before

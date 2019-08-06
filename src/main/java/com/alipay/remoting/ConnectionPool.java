@@ -16,32 +16,30 @@
  */
 package com.alipay.remoting;
 
+import com.alipay.remoting.log.BoltLoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import org.slf4j.Logger;
-
-import com.alipay.remoting.log.BoltLoggerFactory;
 
 /**
  * Connection pool
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: ConnectionPool.java, v 0.1 Mar 8, 2016 11:04:54 AM xiaomin.cxm Exp $
  */
 public class ConnectionPool implements Scannable {
 
-    private static final Logger              logger = BoltLoggerFactory.getLogger("CommonDefault");
+    private static final Logger logger = BoltLoggerFactory.getLogger("CommonDefault");
 
     private CopyOnWriteArrayList<Connection> connections;
-    private ConnectionSelectStrategy         strategy;
-    private volatile long                    lastAccessTimestamp;
-    private volatile boolean                 asyncCreationDone;
+    private ConnectionSelectStrategy strategy;
+    private volatile long lastAccessTimestamp;
+    private volatile boolean asyncCreationDone;
 
     /**
      * Constructor
-     * 
+     *
      * @param strategy ConnectionSelectStrategy
      */
     public ConnectionPool(ConnectionSelectStrategy strategy) {
@@ -52,7 +50,7 @@ public class ConnectionPool implements Scannable {
 
     /**
      * add a connection
-     * 
+     *
      * @param connection Connection
      */
     public void add(Connection connection) {
@@ -68,7 +66,7 @@ public class ConnectionPool implements Scannable {
 
     /**
      * check weather a connection already added
-     * 
+     *
      * @param connection Connection
      * @return whether this pool contains the target connection
      */
@@ -78,7 +76,7 @@ public class ConnectionPool implements Scannable {
 
     /**
      * removeAndTryClose a connection
-     * 
+     *
      * @param connection Connection
      */
     public void removeAndTryClose(Connection connection) {
@@ -106,7 +104,7 @@ public class ConnectionPool implements Scannable {
 
     /**
      * get a connection
-     * 
+     *
      * @return Connection
      */
     public Connection get() {
@@ -125,7 +123,7 @@ public class ConnectionPool implements Scannable {
 
     /**
      * get all connections
-     * 
+     *
      * @return Connection List
      */
     public List<Connection> getAll() {
@@ -169,6 +167,7 @@ public class ConnectionPool implements Scannable {
 
     /**
      * is async create connection done
+     *
      * @return true if async create connection done
      */
     public boolean isAsyncCreationDone() {
@@ -195,8 +194,8 @@ public class ConnectionPool implements Scannable {
             for (Connection conn : connections) {
                 if (!conn.isFine()) {
                     logger.warn(
-                        "Remove bad connection when scanning conns of ConnectionPool - {}:{}",
-                        conn.getRemoteIP(), conn.getRemotePort());
+                            "Remove bad connection when scanning conns of ConnectionPool - {}:{}",
+                            conn.getRemoteIP(), conn.getRemotePort());
                     conn.close();
                     removeAndTryClose(conn);
                 }

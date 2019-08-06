@@ -16,13 +16,14 @@
  */
 package com.alipay.remoting.util;
 
-/** 
- * utils of thread operations
+/**
+ *   utils of thread operations
  *
- * @author tsui  
- * @version $Id: ThreadTestUtils.java, v 0.1 2018-05-29 15:29 tsui Exp $$  
+ * @author tsui
+ * @version $Id: ThreadTestUtils.java, v 0.1 2018-05-29 15:29 tsui Exp $$
  */
 public class ThreadTestUtils {
+
     public static void sleep(long duration) {
         try {
             Thread.sleep(duration);

@@ -16,19 +16,16 @@
  */
 package com.alipay.remoting.rpc.exception;
 
-import java.util.concurrent.Executor;
-
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.BizContext;
 import com.alipay.remoting.rpc.RpcServer;
 import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.protocol.SyncUserProcessor;
+import java.util.concurrent.Executor;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * 
  * @author jiangping
  * @version $Id: BadServerIpTest.java, v 0.1 2015-12-3 PM5:01:30 tao Exp $
  */
@@ -58,9 +55,9 @@ public class BadServerIpTest {
 
     class BadServer {
 
-        Logger    logger = LoggerFactory.getLogger(BadServer.class);
+        Logger logger = LoggerFactory.getLogger(BadServer.class);
         RpcServer server;
-        String    ip;
+        String ip;
 
         public BadServer(String ip) {
             this.ip = ip;
@@ -71,7 +68,7 @@ public class BadServerIpTest {
             server.registerUserProcessor(new SyncUserProcessor<RequestBody>() {
                 @Override
                 public Object handleRequest(BizContext bizCtx, RequestBody request)
-                                                                                   throws Exception {
+                        throws Exception {
                     logger.warn("Request received:" + request);
                     return "hello world!";
                 }

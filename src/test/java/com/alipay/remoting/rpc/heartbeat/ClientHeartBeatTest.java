@@ -16,13 +16,6 @@
  */
 package com.alipay.remoting.rpc.heartbeat;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.CommonCommandCode;
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.config.Configs;
@@ -35,34 +28,41 @@ import com.alipay.remoting.rpc.common.PortScan;
 import com.alipay.remoting.rpc.common.SimpleClientUserProcessor;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
 import com.alipay.remoting.rpc.protocol.RpcProtocol;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Client heart beat test
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: ClientHeartBeatTest.java, v 0.1 Apr 12, 2016 11:13:10 AM xiaomin.cxm Exp $
  */
 public class ClientHeartBeatTest {
-    static Logger             logger                    = LoggerFactory
-                                                            .getLogger(ClientHeartBeatTest.class);
 
-    BoltServer                server;
-    RpcClient                 client;
+    static Logger logger = LoggerFactory
+            .getLogger(ClientHeartBeatTest.class);
 
-    int                       port                      = PortScan.select();
-    String                    ip                        = "127.0.0.1";
-    String                    addr                      = "127.0.0.1:" + port;
+    BoltServer server;
+    RpcClient client;
 
-    int                       invokeTimes               = 5;
+    int port = PortScan.select();
+    String ip = "127.0.0.1";
+    String addr = "127.0.0.1:" + port;
 
-    SimpleServerUserProcessor serverUserProcessor       = new SimpleServerUserProcessor();
-    SimpleClientUserProcessor clientUserProcessor       = new SimpleClientUserProcessor();
-    CONNECTEventProcessor     clientConnectProcessor    = new CONNECTEventProcessor();
-    CONNECTEventProcessor     serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor  clientDisConnectProcessor = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor  serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    int invokeTimes = 5;
 
-    CustomHeartBeatProcessor  heartBeatProcessor        = new CustomHeartBeatProcessor();
+    SimpleServerUserProcessor serverUserProcessor = new SimpleServerUserProcessor();
+    SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor();
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
+
+    CustomHeartBeatProcessor heartBeatProcessor = new CustomHeartBeatProcessor();
 
     @Before
     public void init() {
@@ -92,12 +92,12 @@ public class ClientHeartBeatTest {
     }
 
     /**
-     *  test heartbeat trigger
+     * test heartbeat trigger
      */
     @Test
     public void testClientHeartBeatTrigger() throws InterruptedException {
         server.getRpcServer().registerProcessor(RpcProtocol.PROTOCOL_CODE,
-            CommonCommandCode.HEARTBEAT, heartBeatProcessor);
+                CommonCommandCode.HEARTBEAT, heartBeatProcessor);
         try {
             client.createStandaloneConnection(addr, 1000);
         } catch (RemotingException e) {
@@ -110,12 +110,12 @@ public class ClientHeartBeatTest {
     }
 
     /**
-     *  test heartbeat no response, close the connection from client side
+     * test heartbeat no response, close the connection from client side
      */
     @Test
     public void testClientHeartBeatTriggerExceed3Times() throws InterruptedException {
         server.getRpcServer().registerProcessor(RpcProtocol.PROTOCOL_CODE,
-            CommonCommandCode.HEARTBEAT, heartBeatProcessor);
+                CommonCommandCode.HEARTBEAT, heartBeatProcessor);
         try {
             client.createStandaloneConnection(addr, 1000);
         } catch (RemotingException e) {

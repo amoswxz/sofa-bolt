@@ -23,6 +23,10 @@ package com.alipay.remoting.config;
  * @version $Id: ConfigManager.java, v 0.1 2017-08-03 19:21 tsui Exp $
  */
 public class ConfigManager {
+
+    // ~~~ properties for serializer
+    public static final byte serializer = serializer();
+
     // ~~~ properties for bootstrap
     public static boolean tcp_nodelay() {
         return getBool(Configs.TCP_NODELAY, Configs.TCP_NODELAY_DEFAULT);
@@ -50,12 +54,12 @@ public class ConfigManager {
 
     public static int netty_buffer_low_watermark() {
         return getInt(Configs.NETTY_BUFFER_LOW_WATERMARK,
-            Configs.NETTY_BUFFER_LOW_WATERMARK_DEFAULT);
+                Configs.NETTY_BUFFER_LOW_WATERMARK_DEFAULT);
     }
 
     public static int netty_buffer_high_watermark() {
         return getInt(Configs.NETTY_BUFFER_HIGH_WATERMARK,
-            Configs.NETTY_BUFFER_HIGH_WATERMARK_DEFAULT);
+                Configs.NETTY_BUFFER_HIGH_WATERMARK_DEFAULT);
     }
 
     public static boolean netty_epoll() {
@@ -98,7 +102,7 @@ public class ConfigManager {
 
     public static int conn_create_tp_keepalive() {
         return getInt(Configs.CONN_CREATE_TP_KEEPALIVE_TIME,
-            Configs.CONN_CREATE_TP_KEEPALIVE_TIME_DEFAULT);
+                Configs.CONN_CREATE_TP_KEEPALIVE_TIME_DEFAULT);
     }
 
     // ~~~ properties for processor manager
@@ -130,7 +134,7 @@ public class ConfigManager {
 
     public static long conn_monitor_initial_delay() {
         return getLong(Configs.CONN_MONITOR_INITIAL_DELAY,
-            Configs.CONN_MONITOR_INITIAL_DELAY_DEFAULT);
+                Configs.CONN_MONITOR_INITIAL_DELAY_DEFAULT);
     }
 
     public static long conn_monitor_period() {
@@ -144,9 +148,6 @@ public class ConfigManager {
     public static int retry_detect_period() {
         return getInt(Configs.RETRY_DETECT_PERIOD, Configs.RETRY_DETECT_PERIOD_DEFAULT);
     }
-
-    // ~~~ properties for serializer
-    public static final byte serializer = serializer();
 
     public static byte serializer() {
         return getByte(Configs.SERIALIZER, Configs.SERIALIZER_DEFAULT);

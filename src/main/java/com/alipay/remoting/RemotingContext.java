@@ -16,48 +16,52 @@
  */
 package com.alipay.remoting;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.alipay.remoting.rpc.RpcCommandType;
 import com.alipay.remoting.rpc.protocol.UserProcessor;
 import com.alipay.remoting.util.ConnectionUtil;
 import com.alipay.remoting.util.StringUtils;
-
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Wrap the ChannelHandlerContext.
- * 
+ *
  * @author jiangping
  * @version $Id: RemotingContext.java, v 0.1 2015-9-6 PM5:50:07 tao Exp $
  */
 public class RemotingContext {
 
-    private ChannelHandlerContext                       channelContext;
+    private ChannelHandlerContext channelContext;
 
-    private boolean                                     serverSide     = false;
+    private boolean serverSide = false;
 
-    /** whether need handle request timeout, if true, request will be discarded. The default value is true */
-    private boolean                                     timeoutDiscard = true;
+    /**
+     * whether need handle request timeout, if true, request will be discarded. The default value is true
+     */
+    private boolean timeoutDiscard = true;
 
-    /** request arrive time stamp */
-    private long                                        arriveTimestamp;
+    /**
+     * request arrive time stamp
+     */
+    private long arriveTimestamp;
 
-    /** request timeout setting by invoke side */
-    private int                                         timeout;
+    /**
+     * request timeout setting by invoke side
+     */
+    private int timeout;
 
-    /** rpc command type */
-    private int                                         rpcCommandType;
+    /**
+     * rpc command type
+     */
+    private int rpcCommandType;
 
     private ConcurrentHashMap<String, UserProcessor<?>> userProcessors;
 
-    private InvokeContext                               invokeContext;
+    private InvokeContext invokeContext;
 
     /**
      * Constructor.
-     * 
-     * @param ctx
      */
     public RemotingContext(ChannelHandlerContext ctx) {
         this.channelContext = ctx;
@@ -65,8 +69,6 @@ public class RemotingContext {
 
     /**
      * Constructor.
-     * @param ctx
-     * @param serverSide
      */
     public RemotingContext(ChannelHandlerContext ctx, boolean serverSide) {
         this.channelContext = ctx;
@@ -75,12 +77,9 @@ public class RemotingContext {
 
     /**
      * Constructor.
-     * @param ctx
-     * @param serverSide
-     * @param userProcessors
      */
     public RemotingContext(ChannelHandlerContext ctx, boolean serverSide,
-                           ConcurrentHashMap<String, UserProcessor<?>> userProcessors) {
+            ConcurrentHashMap<String, UserProcessor<?>> userProcessors) {
         this.channelContext = ctx;
         this.serverSide = serverSide;
         this.userProcessors = userProcessors;
@@ -88,14 +87,10 @@ public class RemotingContext {
 
     /**
      * Constructor.
-     * @param ctx
-     * @param invokeContext
-     * @param serverSide
-     * @param userProcessors
      */
     public RemotingContext(ChannelHandlerContext ctx, InvokeContext invokeContext,
-                           boolean serverSide,
-                           ConcurrentHashMap<String, UserProcessor<?>> userProcessors) {
+            boolean serverSide,
+            ConcurrentHashMap<String, UserProcessor<?>> userProcessors) {
         this.channelContext = ctx;
         this.serverSide = serverSide;
         this.userProcessors = userProcessors;
@@ -104,9 +99,6 @@ public class RemotingContext {
 
     /**
      * Wrap the writeAndFlush method.
-     * 
-     * @param msg
-     * @return
      */
     public ChannelFuture writeAndFlush(RemotingCommand msg) {
         return this.channelContext.writeAndFlush(msg);
@@ -114,12 +106,10 @@ public class RemotingContext {
 
     /**
      * whether this request already timeout
-     * 
-     * @return
      */
     public boolean isRequestTimeout() {
         if (this.timeout > 0 && (this.rpcCommandType != RpcCommandType.REQUEST_ONEWAY)
-            && (System.currentTimeMillis() - this.arriveTimestamp) > this.timeout) {
+                && (System.currentTimeMillis() - this.arriveTimestamp) > this.timeout) {
             return true;
         }
         return false;
@@ -127,18 +117,13 @@ public class RemotingContext {
 
     /**
      * The server side
-     * 
-     * @return
      */
     public boolean isServerSide() {
         return this.serverSide;
     }
 
-    /** 
+    /**
      * Get user processor for class name.
-     * 
-     * @param className
-     * @return
      */
     public UserProcessor<?> getUserProcessor(String className) {
         return StringUtils.isBlank(className) ? null : this.userProcessors.get(className);
@@ -146,8 +131,6 @@ public class RemotingContext {
 
     /**
      * Get connection from channel
-     * 
-     * @return
      */
     public Connection getConnection() {
         return ConnectionUtil.getConnectionFromChannel(channelContext.channel());
@@ -155,8 +138,6 @@ public class RemotingContext {
 
     /**
      * Get the channel handler context.
-     *
-     * @return
      */
     public ChannelHandlerContext getChannelContext() {
         return channelContext;
@@ -164,8 +145,6 @@ public class RemotingContext {
 
     /**
      * Set the channel handler context.
-     *
-     * @param ctx
      */
     public void setChannelContext(ChannelHandlerContext ctx) {
         this.channelContext = ctx;
@@ -181,15 +160,6 @@ public class RemotingContext {
     }
 
     /**
-     * Setter method for property <tt>arriveTimestamp<tt>.
-     *
-     * @param arriveTimestamp value to be assigned to property arriveTimestamp
-     */
-    public void setArriveTimestamp(long arriveTimestamp) {
-        this.arriveTimestamp = arriveTimestamp;
-    }
-
-    /**
      * Getter method for property <tt>arriveTimestamp</tt>.
      *
      * @return property value of arriveTimestamp
@@ -199,12 +169,12 @@ public class RemotingContext {
     }
 
     /**
-     * Setter method for property <tt>timeout<tt>.
+     * Setter method for property <tt>arriveTimestamp<tt>.
      *
-     * @param timeout value to be assigned to property timeout
+     * @param arriveTimestamp value to be assigned to property arriveTimestamp
      */
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
+    public void setArriveTimestamp(long arriveTimestamp) {
+        this.arriveTimestamp = arriveTimestamp;
     }
 
     /**
@@ -214,6 +184,15 @@ public class RemotingContext {
      */
     public int getTimeout() {
         return timeout;
+    }
+
+    /**
+     * Setter method for property <tt>timeout<tt>.
+     *
+     * @param timeout value to be assigned to property timeout
+     */
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
     }
 
     /**

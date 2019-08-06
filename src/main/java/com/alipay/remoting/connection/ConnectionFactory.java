@@ -22,7 +22,7 @@ import com.alipay.remoting.Url;
 
 /**
  * Factory that creates connections.
- * 
+ *
  * @author jiangping
  * @version $Id: ConnectionFactory.java, v 0.1 2015-9-21 PM7:47:46 tao Exp $
  */
@@ -35,23 +35,22 @@ public interface ConnectionFactory {
 
     /**
      * Create a connection use #BoltUrl
-     * 
+     *
      * @param url target url
      * @return connection
      */
     Connection createConnection(Url url) throws Exception;
 
     /**
-     * Create a connection according to the IP and port.
-     * Note: The default protocol is RpcProtocol.
-     * 
+     * Create a connection according to the IP and port. Note: The default protocol is RpcProtocol.
+     *
      * @param targetIP target ip
      * @param targetPort target port
      * @param connectTimeout connect timeout in millisecond
      * @return connection
      */
     Connection createConnection(String targetIP, int targetPort, int connectTimeout)
-                                                                                    throws Exception;
+            throws Exception;
 
     /**
      * Create a connection according to the IP and port.
@@ -65,5 +64,5 @@ public interface ConnectionFactory {
      * @return connection
      */
     Connection createConnection(String targetIP, int targetPort, byte version, int connectTimeout)
-                                                                                                  throws Exception;
+            throws Exception;
 }

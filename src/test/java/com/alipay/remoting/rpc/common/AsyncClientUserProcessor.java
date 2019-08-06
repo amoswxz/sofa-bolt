@@ -16,51 +16,61 @@
  */
 package com.alipay.remoting.rpc.common;
 
+import com.alipay.remoting.AsyncContext;
+import com.alipay.remoting.BizContext;
+import com.alipay.remoting.NamedThreadFactory;
+import com.alipay.remoting.rpc.protocol.AsyncUserProcessor;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alipay.remoting.AsyncContext;
-import com.alipay.remoting.BizContext;
-import com.alipay.remoting.NamedThreadFactory;
-import com.alipay.remoting.rpc.protocol.AsyncUserProcessor;
-
 /**
  * a demo aysnc user processor for rpc client
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: SimpleClientUserProcessor.java, v 0.1 Jan 7, 2016 3:01:49 PM xiaomin.cxm Exp $
  */
 public class AsyncClientUserProcessor extends AsyncUserProcessor<RequestBody> {
 
-    /** logger */
-    private static final Logger logger      = LoggerFactory
-                                                .getLogger(AsyncClientUserProcessor.class);
+    /**
+     * logger
+     */
+    private static final Logger logger = LoggerFactory
+            .getLogger(AsyncClientUserProcessor.class);
 
-    /** delay milliseconds */
-    private long                delayMs;
+    /**
+     * delay milliseconds
+     */
+    private long delayMs;
 
-    /** whether delay or not */
-    private boolean             delaySwitch;
+    /**
+     * whether delay or not
+     */
+    private boolean delaySwitch;
 
-    /** whether exception */
-    private boolean             isException;
+    /**
+     * whether exception
+     */
+    private boolean isException;
 
-    /** whether null */
-    private boolean             isNull;
+    /**
+     * whether null
+     */
+    private boolean isNull;
 
-    /** executor */
-    private ThreadPoolExecutor  executor;
+    /**
+     * executor
+     */
+    private ThreadPoolExecutor executor;
 
-    private ThreadPoolExecutor  asyncExecutor;
+    private ThreadPoolExecutor asyncExecutor;
 
-    private AtomicInteger       invokeTimes = new AtomicInteger();
+    private AtomicInteger invokeTimes = new AtomicInteger();
 
     public AsyncClientUserProcessor() {
         this.delaySwitch = false;
@@ -68,9 +78,9 @@ public class AsyncClientUserProcessor extends AsyncUserProcessor<RequestBody> {
         this.isNull = false;
         this.delayMs = 0;
         this.executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(4), new NamedThreadFactory("Request-process-pool"));
+                new ArrayBlockingQueue<Runnable>(4), new NamedThreadFactory("Request-process-pool"));
         this.asyncExecutor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(4), new NamedThreadFactory(
+                new ArrayBlockingQueue<Runnable>(4), new NamedThreadFactory(
                 "Another-aysnc-process-pool"));
     }
 
@@ -90,10 +100,10 @@ public class AsyncClientUserProcessor extends AsyncUserProcessor<RequestBody> {
     }
 
     public AsyncClientUserProcessor(long delay, int core, int max, int keepaliveSeconds,
-                                    int workQueue) {
+            int workQueue) {
         this(delay);
         this.executor = new ThreadPoolExecutor(core, max, keepaliveSeconds, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(workQueue), new NamedThreadFactory(
+                new ArrayBlockingQueue<Runnable>(workQueue), new NamedThreadFactory(
                 "Request-process-pool"));
     }
 
@@ -102,9 +112,24 @@ public class AsyncClientUserProcessor extends AsyncUserProcessor<RequestBody> {
         this.asyncExecutor.execute(new InnerTask(asyncCtx, request));
     }
 
+    @Override
+    public String interest() {
+        return RequestBody.class.getName();
+    }
+
+    @Override
+    public Executor getExecutor() {
+        return executor;
+    }
+
+    public int getInvokeTimes() {
+        return this.invokeTimes.get();
+    }
+
     class InnerTask implements Runnable {
+
         private AsyncContext asyncCtx;
-        private RequestBody  request;
+        private RequestBody request;
 
         public InnerTask(AsyncContext asyncCtx, RequestBody request) {
             this.asyncCtx = asyncCtx;
@@ -132,19 +157,5 @@ public class AsyncClientUserProcessor extends AsyncUserProcessor<RequestBody> {
                 this.asyncCtx.sendResponse(RequestBody.DEFAULT_CLIENT_RETURN_STR);
             }
         }
-    }
-
-    @Override
-    public String interest() {
-        return RequestBody.class.getName();
-    }
-
-    @Override
-    public Executor getExecutor() {
-        return executor;
-    }
-
-    public int getInvokeTimes() {
-        return this.invokeTimes.get();
     }
 }

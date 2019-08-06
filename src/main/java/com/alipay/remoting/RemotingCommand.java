@@ -16,19 +16,19 @@
  */
 package com.alipay.remoting;
 
-import java.io.Serializable;
-
 import com.alipay.remoting.config.switches.ProtocolSwitch;
 import com.alipay.remoting.exception.DeserializationException;
 import com.alipay.remoting.exception.SerializationException;
+import java.io.Serializable;
 
 /**
  * Remoting command.
- * 
+ *
  * @author jiangping
  * @version $Id: RemotingCommand.java, v 0.1 2015-12-11 PM10:17:11 tao Exp $
  */
 public interface RemotingCommand extends Serializable {
+
     /**
      * Get the code of the protocol that this command belongs to
      *
@@ -59,45 +59,31 @@ public interface RemotingCommand extends Serializable {
 
     /**
      * Get serializer type for this command
-     *
-     * @return
      */
     byte getSerializer();
 
     /**
      * Get the protocol switch status for this command
-     *
-     * @return
      */
     ProtocolSwitch getProtocolSwitch();
 
     /**
      * Serialize all parts of remoting command
-     *
-     * @throws SerializationException
      */
     void serialize() throws SerializationException;
 
     /**
      * Deserialize all parts of remoting command
-     *
-     * @throws DeserializationException
      */
     void deserialize() throws DeserializationException;
 
     /**
      * Serialize content of remoting command
-     *
-     * @param invokeContext
-     * @throws SerializationException
      */
     void serializeContent(InvokeContext invokeContext) throws SerializationException;
 
     /**
      * Deserialize content of remoting command
-     *
-     * @param invokeContext
-     * @throws DeserializationException
      */
     void deserializeContent(InvokeContext invokeContext) throws DeserializationException;
 }

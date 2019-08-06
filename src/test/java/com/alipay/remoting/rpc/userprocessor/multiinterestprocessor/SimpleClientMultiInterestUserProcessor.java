@@ -16,6 +16,11 @@
  */
 package com.alipay.remoting.rpc.userprocessor.multiinterestprocessor;
 
+import com.alipay.remoting.BizContext;
+import com.alipay.remoting.InvokeContext;
+import com.alipay.remoting.NamedThreadFactory;
+import com.alipay.remoting.rpc.common.RequestBody;
+import com.alipay.remoting.rpc.protocol.SyncMutiInterestUserProcessor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -23,56 +28,60 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.alipay.remoting.BizContext;
-import com.alipay.remoting.InvokeContext;
-import com.alipay.remoting.NamedThreadFactory;
-import com.alipay.remoting.rpc.common.RequestBody;
-import com.alipay.remoting.rpc.protocol.SyncMutiInterestUserProcessor;
 
 /**
  * @antuor muyun.cyt (muyun.cyt@antfin.com)  2018/7/5   11:20 AM
  */
 public class SimpleClientMultiInterestUserProcessor
-                                                   extends
-                                                   SyncMutiInterestUserProcessor<MultiInterestBaseRequestBody> {
-    /** logger */
-    private static final Logger logger          = LoggerFactory
-                                                    .getLogger(SimpleClientMultiInterestUserProcessor.class);
+        extends
+        SyncMutiInterestUserProcessor<MultiInterestBaseRequestBody> {
 
-    /** delay milliseconds */
-    private long                delayMs;
+    /**
+     * logger
+     */
+    private static final Logger logger = LoggerFactory
+            .getLogger(SimpleClientMultiInterestUserProcessor.class);
 
-    /** whether delay or not */
-    private boolean             delaySwitch;
+    /**
+     * delay milliseconds
+     */
+    private long delayMs;
 
-    /** executor */
-    private ThreadPoolExecutor  executor;
+    /**
+     * whether delay or not
+     */
+    private boolean delaySwitch;
 
-    /** default is true */
-    private boolean             timeoutDiscard  = true;
+    /**
+     * executor
+     */
+    private ThreadPoolExecutor executor;
 
-    private AtomicInteger       c1invokeTimes   = new AtomicInteger();
-    private AtomicInteger       c1onewayTimes   = new AtomicInteger();
-    private AtomicInteger       c1syncTimes     = new AtomicInteger();
-    private AtomicInteger       c1futureTimes   = new AtomicInteger();
-    private AtomicInteger       c1callbackTimes = new AtomicInteger();
+    /**
+     * default is true
+     */
+    private boolean timeoutDiscard = true;
 
-    private AtomicInteger       c2invokeTimes   = new AtomicInteger();
-    private AtomicInteger       c2onewayTimes   = new AtomicInteger();
-    private AtomicInteger       c2syncTimes     = new AtomicInteger();
-    private AtomicInteger       c2futureTimes   = new AtomicInteger();
-    private AtomicInteger       c2callbackTimes = new AtomicInteger();
+    private AtomicInteger c1invokeTimes = new AtomicInteger();
+    private AtomicInteger c1onewayTimes = new AtomicInteger();
+    private AtomicInteger c1syncTimes = new AtomicInteger();
+    private AtomicInteger c1futureTimes = new AtomicInteger();
+    private AtomicInteger c1callbackTimes = new AtomicInteger();
+
+    private AtomicInteger c2invokeTimes = new AtomicInteger();
+    private AtomicInteger c2onewayTimes = new AtomicInteger();
+    private AtomicInteger c2syncTimes = new AtomicInteger();
+    private AtomicInteger c2futureTimes = new AtomicInteger();
+    private AtomicInteger c2callbackTimes = new AtomicInteger();
 
     public SimpleClientMultiInterestUserProcessor() {
         this.delaySwitch = false;
         this.delayMs = 0;
         this.executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(4), new NamedThreadFactory("Request-process-pool"));
+                new ArrayBlockingQueue<Runnable>(4), new NamedThreadFactory("Request-process-pool"));
     }
 
     public SimpleClientMultiInterestUserProcessor(long delay) {
@@ -85,10 +94,10 @@ public class SimpleClientMultiInterestUserProcessor
     }
 
     public SimpleClientMultiInterestUserProcessor(long delay, int core, int max,
-                                                  int keepaliveSeconds, int workQueue) {
+            int keepaliveSeconds, int workQueue) {
         this(delay);
         this.executor = new ThreadPoolExecutor(core, max, keepaliveSeconds, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(workQueue), new NamedThreadFactory(
+                new ArrayBlockingQueue<Runnable>(workQueue), new NamedThreadFactory(
                 "Request-process-pool"));
     }
 
@@ -96,7 +105,7 @@ public class SimpleClientMultiInterestUserProcessor
 
     @Override
     public Object handleRequest(BizContext bizCtx, MultiInterestBaseRequestBody request)
-                                                                                        throws Exception {
+            throws Exception {
         logger.warn("Request received:" + request);
         if (bizCtx.isRequestTimeout()) {
             String errMsg = "Stop process in client biz thread, already timeout!";
@@ -175,13 +184,13 @@ public class SimpleClientMultiInterestUserProcessor
     }
 
     public int getInvokeTimesEachCallTypeC1(RequestBody.InvokeType type) {
-        return new int[] { this.c1onewayTimes.get(), this.c1syncTimes.get(),
-                this.c1futureTimes.get(), this.c1callbackTimes.get() }[type.ordinal()];
+        return new int[]{this.c1onewayTimes.get(), this.c1syncTimes.get(),
+                this.c1futureTimes.get(), this.c1callbackTimes.get()}[type.ordinal()];
     }
 
     public int getInvokeTimesEachCallTypeC2(RequestBody.InvokeType type) {
-        return new int[] { this.c2onewayTimes.get(), this.c2syncTimes.get(),
-                this.c2futureTimes.get(), this.c2callbackTimes.get() }[type.ordinal()];
+        return new int[]{this.c2onewayTimes.get(), this.c2syncTimes.get(),
+                this.c2futureTimes.get(), this.c2callbackTimes.get()}[type.ordinal()];
     }
 
     // ~~~ private methods
@@ -212,6 +221,7 @@ public class SimpleClientMultiInterestUserProcessor
     }
 
     // ~~~ getters and setters
+
     /**
      * Getter method for property <tt>timeoutDiscard</tt>.
      *

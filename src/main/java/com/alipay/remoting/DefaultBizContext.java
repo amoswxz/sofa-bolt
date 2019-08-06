@@ -17,7 +17,6 @@
 package com.alipay.remoting;
 
 import com.alipay.remoting.util.RemotingUtil;
-
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -28,6 +27,7 @@ import io.netty.channel.ChannelHandlerContext;
  * @version $Id: DefaultBizContext.java, v 0.1 Jan 7, 2016 10:42:30 AM xiaomin.cxm Exp $
  */
 public class DefaultBizContext implements BizContext {
+
     /**
      * remoting context
      */
@@ -35,8 +35,6 @@ public class DefaultBizContext implements BizContext {
 
     /**
      * Constructor with RemotingContext
-     *
-     * @param remotingCtx
      */
     public DefaultBizContext(RemotingContext remotingCtx) {
         this.remotingCtx = remotingCtx;
@@ -117,8 +115,6 @@ public class DefaultBizContext implements BizContext {
 
     /**
      * get the timeout value from rpc client.
-     *
-     * @return
      */
     @Override
     public int getClientTimeout() {
@@ -127,8 +123,6 @@ public class DefaultBizContext implements BizContext {
 
     /**
      * get the arrive time stamp
-     *
-     * @return
      */
     @Override
     public long getArriveTimestamp() {

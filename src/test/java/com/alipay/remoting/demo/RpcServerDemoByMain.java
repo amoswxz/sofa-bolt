@@ -16,14 +16,13 @@
  */
 package com.alipay.remoting.demo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.rpc.common.BoltServer;
 import com.alipay.remoting.rpc.common.CONNECTEventProcessor;
 import com.alipay.remoting.rpc.common.DISCONNECTEventProcessor;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * a demo for rpc server, you can just run the main method to start a server
@@ -32,16 +31,16 @@ import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
  * @version $Id: RpcServerDemoByMain.java, v 0.1 2018-04-10 10:37 tsui Exp $
  */
 public class RpcServerDemoByMain {
-    static Logger             logger                    = LoggerFactory
-                                                            .getLogger(RpcServerDemoByMain.class);
 
-    BoltServer                server;
+    static Logger logger = LoggerFactory.getLogger(RpcServerDemoByMain.class);
 
-    int                       port                      = 8999;
+    BoltServer server;
 
-    SimpleServerUserProcessor serverUserProcessor       = new SimpleServerUserProcessor();
-    CONNECTEventProcessor     serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor  serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    int port = 8999;
+
+    SimpleServerUserProcessor serverUserProcessor = new SimpleServerUserProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
 
     public RpcServerDemoByMain() {
         // 1. create a Rpc server with port assigned

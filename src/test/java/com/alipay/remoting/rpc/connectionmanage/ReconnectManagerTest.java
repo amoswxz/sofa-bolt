@@ -16,13 +16,6 @@
  */
 package com.alipay.remoting.rpc.connectionmanage;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.RemotingAddressParser;
@@ -36,32 +29,38 @@ import com.alipay.remoting.rpc.common.CONNECTEventProcessor;
 import com.alipay.remoting.rpc.common.DISCONNECTEventProcessor;
 import com.alipay.remoting.rpc.common.SimpleClientUserProcessor;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author yueliang
  * @version $Id: ReconnectManagerTest.java, v 0.1 2017-03-16 PM1:03 yueliang Exp $
  */
 public class ReconnectManagerTest {
-    static Logger                 logger                    = LoggerFactory
-                                                                .getLogger(ReconnectManagerTest.class);
 
-    BoltServer                    server;
-    RpcClient                     client;
+    static Logger logger = LoggerFactory
+            .getLogger(ReconnectManagerTest.class);
 
-    int                           port                      = 2014;
+    BoltServer server;
+    RpcClient client;
 
-    SimpleServerUserProcessor     serverUserProcessor       = new SimpleServerUserProcessor();
-    SimpleClientUserProcessor     clientUserProcessor       = new SimpleClientUserProcessor();
-    CONNECTEventProcessor         clientConnectProcessor    = new CONNECTEventProcessor();
-    CONNECTEventProcessor         serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor      clientDisConnectProcessor = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor      serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    int port = 2014;
+
+    SimpleServerUserProcessor serverUserProcessor = new SimpleServerUserProcessor();
+    SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor();
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
 
     /**
      * parser
      */
-    private RemotingAddressParser addressParser             = new RpcAddressParser();
+    private RemotingAddressParser addressParser = new RpcAddressParser();
 
     @Before
     public void init() {

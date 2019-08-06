@@ -16,6 +16,8 @@
  */
 package com.alipay.remoting.inner.utiltest;
 
+import com.alipay.remoting.config.Configs;
+import com.alipay.remoting.rpc.RpcClient;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -23,20 +25,21 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.alipay.remoting.config.Configs;
-import com.alipay.remoting.rpc.RpcClient;
-
 /**
- *
  * @author tsui
  * @version $Id: SwitchStatusTest.java, v 0.1 2017-08-03 17:25 tsui Exp $
  */
 public class GlobalSwitchTest {
+
     private RpcClient client1;
     private RpcClient client2;
 
     @BeforeClass
     public static void initClass() {
+    }
+
+    @AfterClass
+    public static void afterClass() {
     }
 
     @Before
@@ -45,10 +48,6 @@ public class GlobalSwitchTest {
 
     @After
     public void stop() {
-    }
-
-    @AfterClass
-    public static void afterClass() {
     }
 
     @Test

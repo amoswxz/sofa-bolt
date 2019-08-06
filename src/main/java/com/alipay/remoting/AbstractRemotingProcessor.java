@@ -16,25 +16,23 @@
  */
 package com.alipay.remoting;
 
-import java.util.concurrent.ExecutorService;
-
-import org.slf4j.Logger;
-
 import com.alipay.remoting.log.BoltLoggerFactory;
 import com.alipay.remoting.util.RemotingUtil;
+import java.util.concurrent.ExecutorService;
+import org.slf4j.Logger;
 
 /**
  * Processor to process remoting command.
- * 
+ *
  * @author jiangping
  * @version $Id: RemotingProcessor.java, v 0.1 2015-9-6 PM2:50:51 tao Exp $
- * @param <T>
  */
 public abstract class AbstractRemotingProcessor<T extends RemotingCommand> implements
-                                                                           RemotingProcessor<T> {
+        RemotingProcessor<T> {
+
     private static final Logger logger = BoltLoggerFactory.getLogger("CommonDefault");
-    private ExecutorService     executor;
-    private CommandFactory      commandFactory;
+    private ExecutorService executor;
+    private CommandFactory commandFactory;
 
     /**
      * Default constructor.
@@ -52,6 +50,7 @@ public abstract class AbstractRemotingProcessor<T extends RemotingCommand> imple
 
     /**
      * Constructor.
+     *
      * @param executor ExecutorService
      */
     public AbstractRemotingProcessor(ExecutorService executor) {
@@ -71,7 +70,7 @@ public abstract class AbstractRemotingProcessor<T extends RemotingCommand> imple
 
     /**
      * Do the process.
-     * 
+     *
      * @param ctx RemotingContext
      * @param msg T
      */
@@ -79,14 +78,14 @@ public abstract class AbstractRemotingProcessor<T extends RemotingCommand> imple
 
     /**
      * Process the remoting command with its own executor or with the defaultExecutor if its own if null.
-     * 
+     *
      * @param ctx RemotingContext
      * @param msg T
      * @param defaultExecutor ExecutorService, default executor
      */
     @Override
     public void process(RemotingContext ctx, T msg, ExecutorService defaultExecutor)
-                                                                                    throws Exception {
+            throws Exception {
         ProcessTask task = new ProcessTask(ctx, msg);
         if (this.getExecutor() != null) {
             this.getExecutor().execute(task);
@@ -97,7 +96,7 @@ public abstract class AbstractRemotingProcessor<T extends RemotingCommand> imple
 
     /**
      * Getter method for property <tt>executor</tt>.
-     * 
+     *
      * @return property value of executor
      */
     @Override
@@ -107,7 +106,7 @@ public abstract class AbstractRemotingProcessor<T extends RemotingCommand> imple
 
     /**
      * Setter method for property <tt>executor</tt>.
-     * 
+     *
      * @param executor value to be assigned to property executor
      */
     @Override
@@ -125,14 +124,14 @@ public abstract class AbstractRemotingProcessor<T extends RemotingCommand> imple
 
     /**
      * Task for asynchronous process.
-     * 
+     *
      * @author jiangping
      * @version $Id: RemotingProcessor.java, v 0.1 2015-10-14 PM7:40:44 tao Exp $
      */
     class ProcessTask implements Runnable {
 
         RemotingContext ctx;
-        T               msg;
+        T msg;
 
         public ProcessTask(RemotingContext ctx, T msg) {
             this.ctx = ctx;
@@ -146,12 +145,12 @@ public abstract class AbstractRemotingProcessor<T extends RemotingCommand> imple
             } catch (Throwable e) {
                 //protect the thread running this task
                 String remotingAddress = RemotingUtil.parseRemoteAddress(ctx.getChannelContext()
-                    .channel());
+                        .channel());
                 logger
-                    .error(
-                        "Exception caught when process rpc request command in AbstractRemotingProcessor, Id="
-                                + msg.getId() + "! Invoke source address is [" + remotingAddress
-                                + "].", e);
+                        .error(
+                                "Exception caught when process rpc request command in AbstractRemotingProcessor, Id="
+                                        + msg.getId() + "! Invoke source address is [" + remotingAddress
+                                        + "].", e);
             }
         }
 

@@ -16,15 +16,13 @@
  */
 package com.alipay.remoting.inner.utiltest;
 
+import com.alipay.remoting.util.StringUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.alipay.remoting.util.StringUtils;
-
 /**
- *
  * @author tsui
  * @version $Id: StringUtilsTest.java, v 0.1 2017-07-19 14:57 tsui Exp $
  */

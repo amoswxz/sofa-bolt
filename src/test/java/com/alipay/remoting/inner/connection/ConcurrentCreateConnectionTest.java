@@ -16,21 +16,12 @@
  */
 package com.alipay.remoting.inner.connection;
 
-import java.util.concurrent.ConcurrentHashMap;
-
-import com.alipay.remoting.DefaultClientConnectionManager;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.ConnectionEventHandler;
 import com.alipay.remoting.ConnectionEventListener;
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.ConnectionSelectStrategy;
+import com.alipay.remoting.DefaultClientConnectionManager;
 import com.alipay.remoting.RandomSelectStrategy;
 import com.alipay.remoting.RemotingAddressParser;
 import com.alipay.remoting.Url;
@@ -43,40 +34,43 @@ import com.alipay.remoting.rpc.RpcConnectionFactory;
 import com.alipay.remoting.rpc.common.BoltServer;
 import com.alipay.remoting.rpc.common.CONNECTEventProcessor;
 import com.alipay.remoting.rpc.protocol.UserProcessor;
+import java.util.concurrent.ConcurrentHashMap;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Concurrent create connection test
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: ConcurrentTest.java, v 0.1 Mar 10, 2016 9:50:00 AM xiaomin.cxm Exp $
  */
 public class ConcurrentCreateConnectionTest {
 
-    private final static Logger                         logger                   = LoggerFactory
-                                                                                     .getLogger(RpcConnectionManagerTest.class);
-    private ConcurrentHashMap<String, UserProcessor<?>> userProcessors           = new ConcurrentHashMap<String, UserProcessor<?>>();
-
-    private DefaultClientConnectionManager              cm;
-    private ConnectionSelectStrategy                    connectionSelectStrategy = new RandomSelectStrategy(
-                                                                                     null);
-    private RemotingAddressParser                       addressParser            = new RpcAddressParser();
-    private ConnectionFactory                           connectionFactory        = new RpcConnectionFactory(
-                                                                                     userProcessors,
-                                                                                     new RpcClient());
-    private ConnectionEventHandler                      connectionEventHandler   = new RpcConnectionEventHandler();
-    private ConnectionEventListener                     connectionEventListener  = new ConnectionEventListener();
-
-    private BoltServer                                  server;
-
-    private String                                      ip                       = "127.0.0.1";
-    private int                                         port                     = 1111;
-
-    CONNECTEventProcessor                               serverConnectProcessor   = new CONNECTEventProcessor();
+    private final static Logger logger = LoggerFactory
+            .getLogger(RpcConnectionManagerTest.class);
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    private ConcurrentHashMap<String, UserProcessor<?>> userProcessors = new ConcurrentHashMap<String, UserProcessor<?>>();
+    private DefaultClientConnectionManager cm;
+    private ConnectionSelectStrategy connectionSelectStrategy = new RandomSelectStrategy(
+            null);
+    private RemotingAddressParser addressParser = new RpcAddressParser();
+    private ConnectionFactory connectionFactory = new RpcConnectionFactory(
+            userProcessors,
+            new RpcClient());
+    private ConnectionEventHandler connectionEventHandler = new RpcConnectionEventHandler();
+    private ConnectionEventListener connectionEventListener = new ConnectionEventListener();
+    private BoltServer server;
+    private String ip = "127.0.0.1";
+    private int port = 1111;
 
     @Before
     public void init() {
         cm = new DefaultClientConnectionManager(connectionSelectStrategy, connectionFactory,
-            connectionEventHandler, connectionEventListener);
+                connectionEventHandler, connectionEventListener);
         cm.setAddressParser(addressParser);
         cm.startup();
         server = new BoltServer(port);
@@ -119,7 +113,8 @@ public class ConcurrentCreateConnectionTest {
         final boolean warmup = true;
 
         for (int i = 0; i < 10; ++i) {
-            MyThread thread = new MyThread(addr, connNum, warmup);// warmup in one thread, the other threads will try lock failed.
+            MyThread thread = new MyThread(addr, connNum,
+                    warmup);// warmup in one thread, the other threads will try lock failed.
             new Thread(thread).start();
         }
         try {
@@ -131,9 +126,10 @@ public class ConcurrentCreateConnectionTest {
     }
 
     class MyThread implements Runnable {
-        Url              addr;
-        int              connNum;
-        boolean          warmup;
+
+        Url addr;
+        int connNum;
+        boolean warmup;
         RpcAddressParser parser;
 
         public MyThread(Url addr, int connNum, boolean warmup) {

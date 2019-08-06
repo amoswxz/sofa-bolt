@@ -16,24 +16,23 @@
  */
 package com.alipay.remoting.rpc.heartbeat;
 
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.AbstractRemotingProcessor;
 import com.alipay.remoting.RemotingCommand;
 import com.alipay.remoting.RemotingContext;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * CustomHeartBeatProcessor
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: CustomHeartBeatProcessor.java, v 0.1 Apr 12, 2016 12:05:19 PM xiaomin.cxm Exp $
  */
 public class CustomHeartBeatProcessor extends AbstractRemotingProcessor<RemotingCommand> {
-    static Logger         logger         = LoggerFactory.getLogger(CustomHeartBeatProcessor.class);
+
+    static Logger logger = LoggerFactory.getLogger(CustomHeartBeatProcessor.class);
 
     private AtomicInteger heartBeatTimes = new AtomicInteger();
 

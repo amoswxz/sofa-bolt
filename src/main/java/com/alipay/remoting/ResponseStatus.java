@@ -18,7 +18,7 @@ package com.alipay.remoting;
 
 /**
  * Status of the response.
- * 
+ *
  * @author jiangping
  * @version $Id: ResponseStatus.java, v 0.1 2015-9-28 PM3:08:12 tao Exp $
  */
@@ -39,8 +39,42 @@ public enum ResponseStatus {
     ;
 
     /**
+     * Convert to ResponseStatus.
+     */
+    public static ResponseStatus valueOf(short value) {
+        switch (value) {
+            case 0x0000:
+                return SUCCESS;
+            case 0x0001:
+                return ERROR;
+            case 0x0002:
+                return SERVER_EXCEPTION;
+            case 0x0003:
+                return UNKNOWN;
+            case 0x0004:
+                return SERVER_THREADPOOL_BUSY;
+            case 0x0005:
+                return ERROR_COMM;
+            case 0x0006:
+                return NO_PROCESSOR;
+            case 0x0007:
+                return TIMEOUT;
+            case 0x0008:
+                return CLIENT_SEND_ERROR;
+            case 0x0009:
+                return CODEC_EXCEPTION;
+            case 0x0010:
+                return CONNECTION_CLOSED;
+            case 0x0011:
+                return SERVER_SERIAL_EXCEPTION;
+            case 0x0012:
+                return SERVER_DESERIAL_EXCEPTION;
+        }
+        throw new IllegalArgumentException("Unknown status value ," + value);
+    }
+
+    /**
      * Convert to short.
-     * @return
      */
     public short getValue() {
         switch (this) {
@@ -73,43 +107,5 @@ public enum ResponseStatus {
 
         }
         throw new IllegalArgumentException("Unknown status," + this);
-    }
-
-    /**
-     * Convert to ResponseStatus.
-     * 
-     * @param value
-     * @return
-     */
-    public static ResponseStatus valueOf(short value) {
-        switch (value) {
-            case 0x0000:
-                return SUCCESS;
-            case 0x0001:
-                return ERROR;
-            case 0x0002:
-                return SERVER_EXCEPTION;
-            case 0x0003:
-                return UNKNOWN;
-            case 0x0004:
-                return SERVER_THREADPOOL_BUSY;
-            case 0x0005:
-                return ERROR_COMM;
-            case 0x0006:
-                return NO_PROCESSOR;
-            case 0x0007:
-                return TIMEOUT;
-            case 0x0008:
-                return CLIENT_SEND_ERROR;
-            case 0x0009:
-                return CODEC_EXCEPTION;
-            case 0x0010:
-                return CONNECTION_CLOSED;
-            case 0x0011:
-                return SERVER_SERIAL_EXCEPTION;
-            case 0x0012:
-                return SERVER_DESERIAL_EXCEPTION;
-        }
-        throw new IllegalArgumentException("Unknown status value ," + value);
     }
 }

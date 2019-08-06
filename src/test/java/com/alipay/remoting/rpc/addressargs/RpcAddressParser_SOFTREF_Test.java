@@ -16,16 +16,14 @@
  */
 package com.alipay.remoting.rpc.addressargs;
 
-import org.junit.Assert;
-
 import com.alipay.remoting.Url;
 import com.alipay.remoting.exception.RemotingException;
 import com.alipay.remoting.rpc.RpcAddressParser;
+import org.junit.Assert;
 
 /**
- * rpc address parser
- * test soft reference
- * 
+ * rpc address parser test soft reference
+ *
  * @author xiaomin.cxm
  * @version $Id: RpcAddressParser_SOFTREF_Test.java, v 0.1 Apr 6, 2016 10:45:13 AM xiaomin.cxm Exp $
  */

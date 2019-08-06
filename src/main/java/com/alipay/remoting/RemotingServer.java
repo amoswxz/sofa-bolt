@@ -16,10 +16,9 @@
  */
 package com.alipay.remoting;
 
-import java.util.concurrent.ExecutorService;
-
 import com.alipay.remoting.config.Configurable;
 import com.alipay.remoting.rpc.protocol.UserProcessor;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author chengyi (mark.lx@antfin.com) 2018-06-16 06:55
@@ -41,8 +40,8 @@ public interface RemotingServer extends Configurable, LifeCycle {
     /**
      * Stop the server. Use shutdown() instead.
      *
-     * Remoting server can not be used any more after stop.
-     * If you need, you should destroy it, and instantiate another one.
+     * Remoting server can not be used any more after stop. If you need, you should destroy it, and instantiate another
+     * one.
      */
     @Deprecated
     boolean stop();
@@ -69,7 +68,7 @@ public interface RemotingServer extends Configurable, LifeCycle {
      * @param processor processor
      */
     void registerProcessor(byte protocolCode, CommandCode commandCode,
-                           RemotingProcessor<?> processor);
+            RemotingProcessor<?> processor);
 
     /**
      * Register default executor service for server.

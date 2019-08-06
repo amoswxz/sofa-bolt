@@ -39,7 +39,7 @@ public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
     /**
      * by default, suggest design a single byte for protocol version.
      */
-    public static final int DEFAULT_PROTOCOL_VERSION_LENGTH         = 1;
+    public static final int DEFAULT_PROTOCOL_VERSION_LENGTH = 1;
     /**
      * protocol version should be a positive number, we use -1 to represent illegal
      */
@@ -48,7 +48,7 @@ public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
     /**
      * the length of protocol code
      */
-    protected int           protocolCodeLength;
+    protected int protocolCodeLength;
 
     public ProtocolCodeBasedDecoder(int protocolCodeLength) {
         super();
@@ -101,7 +101,7 @@ public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
                 protocol.getDecoder().decode(ctx, in, out);
             } else {
                 throw new CodecException("Unknown protocol code: [" + protocolCode
-                                         + "] while decode in ProtocolDecoder.");
+                        + "] while decode in ProtocolDecoder.");
             }
         }
     }

@@ -62,15 +62,13 @@ public class RpcClient extends AbstractBoltClient {
     private final ConcurrentHashMap<String, UserProcessor<?>> userProcessors;
     private final ConnectionEventHandler connectionEventHandler;
     private final ConnectionEventListener connectionEventListener;
-
+    // used in RpcClientAdapter (bolt-tr-adapter)
+    protected RpcRemoting rpcRemoting;
     private DefaultClientConnectionManager connectionManager;
     private Reconnector reconnectManager;
     private RemotingAddressParser addressParser;
     private DefaultConnectionMonitor connectionMonitor;
     private ConnectionMonitorStrategy monitorStrategy;
-
-    // used in RpcClientAdapter (bolt-tr-adapter)
-    protected RpcRemoting rpcRemoting;
 
     public RpcClient() {
         this.taskScanner = new RpcTaskScanner();

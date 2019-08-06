@@ -23,6 +23,7 @@ package com.alipay.remoting.config.switches;
  * @version $Id: Switch.java, v 0.1 2018-04-08 11:26 tsui Exp $
  */
 public interface Switch {
+
     /**
      * api for user to turn on a feature
      *
@@ -32,6 +33,7 @@ public interface Switch {
 
     /**
      * api for user to turn off a feature
+     *
      * @param index the switch index of feature
      */
     void turnOff(int index);

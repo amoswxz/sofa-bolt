@@ -16,29 +16,29 @@
  */
 package com.alipay.remoting.rpc.watermark;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.alipay.remoting.config.Configs;
 import com.alipay.remoting.exception.RemotingException;
 import com.alipay.remoting.rpc.RpcClient;
 import com.alipay.remoting.rpc.common.BoltServer;
 import com.alipay.remoting.rpc.common.PortScan;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * water mark init test
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: WaterMarkTest.java, v 0.1 Apr 6, 2016 8:58:36 PM xiaomin.cxm Exp $
  */
 public class WaterMarkInitTest {
-    BoltServer server;
-    RpcClient  client;
 
-    int        port = PortScan.select();
-    String     addr = "127.0.0.1:" + port;
+    BoltServer server;
+    RpcClient client;
+
+    int port = PortScan.select();
+    String addr = "127.0.0.1:" + port;
 
     @Before
     public void init() {

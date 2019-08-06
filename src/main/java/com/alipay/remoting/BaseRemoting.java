@@ -16,30 +16,30 @@
  */
 package com.alipay.remoting;
 
-import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-
 import com.alipay.remoting.exception.RemotingException;
 import com.alipay.remoting.log.BoltLoggerFactory;
 import com.alipay.remoting.util.RemotingUtil;
-
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.util.Timeout;
 import io.netty.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
 
 /**
  * Base remoting capability.
- * 
+ *
  * @author jiangping
  * @version $Id: BaseRemoting.java, v 0.1 Mar 4, 2016 12:09:56 AM tao Exp $
  */
 public abstract class BaseRemoting {
-    /** logger */
+
+    /**
+     * logger
+     */
     private static final Logger logger = BoltLoggerFactory.getLogger("CommonDefault");
 
-    protected CommandFactory    commandFactory;
+    protected CommandFactory commandFactory;
 
     public BaseRemoting(CommandFactory commandFactory) {
         this.commandFactory = commandFactory;
@@ -47,17 +47,10 @@ public abstract class BaseRemoting {
 
     /**
      * Synchronous invocation
-     * 
-     * @param conn
-     * @param request
-     * @param timeoutMillis
-     * @return
-     * @throws InterruptedException 
-     * @throws RemotingException
      */
     protected RemotingCommand invokeSync(final Connection conn, final RemotingCommand request,
-                                         final int timeoutMillis) throws RemotingException,
-                                                                 InterruptedException {
+            final int timeoutMillis) throws RemotingException,
+            InterruptedException {
         final InvokeFuture future = createInvokeFuture(request, request.getInvokeContext());
         conn.addInvokeFuture(future);
         final int requestId = request.getId();
@@ -69,7 +62,7 @@ public abstract class BaseRemoting {
                     if (!f.isSuccess()) {
                         conn.removeInvokeFuture(requestId);
                         future.putResponse(commandFactory.createSendFailedResponse(
-                            conn.getRemoteAddress(), f.cause()));
+                                conn.getRemoteAddress(), f.cause()));
                         logger.error("Invoke send failed, id={}", requestId, f.cause());
                     }
                 }
@@ -93,17 +86,11 @@ public abstract class BaseRemoting {
 
     /**
      * Invocation with callback.
-     * 
-     * @param conn
-     * @param request
-     * @param invokeCallback
-     * @param timeoutMillis
-     * @throws InterruptedException
      */
     protected void invokeWithCallback(final Connection conn, final RemotingCommand request,
-                                      final InvokeCallback invokeCallback, final int timeoutMillis) {
+            final InvokeCallback invokeCallback, final int timeoutMillis) {
         final InvokeFuture future = createInvokeFuture(conn, request, request.getInvokeContext(),
-            invokeCallback);
+                invokeCallback);
         conn.addInvokeFuture(future);
         final int requestId = request.getId();
         try {
@@ -113,7 +100,7 @@ public abstract class BaseRemoting {
                     InvokeFuture future = conn.removeInvokeFuture(requestId);
                     if (future != null) {
                         future.putResponse(commandFactory.createTimeoutResponse(conn
-                            .getRemoteAddress()));
+                                .getRemoteAddress()));
                         future.tryAsyncExecuteInvokeCallbackAbnormally();
                     }
                 }
@@ -129,11 +116,11 @@ public abstract class BaseRemoting {
                         if (f != null) {
                             f.cancelTimeout();
                             f.putResponse(commandFactory.createSendFailedResponse(
-                                conn.getRemoteAddress(), cf.cause()));
+                                    conn.getRemoteAddress(), cf.cause()));
                             f.tryAsyncExecuteInvokeCallbackAbnormally();
                         }
                         logger.error("Invoke send failed. The address is {}",
-                            RemotingUtil.parseRemoteAddress(conn.getChannel()), cf.cause());
+                                RemotingUtil.parseRemoteAddress(conn.getChannel()), cf.cause());
                     }
                 }
 
@@ -146,20 +133,15 @@ public abstract class BaseRemoting {
                 f.tryAsyncExecuteInvokeCallbackAbnormally();
             }
             logger.error("Exception caught when sending invocation. The address is {}",
-                RemotingUtil.parseRemoteAddress(conn.getChannel()), e);
+                    RemotingUtil.parseRemoteAddress(conn.getChannel()), e);
         }
     }
 
     /**
      * Invocation with future returned.
-     * 
-     * @param conn
-     * @param request
-     * @param timeoutMillis
-     * @return
      */
     protected InvokeFuture invokeWithFuture(final Connection conn, final RemotingCommand request,
-                                            final int timeoutMillis) {
+            final int timeoutMillis) {
 
         final InvokeFuture future = createInvokeFuture(request, request.getInvokeContext());
         conn.addInvokeFuture(future);
@@ -171,7 +153,7 @@ public abstract class BaseRemoting {
                     InvokeFuture future = conn.removeInvokeFuture(requestId);
                     if (future != null) {
                         future.putResponse(commandFactory.createTimeoutResponse(conn
-                            .getRemoteAddress()));
+                                .getRemoteAddress()));
                     }
                 }
 
@@ -187,10 +169,10 @@ public abstract class BaseRemoting {
                         if (f != null) {
                             f.cancelTimeout();
                             f.putResponse(commandFactory.createSendFailedResponse(
-                                conn.getRemoteAddress(), cf.cause()));
+                                    conn.getRemoteAddress(), cf.cause()));
                         }
                         logger.error("Invoke send failed. The address is {}",
-                            RemotingUtil.parseRemoteAddress(conn.getChannel()), cf.cause());
+                                RemotingUtil.parseRemoteAddress(conn.getChannel()), cf.cause());
                     }
                 }
 
@@ -202,17 +184,13 @@ public abstract class BaseRemoting {
                 f.putResponse(commandFactory.createSendFailedResponse(conn.getRemoteAddress(), e));
             }
             logger.error("Exception caught when sending invocation. The address is {}",
-                RemotingUtil.parseRemoteAddress(conn.getChannel()), e);
+                    RemotingUtil.parseRemoteAddress(conn.getChannel()), e);
         }
         return future;
     }
 
     /**
      * Oneway invocation.
-     * 
-     * @param conn
-     * @param request
-     * @throws InterruptedException
      */
     protected void oneway(final Connection conn, final RemotingCommand request) {
         try {
@@ -222,7 +200,7 @@ public abstract class BaseRemoting {
                 public void operationComplete(ChannelFuture f) throws Exception {
                     if (!f.isSuccess()) {
                         logger.error("Invoke send failed. The address is {}",
-                            RemotingUtil.parseRemoteAddress(conn.getChannel()), f.cause());
+                                RemotingUtil.parseRemoteAddress(conn.getChannel()), f.cause());
                     }
                 }
 
@@ -232,32 +210,24 @@ public abstract class BaseRemoting {
                 logger.error("Conn is null");
             } else {
                 logger.error("Exception caught when sending invocation. The address is {}",
-                    RemotingUtil.parseRemoteAddress(conn.getChannel()), e);
+                        RemotingUtil.parseRemoteAddress(conn.getChannel()), e);
             }
         }
     }
 
     /**
      * Create invoke future with {@link InvokeContext}.
-     * @param request
-     * @param invokeContext
-     * @return
      */
     protected abstract InvokeFuture createInvokeFuture(final RemotingCommand request,
-                                                       final InvokeContext invokeContext);
+            final InvokeContext invokeContext);
 
     /**
      * Create invoke future with {@link InvokeContext}.
-     * @param conn
-     * @param request
-     * @param invokeContext
-     * @param invokeCallback
-     * @return
      */
     protected abstract InvokeFuture createInvokeFuture(final Connection conn,
-                                                       final RemotingCommand request,
-                                                       final InvokeContext invokeContext,
-                                                       final InvokeCallback invokeCallback);
+            final RemotingCommand request,
+            final InvokeContext invokeContext,
+            final InvokeCallback invokeCallback);
 
     protected CommandFactory getCommandFactory() {
         return commandFactory;

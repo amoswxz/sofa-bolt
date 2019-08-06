@@ -27,7 +27,6 @@ import com.alipay.remoting.RemotingAddressParser;
 import com.alipay.remoting.RemotingCommand;
 import com.alipay.remoting.Url;
 import com.alipay.remoting.config.switches.ProtocolSwitch;
-import com.alipay.remoting.exception.CodecException;
 import com.alipay.remoting.exception.RemotingException;
 import com.alipay.remoting.exception.SerializationException;
 import com.alipay.remoting.log.BoltLoggerFactory;
@@ -44,14 +43,14 @@ import org.slf4j.Logger;
  */
 public abstract class RpcRemoting extends BaseRemoting {
 
-    static {
-        RpcProtocolManager.initProtocols();
-    }
-
     /**
      * logger
      */
     private static final Logger logger = BoltLoggerFactory.getLogger("RpcRemoting");
+
+    static {
+        RpcProtocolManager.initProtocols();
+    }
 
     /**
      * address parser to get custom args

@@ -37,6 +37,7 @@ public interface ConfigurableInstance extends NettyConfigure {
 
     /**
      * get the global switch for current instance
+     *
      * @return the global switch
      */
     GlobalSwitch switches();

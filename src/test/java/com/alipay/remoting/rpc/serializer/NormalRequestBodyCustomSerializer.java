@@ -16,10 +16,6 @@
  */
 package com.alipay.remoting.rpc.serializer;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.alipay.remoting.CustomSerializer;
 import com.alipay.remoting.DefaultCustomSerializer;
 import com.alipay.remoting.InvokeContext;
@@ -28,27 +24,30 @@ import com.alipay.remoting.exception.SerializationException;
 import com.alipay.remoting.rpc.RequestCommand;
 import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.protocol.RpcRequestCommand;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * a custom serialize demo
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: NormalRequestBodyCustomSerializer.java, v 0.1 Apr 11, 2016 10:18:59 PM xiaomin.cxm Exp $
  */
 public class NormalRequestBodyCustomSerializer extends DefaultCustomSerializer {
 
-    private AtomicBoolean serialFlag          = new AtomicBoolean();
-    private AtomicBoolean deserialFlag        = new AtomicBoolean();
+    private AtomicBoolean serialFlag = new AtomicBoolean();
+    private AtomicBoolean deserialFlag = new AtomicBoolean();
 
-    private byte          contentSerializer   = -1;
-    private byte          contentDeserializer = -1;
+    private byte contentSerializer = -1;
+    private byte contentDeserializer = -1;
 
-    /** 
+    /**
      * @see CustomSerializer#serializeContent(RequestCommand, InvokeContext)
      */
     @Override
     public <T extends RequestCommand> boolean serializeContent(T req, InvokeContext invokeContext)
-                                                                                                  throws SerializationException {
+            throws SerializationException {
         serialFlag.set(true);
         RpcRequestCommand rpcReq = (RpcRequestCommand) req;
         RequestBody bd = (RequestBody) rpcReq.getRequestObject();
@@ -68,12 +67,12 @@ public class NormalRequestBodyCustomSerializer extends DefaultCustomSerializer {
         return true;
     }
 
-    /** 
+    /**
      * @see CustomSerializer#deserializeContent(RequestCommand)
      */
     @Override
     public <T extends RequestCommand> boolean deserializeContent(T req)
-                                                                       throws DeserializationException {
+            throws DeserializationException {
         deserialFlag.set(true);
         RpcRequestCommand rpcReq = (RpcRequestCommand) req;
         byte[] content = rpcReq.getContent();

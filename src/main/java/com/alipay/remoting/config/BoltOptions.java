@@ -28,8 +28,7 @@ public class BoltOptions {
     private ConcurrentHashMap<BoltOption<?>, Object> options = new ConcurrentHashMap<BoltOption<?>, Object>();
 
     /**
-     * Get the optioned value.
-     * Return default value if option does not exist.
+     * Get the optioned value. Return default value if option does not exist.
      *
      * @param option target option
      * @return the optioned value of default value if option does not exist.
@@ -45,8 +44,8 @@ public class BoltOptions {
     }
 
     /**
-     * Set up an new option with specific value.
-     * Use a value of {@code null} to remove a previous set {@link BoltOption}.
+     * Set up an new option with specific value. Use a value of {@code null} to remove a previous set {@link
+     * BoltOption}.
      *
      * @param option target option
      * @param value option value, null for remove a previous set {@link BoltOption}.

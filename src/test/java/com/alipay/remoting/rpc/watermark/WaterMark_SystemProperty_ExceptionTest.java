@@ -16,16 +16,6 @@
  */
 package com.alipay.remoting.rpc.watermark;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.config.Configs;
@@ -38,34 +28,43 @@ import com.alipay.remoting.rpc.common.PortScan;
 import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.common.SimpleClientUserProcessor;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * water mark exception test, set a small buffer mark by system property, and trigger write over flow.
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: WaterMark_SystemProperty_ExceptionTest.java, v 0.1 Apr 6, 2016 8:58:36 PM xiaomin.cxm Exp $
  */
 public class WaterMark_SystemProperty_ExceptionTest {
-    static Logger             logger                    = LoggerFactory
-                                                            .getLogger(WaterMark_SystemProperty_ExceptionTest.class);
 
-    BoltServer                server;
-    RpcClient                 client;
+    static Logger logger = LoggerFactory
+            .getLogger(WaterMark_SystemProperty_ExceptionTest.class);
 
-    int                       port                      = PortScan.select();
-    String                    ip                        = "127.0.0.1";
-    String                    addr                      = "127.0.0.1:" + port;
+    BoltServer server;
+    RpcClient client;
 
-    int                       invokeTimes               = 10;
+    int port = PortScan.select();
+    String ip = "127.0.0.1";
+    String addr = "127.0.0.1:" + port;
 
-    SimpleServerUserProcessor serverUserProcessor       = new SimpleServerUserProcessor(0, 20, 20,
-                                                            60, 100);
-    SimpleClientUserProcessor clientUserProcessor       = new SimpleClientUserProcessor(0, 20, 20,
-                                                            60, 100);
-    CONNECTEventProcessor     clientConnectProcessor    = new CONNECTEventProcessor();
-    CONNECTEventProcessor     serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor  clientDisConnectProcessor = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor  serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    int invokeTimes = 10;
+
+    SimpleServerUserProcessor serverUserProcessor = new SimpleServerUserProcessor(0, 20, 20,
+            60, 100);
+    SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor(0, 20, 20,
+            60, 100);
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
 
     @Before
     public void init() {
@@ -153,7 +152,7 @@ public class WaterMark_SystemProperty_ExceptionTest {
                     try {
                         for (int i = 0; i < invokeTimes; i++) {
                             String clientres = (String) server.getRpcServer().invokeSync(
-                                remoteAddr, req, 1000);
+                                    remoteAddr, req, 1000);
                             Assert.assertEquals(clientres, RequestBody.DEFAULT_CLIENT_RETURN_STR);
                         }
                     } catch (RemotingException e) {

@@ -16,15 +16,14 @@
  */
 package com.alipay.remoting.rpc.protocol;
 
-import java.util.concurrent.Executor;
-
 import com.alipay.remoting.AsyncContext;
 import com.alipay.remoting.BizContext;
 import com.alipay.remoting.RemotingContext;
+import java.util.concurrent.Executor;
 
 /**
  * Defined all functions for biz to process user defined request.
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: UserProcessor.java, v 0.1 May 19, 2016 2:16:13 PM xiaomin.cxm Exp $
  */
@@ -41,6 +40,7 @@ public interface UserProcessor<T> {
 
     /**
      * Handle request with {@link AsyncContext}.
+     *
      * @param bizCtx biz context
      * @param asyncCtx async context
      * @param request request
@@ -49,14 +49,14 @@ public interface UserProcessor<T> {
 
     /**
      * Handle request in sync way.
+     *
      * @param bizCtx biz context
      * @param request request
      */
     Object handleRequest(BizContext bizCtx, T request) throws Exception;
 
     /**
-     * The class name of user request.
-     * Use String type to avoid classloader problem.
+     * The class name of user request. Use String type to avoid classloader problem.
      *
      * @return interested request's class name
      */
@@ -64,13 +64,15 @@ public interface UserProcessor<T> {
 
     /**
      * Get user executor.
+     *
      * @return executor
      */
     Executor getExecutor();
 
     /**
-     * Whether deserialize and process biz logic in io thread.
-     * Notice: If return true, this will have a strong impact on performance.
+     * Whether deserialize and process biz logic in io thread. Notice: If return true, this will have a strong impact on
+     * performance.
+     *
      * @return true for processing in io thread
      */
     boolean processInIOThread();
@@ -78,33 +80,36 @@ public interface UserProcessor<T> {
     /**
      * Whether handle request timeout automatically, we call this fail fast processing when detect timeout.
      *
-     * Notice: If you do not want to enable this feature, you need to override this method to return false,
-     * and then call {@link BizContext#isRequestTimeout()} to check by yourself if you want.
+     * Notice: If you do not want to enable this feature, you need to override this method to return false, and then
+     * call {@link BizContext#isRequestTimeout()} to check by yourself if you want.
      *
      * @return true if you want to enable fail fast processing, otherwise return false
      */
     boolean timeoutDiscard();
 
     /**
-     * Use this method to set executor selector.
-     * @param executorSelector executor selector
-     */
-    void setExecutorSelector(ExecutorSelector executorSelector);
-
-    /**
      * Use this method to get the executor selector.
+     *
      * @return executor selector
      */
     ExecutorSelector getExecutorSelector();
 
     /**
-     * Executor selector interface.
-     * You can implement this and then provide a {@link ExecutorSelector} using method {@link #setExecutorSelector(ExecutorSelector)}
+     * Use this method to set executor selector.
+     *
+     * @param executorSelector executor selector
+     */
+    void setExecutorSelector(ExecutorSelector executorSelector);
+
+    /**
+     * Executor selector interface. You can implement this and then provide a {@link ExecutorSelector} using method
+     * {@link #setExecutorSelector(ExecutorSelector)}
      *
      * @author xiaomin.cxm
      * @version $Id: ExecutorSelector.java, v 0.1 April 24, 2017 17:16:13 PM xiaomin.cxm Exp $
      */
     interface ExecutorSelector {
+
         Executor select(String requestClass, Object requestHeader);
     }
 }

@@ -16,25 +16,42 @@
  */
 package com.alipay.remoting.inner.connection;
 
+import com.alipay.remoting.Url;
+import com.alipay.remoting.rpc.RpcAddressParser;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Constructor;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alipay.remoting.Url;
-import com.alipay.remoting.rpc.RpcAddressParser;
-
 /**
  * Test basic usage of url
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: UrlTest.java, v 0.1 Apr 18, 2016 7:22:01 PM xiaomin.cxm Exp $
  */
 public class UrlTest {
+
     private final static Logger logger = LoggerFactory.getLogger(UrlTest.class);
+
+    /**
+     * -server -Xms20m -Xmx20m -Xmn3m -Xss256k -XX:PermSize=20m -XX:MaxPermSize=20m -XX:+UseConcMarkSweepGC
+     * -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+DisableExplicitGC -XX:+UseCMSInitiatingOccupancyOnly
+     * -XX:CMSInitiatingOccupancyFraction=68 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps
+     * -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/Users/tsui/logs/
+     */
+    public static void main(String[] args) {
+        //        ConcurrentHashMap<String, SoftReference<String>> parsedUrls = new ConcurrentHashMap<String, SoftReference<String>>();
+        //        int MAX = Integer.valueOf(args[0]);
+        //        for (int i = 0; i < MAX; i++) {
+        //            parsedUrls.put("test" + i, new SoftReference<String>(i + "hehe"));
+        //        }
+        //        Collection<SoftReference<String>> urls = parsedUrls.values();
+        //        for (SoftReference<String> url : urls) {
+        //            System.out.println(url.get());
+        //        }
+    }
 
     @Test
     public void testUrlArgs() {
@@ -75,7 +92,7 @@ public class UrlTest {
     public void testGC() throws Exception {
         String url = "localhost:3333?k1=v1&k2=v2";
 
-        Constructor con = Url.class.getDeclaredConstructor(new Class[] { String.class });
+        Constructor con = Url.class.getDeclaredConstructor(new Class[]{String.class});
         con.setAccessible(true);
 
         long start = System.currentTimeMillis();
@@ -90,26 +107,5 @@ public class UrlTest {
                 break;
             }
         }
-    }
-
-    /**
-     * -server -Xms20m -Xmx20m -Xmn3m -Xss256k -XX:PermSize=20m -XX:MaxPermSize=20m
-     * -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled
-     * -XX:+DisableExplicitGC -XX:+UseCMSInitiatingOccupancyOnly
-     * -XX:CMSInitiatingOccupancyFraction=68 -verbose:gc -XX:+PrintGCDetails
-     * -XX:+PrintGCDateStamps -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/Users/tsui/logs/
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-        //        ConcurrentHashMap<String, SoftReference<String>> parsedUrls = new ConcurrentHashMap<String, SoftReference<String>>();
-        //        int MAX = Integer.valueOf(args[0]);
-        //        for (int i = 0; i < MAX; i++) {
-        //            parsedUrls.put("test" + i, new SoftReference<String>(i + "hehe"));
-        //        }
-        //        Collection<SoftReference<String>> urls = parsedUrls.values();
-        //        for (SoftReference<String> url : urls) {
-        //            System.out.println(url.get());
-        //        }
     }
 }

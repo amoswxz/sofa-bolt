@@ -16,22 +16,6 @@
  */
 package com.alipay.remoting.inner.utiltest;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.UnknownHostException;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.BizContext;
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.NamedThreadFactory;
@@ -43,27 +27,37 @@ import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.protocol.SyncUserProcessor;
 import com.alipay.remoting.util.RemotingUtil;
 import com.alipay.remoting.util.StringUtils;
-
 import io.netty.channel.Channel;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.UnknownHostException;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * remoting util test
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: RemotingUtilTest.java, v 0.1 Jan 26, 2016 7:29:42 PM xiaomin.cxm Exp $
  */
 public class RemotingUtilTest {
 
-    Logger                      logger      = LoggerFactory.getLogger(RemotingUtilTest.class);
-
-    Server                      server;
-    RpcClient                   client;
-
-    private static final int    port        = 1111;
-    private static final String localIP     = "127.0.0.1";
-
-    private static final Url    connAddress = new Url(localIP, port);
-    RpcAddressParser            parser      = new RpcAddressParser();
+    private static final int port = 1111;
+    private static final String localIP = "127.0.0.1";
+    private static final Url connAddress = new Url(localIP, port);
+    Logger logger = LoggerFactory.getLogger(RemotingUtilTest.class);
+    Server server;
+    RpcClient client;
+    RpcAddressParser parser = new RpcAddressParser();
 
     @Before
     public void init() {
@@ -169,9 +163,9 @@ public class RemotingUtilTest {
 
     /**
      * parse InetSocketAddress to get address (format [ip:port])
-     * 
-     * e.g.1 /127.0.0.1:1234 -> 127.0.0.1:1234
-     * e.g.2 sofatest-2.stack.alipay.net/10.209.155.54:12200 -> 10.209.155.54:12200
+     *
+     * e.g.1 /127.0.0.1:1234 -> 127.0.0.1:1234 e.g.2 sofatest-2.stack.alipay.net/10.209.155.54:12200 ->
+     * 10.209.155.54:12200
      */
     @Test
     public void testParseSocketAddressToString_MuiltiFormatTest() {
@@ -209,15 +203,16 @@ public class RemotingUtilTest {
     }
 
     class Server {
-        Logger    logger = LoggerFactory.getLogger(Server.class);
+
+        Logger logger = LoggerFactory.getLogger(Server.class);
         RpcServer server;
 
         public void startServer() {
             server = new RpcServer(port);
             server.registerUserProcessor(new SyncUserProcessor<RequestBody>() {
                 ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
-                                                new ArrayBlockingQueue<Runnable>(4),
-                                                new NamedThreadFactory("Request-process-pool"));
+                        new ArrayBlockingQueue<Runnable>(4),
+                        new NamedThreadFactory("Request-process-pool"));
 
                 @Override
                 public Object handleRequest(BizContext bizCtx, RequestBody request) {

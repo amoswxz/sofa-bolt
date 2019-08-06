@@ -19,17 +19,18 @@ package com.alipay.remoting.serialization;
 /**
  * Manage all serializers.
  *
- * Notice: Serializer is different with Codec.
- * Serializer is mainly used to deserialize bytes to object, or serialize object to bytes. We can use hessian, json, protocol buff etc.
- * Codec mainly used to encode bytes or decode bytes according to the protocol format. We can use {@link com.alipay.remoting.codec.ProtocolCodeBasedEncoder} or {@link io.netty.handler.codec.LengthFieldBasedFrameDecoder} etc.
- * 
+ * Notice: Serializer is different with Codec. Serializer is mainly used to deserialize bytes to object, or serialize
+ * object to bytes. We can use hessian, json, protocol buff etc. Codec mainly used to encode bytes or decode bytes
+ * according to the protocol format. We can use {@link com.alipay.remoting.codec.ProtocolCodeBasedEncoder} or {@link
+ * io.netty.handler.codec.LengthFieldBasedFrameDecoder} etc.
+ *
  * @author jiangping
  * @version $Id: SerializerManager.java, v 0.1 2015-9-28 PM3:55:59 tao Exp $
  */
 public class SerializerManager {
 
+    public static final byte Hessian2 = 1;
     private static Serializer[] serializers = new Serializer[5];
-    public static final byte    Hessian2    = 1;
     //public static final byte    Json        = 2;
 
     static {

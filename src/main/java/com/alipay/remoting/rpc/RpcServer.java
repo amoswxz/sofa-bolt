@@ -87,41 +87,6 @@ public class RpcServer extends AbstractRemotingServer {
     private static final Logger logger = BoltLoggerFactory
             .getLogger("RpcRemoting");
     /**
-     * server bootstrap
-     */
-    private ServerBootstrap bootstrap;
-
-    /**
-     * channelFuture
-     */
-    private ChannelFuture channelFuture;
-
-    /**
-     * connection event handler
-     */
-    private ConnectionEventHandler connectionEventHandler;
-
-    /**
-     * connection event listener
-     */
-    private ConnectionEventListener connectionEventListener = new ConnectionEventListener();
-
-    /**
-     * user processors of rpc server
-     */
-    private ConcurrentHashMap<String, UserProcessor<?>> userProcessors = new ConcurrentHashMap<String, UserProcessor<?>>(
-            4);
-
-    /**
-     * boss event loop group, boss group should not be daemon, need shutdown manually
-     */
-    private final EventLoopGroup bossGroup = NettyEventLoopUtil
-            .newEventLoopGroup(
-                    1,
-                    new NamedThreadFactory(
-                            "Rpc-netty-server-boss",
-                            false));
-    /**
      * worker event loop group. Reuse I/O worker threads between rpc servers.
      */
     private static final EventLoopGroup workerGroup = NettyEventLoopUtil
@@ -133,26 +98,6 @@ public class RpcServer extends AbstractRemotingServer {
                             "Rpc-netty-server-worker",
                             true));
 
-    /**
-     * address parser to get custom args
-     */
-    private RemotingAddressParser addressParser;
-
-    /**
-     * connection manager
-     */
-    private DefaultServerConnectionManager connectionManager;
-
-    /**
-     * rpc remoting
-     */
-    protected RpcRemoting rpcRemoting;
-
-    /**
-     * rpc codec
-     */
-    private Codec codec = new RpcCodec();
-
     static {
         if (workerGroup instanceof NioEventLoopGroup) {
             ((NioEventLoopGroup) workerGroup).setIoRatio(ConfigManager.netty_io_ratio());
@@ -160,6 +105,53 @@ public class RpcServer extends AbstractRemotingServer {
             ((EpollEventLoopGroup) workerGroup).setIoRatio(ConfigManager.netty_io_ratio());
         }
     }
+
+    /**
+     * boss event loop group, boss group should not be daemon, need shutdown manually
+     */
+    private final EventLoopGroup bossGroup = NettyEventLoopUtil
+            .newEventLoopGroup(
+                    1,
+                    new NamedThreadFactory(
+                            "Rpc-netty-server-boss",
+                            false));
+    /**
+     * rpc remoting
+     */
+    protected RpcRemoting rpcRemoting;
+    /**
+     * server bootstrap
+     */
+    private ServerBootstrap bootstrap;
+    /**
+     * channelFuture
+     */
+    private ChannelFuture channelFuture;
+    /**
+     * connection event handler
+     */
+    private ConnectionEventHandler connectionEventHandler;
+    /**
+     * connection event listener
+     */
+    private ConnectionEventListener connectionEventListener = new ConnectionEventListener();
+    /**
+     * user processors of rpc server
+     */
+    private ConcurrentHashMap<String, UserProcessor<?>> userProcessors = new ConcurrentHashMap<String, UserProcessor<?>>(
+            4);
+    /**
+     * address parser to get custom args
+     */
+    private RemotingAddressParser addressParser;
+    /**
+     * connection manager
+     */
+    private DefaultServerConnectionManager connectionManager;
+    /**
+     * rpc codec
+     */
+    private Codec codec = new RpcCodec();
 
     /**
      * Construct a rpc server. <br>
@@ -197,7 +189,7 @@ public class RpcServer extends AbstractRemotingServer {
      */
     public RpcServer(int port, boolean manageConnection) {
         super(port);
-            if (manageConnection) {
+        if (manageConnection) {
             this.switches().turnOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH);
         }
     }

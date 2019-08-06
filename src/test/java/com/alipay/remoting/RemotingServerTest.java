@@ -18,11 +18,10 @@ package com.alipay.remoting;
 
 import static org.mockito.Mockito.when;
 
+import com.alipay.remoting.rpc.RpcServer;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import com.alipay.remoting.rpc.RpcServer;
 
 /**
  * test {@link AbstractRemotingServer} apis
@@ -31,6 +30,7 @@ import com.alipay.remoting.rpc.RpcServer;
  * @version $Id: RemotingServerTest.java, v 0.1 May 16, 2018 10:00:48 AM tsui Exp $
  */
 public class RemotingServerTest {
+
     @Test
     public void testStartRepeatedly() {
         RpcServer rpcServer = new RpcServer(1111);

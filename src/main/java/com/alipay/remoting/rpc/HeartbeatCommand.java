@@ -21,13 +21,15 @@ import com.alipay.remoting.util.IDGenerator;
 
 /**
  * Heart beat.
- * 
+ *
  * @author jiangping
  * @version $Id: HeartbeatCommand.java, v 0.1 2015-9-10 AM9:46:36 tao Exp $
  */
 public class HeartbeatCommand extends RequestCommand {
 
-    /** For serialization  */
+    /**
+     * For serialization
+     */
     private static final long serialVersionUID = 4949981019109517725L;
 
     /**

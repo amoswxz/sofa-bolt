@@ -16,15 +16,6 @@
  */
 package com.alipay.remoting.rpc.lock;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.InvokeContext;
 import com.alipay.remoting.Url;
@@ -37,37 +28,44 @@ import com.alipay.remoting.rpc.common.ConcurrentServerUserProcessor;
 import com.alipay.remoting.rpc.common.DISCONNECTEventProcessor;
 import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.common.SimpleClientUserProcessor;
+import java.util.concurrent.atomic.AtomicBoolean;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/** 
- * alipay-com/bolt#110
- * 
- * @author tsui 
+/**
+ *   alipay-com/bolt#110
+ *
+ * @author tsui
  * @version $Id: CreateConnLockTest.java, v 0.1 2016-09-26 11:49 tsui Exp $
  */
 public class CreateConnLockTest {
 
-    static Logger                 logger                               = LoggerFactory
-                                                                           .getLogger(CreateConnLockTest.class);
+    static Logger logger = LoggerFactory
+            .getLogger(CreateConnLockTest.class);
 
-    BoltServer                    server;
-    RpcClient                     client;
+    BoltServer server;
+    RpcClient client;
 
-    int                           port                                 = 12200;                                 //PortScan.select();
-    String                        ip                                   = "127.0.0.1";
-    String                        bad_ip                               = "127.0.0.2";
-    String                        ip_prefix                            = "127.0.0.";
-    String                        addr                                 = "127.0.0.1:" + port;
+    int port = 12200;                                 //PortScan.select();
+    String ip = "127.0.0.1";
+    String bad_ip = "127.0.0.2";
+    String ip_prefix = "127.0.0.";
+    String addr = "127.0.0.1:" + port;
 
-    int                           invokeTimes                          = 3;
+    int invokeTimes = 3;
 
-    ConcurrentServerUserProcessor serverUserProcessor                  = new ConcurrentServerUserProcessor();
-    SimpleClientUserProcessor     clientUserProcessor                  = new SimpleClientUserProcessor();
-    CONNECTEventProcessor         clientConnectProcessor               = new CONNECTEventProcessor();
-    CONNECTEventProcessor         serverConnectProcessor               = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor      clientDisConnectProcessor            = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor      serverDisConnectProcessor            = new DISCONNECTEventProcessor();
+    ConcurrentServerUserProcessor serverUserProcessor = new ConcurrentServerUserProcessor();
+    SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor();
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
 
-    private AtomicBoolean         whetherConnectTimeoutConsumedTooLong = new AtomicBoolean();
+    private AtomicBoolean whetherConnectTimeoutConsumedTooLong = new AtomicBoolean();
 
     @Before
     public void init() {
@@ -135,9 +133,10 @@ public class CreateConnLockTest {
     }
 
     class MyThread implements Runnable {
-        Url              url;
-        int              connNum;
-        boolean          warmup;
+
+        Url url;
+        int connNum;
+        boolean warmup;
         RpcAddressParser parser;
 
         public MyThread(Url url, int connNum, boolean warmup) {
@@ -172,7 +171,7 @@ public class CreateConnLockTest {
 
         private long getAndPrintCreateConnTime(InvokeContext ctx) {
             long time = ctx.get(InvokeContext.CLIENT_CONN_CREATETIME) == null ? -1l : (Long) ctx
-                .get(InvokeContext.CLIENT_CONN_CREATETIME);
+                    .get(InvokeContext.CLIENT_CONN_CREATETIME);
             if (time > 1500) {
                 whetherConnectTimeoutConsumedTooLong.set(true);
             }

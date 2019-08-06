@@ -16,9 +16,6 @@
  */
 package com.alipay.remoting.rpc.serializer;
 
-import java.io.UnsupportedEncodingException;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.alipay.remoting.CustomSerializer;
 import com.alipay.remoting.DefaultCustomSerializer;
 import com.alipay.remoting.InvokeContext;
@@ -26,6 +23,8 @@ import com.alipay.remoting.exception.DeserializationException;
 import com.alipay.remoting.exception.SerializationException;
 import com.alipay.remoting.rpc.ResponseCommand;
 import com.alipay.remoting.rpc.protocol.RpcResponseCommand;
+import java.io.UnsupportedEncodingException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * a custom serialize demo
@@ -35,18 +34,18 @@ import com.alipay.remoting.rpc.protocol.RpcResponseCommand;
  */
 public class NormalStringCustomSerializer extends DefaultCustomSerializer {
 
-    private AtomicBoolean serialFlag         = new AtomicBoolean();
-    private AtomicBoolean deserialFlag       = new AtomicBoolean();
+    private AtomicBoolean serialFlag = new AtomicBoolean();
+    private AtomicBoolean deserialFlag = new AtomicBoolean();
 
-    private byte          contentSerializer  = -1;
-    private byte          contentDeserialier = -1;
+    private byte contentSerializer = -1;
+    private byte contentDeserialier = -1;
 
     /**
      * @see CustomSerializer#serializeContent(ResponseCommand)
      */
     @Override
     public <T extends ResponseCommand> boolean serializeContent(T response)
-                                                                           throws SerializationException {
+            throws SerializationException {
         serialFlag.set(true);
         RpcResponseCommand rpcResp = (RpcResponseCommand) response;
         String str = (String) rpcResp.getResponseObject();
@@ -64,8 +63,8 @@ public class NormalStringCustomSerializer extends DefaultCustomSerializer {
      */
     @Override
     public <T extends ResponseCommand> boolean deserializeContent(T response,
-                                                                  InvokeContext invokeContext)
-                                                                                              throws DeserializationException {
+            InvokeContext invokeContext)
+            throws DeserializationException {
         deserialFlag.set(true);
         RpcResponseCommand rpcResp = (RpcResponseCommand) response;
         try {

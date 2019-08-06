@@ -16,11 +16,6 @@
  */
 package com.alipay.remoting.rpc.connectionmanage;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.RemotingAddressParser;
@@ -36,30 +31,33 @@ import com.alipay.remoting.rpc.common.CONNECTEventProcessor;
 import com.alipay.remoting.rpc.common.DISCONNECTEventProcessor;
 import com.alipay.remoting.rpc.common.SimpleClientUserProcessor;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
- *
  * @author yueliang
  * @version $Id: ScheduledDisconnectStrategyTest.java, v 0.1 2017-03-16 AM11:32 yueliang Exp $
  */
 public class ScheduledDisconnectStrategyTest {
 
-    BoltServer                    server;
-    RpcClient                     client;
+    BoltServer server;
+    RpcClient client;
 
-    int                           port                      = 2018;
+    int port = 2018;
 
-    SimpleServerUserProcessor     serverUserProcessor       = new SimpleServerUserProcessor();
-    SimpleClientUserProcessor     clientUserProcessor       = new SimpleClientUserProcessor();
-    CONNECTEventProcessor         clientConnectProcessor    = new CONNECTEventProcessor();
-    CONNECTEventProcessor         serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor      clientDisConnectProcessor = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor      serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    SimpleServerUserProcessor serverUserProcessor = new SimpleServerUserProcessor();
+    SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor();
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
 
     /**
      * parser
      */
-    private RemotingAddressParser addressParser             = new RpcAddressParser();
+    private RemotingAddressParser addressParser = new RpcAddressParser();
 
     @Before
     public void init() {
@@ -74,7 +72,7 @@ public class ScheduledDisconnectStrategyTest {
 
     @Test
     public void testConnectionMonitorBySystemSetting() throws InterruptedException,
-                                                      RemotingException {
+            RemotingException {
         System.setProperty(Configs.CONN_MONITOR_INITIAL_DELAY, "2000");
         System.setProperty(Configs.CONN_MONITOR_PERIOD, "100");
         doInit(true, false);
@@ -135,7 +133,7 @@ public class ScheduledDisconnectStrategyTest {
 
     @Test
     public void testCloseFreshSelectConnections_bySystemSetting() throws RemotingException,
-                                                                 InterruptedException {
+            InterruptedException {
         System.setProperty(Configs.RETRY_DETECT_PERIOD, "500");
         System.setProperty(Configs.CONN_MONITOR_INITIAL_DELAY, "2000");
         System.setProperty(Configs.CONN_MONITOR_PERIOD, "100");
@@ -147,7 +145,7 @@ public class ScheduledDisconnectStrategyTest {
 
         final Connection connection = client.getConnection(url, 1000);
         connection.addInvokeFuture(new DefaultInvokeFuture(1, null, null, RpcCommandType.REQUEST,
-            null));
+                null));
         Thread.sleep(2100);
         Assert.assertTrue(0 == clientDisConnectProcessor.getDisConnectTimes());
         Assert.assertEquals(1, clientConnectProcessor.getConnectTimes());
@@ -161,7 +159,7 @@ public class ScheduledDisconnectStrategyTest {
 
     @Test
     public void testCloseFreshSelectConnections_byUserSetting() throws RemotingException,
-                                                               InterruptedException {
+            InterruptedException {
         System.setProperty(Configs.RETRY_DETECT_PERIOD, "500");
         System.setProperty(Configs.CONN_MONITOR_INITIAL_DELAY, "2000");
         System.setProperty(Configs.CONN_MONITOR_PERIOD, "100");
@@ -173,7 +171,7 @@ public class ScheduledDisconnectStrategyTest {
 
         final Connection connection = client.getConnection(url, 1000);
         connection.addInvokeFuture(new DefaultInvokeFuture(1, null, null, RpcCommandType.REQUEST,
-            null));
+                null));
         Thread.sleep(2100);
         Assert.assertTrue(0 == clientDisConnectProcessor.getDisConnectTimes());
         Assert.assertEquals(1, clientConnectProcessor.getConnectTimes());
@@ -187,7 +185,7 @@ public class ScheduledDisconnectStrategyTest {
 
     @Test
     public void testDisconnectStrategy_bySystemSetting() throws InterruptedException,
-                                                        RemotingException {
+            RemotingException {
         System.setProperty(Configs.CONN_MONITOR_SWITCH, "true");
         System.setProperty(Configs.CONN_MONITOR_INITIAL_DELAY, "2000");
         System.setProperty(Configs.CONN_MONITOR_PERIOD, "100");
@@ -215,7 +213,7 @@ public class ScheduledDisconnectStrategyTest {
 
     @Test
     public void testDisconnectStrategy_byUserSetting() throws InterruptedException,
-                                                      RemotingException {
+            RemotingException {
         System.setProperty(Configs.CONN_MONITOR_SWITCH, "true");
         System.setProperty(Configs.CONN_MONITOR_INITIAL_DELAY, "2000");
         System.setProperty(Configs.CONN_MONITOR_PERIOD, "100");

@@ -16,19 +16,6 @@
  */
 package com.alipay.remoting.rpc.serializer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.CustomSerializerManager;
@@ -46,6 +33,17 @@ import com.alipay.remoting.rpc.common.SimpleClientUserProcessor;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
 import com.alipay.remoting.rpc.invokecontext.BasicUsage_InvokeContext_Test;
 import com.alipay.remoting.util.RemotingUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * test custom serializer codec
@@ -54,24 +52,25 @@ import com.alipay.remoting.util.RemotingUtil;
  * @version $Id: CustomSerializerCodecTest.java, v 0.1 2017-03-13 17:14 tsui Exp $
  */
 public class CustomSerializerCodecTest {
-    static Logger             logger                    = LoggerFactory
-                                                            .getLogger(BasicUsage_InvokeContext_Test.class);
 
-    BoltServer                server;
-    RpcClient                 client;
+    static Logger logger = LoggerFactory
+            .getLogger(BasicUsage_InvokeContext_Test.class);
 
-    int                       port                      = PortScan.select();
-    String                    ip                        = "127.0.0.1";
-    String                    addr                      = "127.0.0.1:" + port;
+    BoltServer server;
+    RpcClient client;
 
-    int                       invokeTimes               = 5;
+    int port = PortScan.select();
+    String ip = "127.0.0.1";
+    String addr = "127.0.0.1:" + port;
 
-    SimpleServerUserProcessor serverUserProcessor       = new SimpleServerUserProcessor();
-    SimpleClientUserProcessor clientUserProcessor       = new SimpleClientUserProcessor();
-    CONNECTEventProcessor     clientConnectProcessor    = new CONNECTEventProcessor();
-    CONNECTEventProcessor     serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor  clientDisConnectProcessor = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor  serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    int invokeTimes = 5;
+
+    SimpleServerUserProcessor serverUserProcessor = new SimpleServerUserProcessor();
+    SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor();
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
 
     @Before
     public void init() {
@@ -299,7 +298,7 @@ public class CustomSerializerCodecTest {
 
             RequestBody req = new RequestBody(1, RequestBody.DEFAULT_SERVER_STR);
             String clientres = (String) server.getRpcServer().invokeSync(serverConn, req,
-                invokeContext, 1000);
+                    invokeContext, 1000);
             Assert.assertEquals(clientres, RequestBody.DEFAULT_CLIENT_RETURN_STR + "RANDOM");
 
             Assert.assertEquals(testCodec + 1, s1.getContentSerializer());
@@ -347,7 +346,7 @@ public class CustomSerializerCodecTest {
             String remoteAddr = serverUserProcessor.getRemoteAddr();
             RequestBody req = new RequestBody(1, RequestBody.DEFAULT_SERVER_STR);
             String clientres = (String) server.getRpcServer().invokeSync(remoteAddr, req,
-                invokeContext, 1000);
+                    invokeContext, 1000);
             Assert.assertEquals(clientres, RequestBody.DEFAULT_CLIENT_RETURN_STR + "RANDOM");
 
             Assert.assertEquals(testCodec + 1, s1.getContentSerializer());

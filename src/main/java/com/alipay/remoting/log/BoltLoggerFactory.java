@@ -16,34 +16,32 @@
  */
 package com.alipay.remoting.log;
 
-import java.io.File;
-
-import org.slf4j.Logger;
-
 import com.alipay.remoting.util.StringUtils;
 import com.alipay.sofa.common.log.LoggerSpaceManager;
+import java.io.File;
+import org.slf4j.Logger;
 
 /**
  * Customized logger factory
  *
- * This can use middleware-log in sofa-common-tools to detect specific log implementation and initialize with the given log template.
+ * This can use middleware-log in sofa-common-tools to detect specific log implementation and initialize with the given
+ * log template.
  *
  * @author tsui
  * @version $Id: BoltLoggerFactory.java, v 0.1 2017-09-05 16:06 tsui Exp $
  */
 public class BoltLoggerFactory {
-    public static final String  BOLT_LOG_SPACE_PROPERTY   = "bolt.log.space";
 
-    private static String       BOLT_LOG_SPACE            = "com.alipay.remoting";
-
-    private static final String LOG_PATH                  = "logging.path";
-    private static final String LOG_PATH_DEFAULT          = System.getProperty("user.home")
-                                                            + File.separator + "logs";
-    private static final String CLIENT_LOG_LEVEL          = "com.alipay.remoting.client.log.level";
-    private static final String CLIENT_LOG_LEVEL_DEFAULT  = "INFO";
-    private static final String CLIENT_LOG_ENCODE         = "com.alipay.remoting.client.log.encode";
-    private static final String COMMON_ENCODE             = "file.encoding";
+    public static final String BOLT_LOG_SPACE_PROPERTY = "bolt.log.space";
+    private static final String LOG_PATH = "logging.path";
+    private static final String LOG_PATH_DEFAULT = System.getProperty("user.home")
+            + File.separator + "logs";
+    private static final String CLIENT_LOG_LEVEL = "com.alipay.remoting.client.log.level";
+    private static final String CLIENT_LOG_LEVEL_DEFAULT = "INFO";
+    private static final String CLIENT_LOG_ENCODE = "com.alipay.remoting.client.log.encode";
+    private static final String COMMON_ENCODE = "file.encoding";
     private static final String CLIENT_LOG_ENCODE_DEFAULT = "UTF-8";
+    private static String BOLT_LOG_SPACE = "com.alipay.remoting";
 
     static {
         String logSpace = System.getProperty(BOLT_LOG_SPACE_PROPERTY);

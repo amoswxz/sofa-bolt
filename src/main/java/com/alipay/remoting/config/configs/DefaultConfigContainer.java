@@ -16,12 +16,10 @@
  */
 package com.alipay.remoting.config.configs;
 
+import com.alipay.remoting.log.BoltLoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.slf4j.Logger;
-
-import com.alipay.remoting.log.BoltLoggerFactory;
 
 /**
  * default implementation for config container
@@ -30,9 +28,12 @@ import com.alipay.remoting.log.BoltLoggerFactory;
  * @version $Id: DefaultConfigContainer.java, v 0.1 2018-07-28 18:11 tsui Exp $$
  */
 public class DefaultConfigContainer implements ConfigContainer {
-    /** logger */
-    private static final Logger                      logger      = BoltLoggerFactory
-                                                                     .getLogger("CommonDefault");
+
+    /**
+     * logger
+     */
+    private static final Logger logger = BoltLoggerFactory
+            .getLogger("CommonDefault");
 
     /**
      * use a hash map to store the user configs with different config types and config items.
@@ -43,7 +44,7 @@ public class DefaultConfigContainer implements ConfigContainer {
     public boolean contains(ConfigType configType, ConfigItem configItem) {
         validate(configType, configItem);
         return null != userConfigs.get(configType)
-               && userConfigs.get(configType).containsKey(configItem);
+                && userConfigs.get(configType).containsKey(configItem);
     }
 
     @Override
@@ -67,22 +68,22 @@ public class DefaultConfigContainer implements ConfigContainer {
         Object prev = items.put(configItem, value);
         if (null != prev) {
             logger.warn("the value of ConfigType {}, ConfigItem {} changed from {} to {}",
-                configType, configItem, prev.toString(), value.toString());
+                    configType, configItem, prev.toString(), value.toString());
         }
     }
 
     private void validate(ConfigType configType, ConfigItem configItem) {
         if (null == configType || null == configItem) {
             throw new IllegalArgumentException(String.format(
-                "ConfigType {%s}, ConfigItem {%s} should not be null!", configType, configItem));
+                    "ConfigType {%s}, ConfigItem {%s} should not be null!", configType, configItem));
         }
     }
 
     private void validate(ConfigType configType, ConfigItem configItem, Object value) {
         if (null == configType || null == configItem || null == value) {
             throw new IllegalArgumentException(String.format(
-                "ConfigType {%s}, ConfigItem {%s}, value {%s} should not be null!", configType,
-                configItem, value == null ? null : value.toString()));
+                    "ConfigType {%s}, ConfigItem {%s}, value {%s} should not be null!", configType,
+                    configItem, value == null ? null : value.toString()));
         }
     }
 }

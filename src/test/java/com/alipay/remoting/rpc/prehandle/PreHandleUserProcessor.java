@@ -16,18 +16,6 @@
  */
 package com.alipay.remoting.rpc.prehandle;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.BizContext;
 import com.alipay.remoting.DefaultBizContext;
 import com.alipay.remoting.InvokeContext;
@@ -36,19 +24,33 @@ import com.alipay.remoting.RemotingContext;
 import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
 import com.alipay.remoting.rpc.protocol.SyncUserProcessor;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PreHandleUserProcessor extends SyncUserProcessor<RequestBody> {
 
-    /** logger */
-    private static final Logger logger      = LoggerFactory
-                                                .getLogger(SimpleServerUserProcessor.class);
+    /**
+     * logger
+     */
+    private static final Logger logger = LoggerFactory
+            .getLogger(SimpleServerUserProcessor.class);
 
-    /** executor */
-    private ThreadPoolExecutor  executor    = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
-                                                new ArrayBlockingQueue<Runnable>(4),
-                                                new NamedThreadFactory("Request-process-pool"));
+    /**
+     * executor
+     */
+    private ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<Runnable>(4),
+            new NamedThreadFactory("Request-process-pool"));
 
-    private AtomicInteger       invokeTimes = new AtomicInteger();
+    private AtomicInteger invokeTimes = new AtomicInteger();
 
     @Override
     public BizContext preHandleRequest(RemotingContext remotingCtx, RequestBody request) {
@@ -86,13 +88,14 @@ public class PreHandleUserProcessor extends SyncUserProcessor<RequestBody> {
     }
 
     class MyBizContext extends DefaultBizContext implements BizContext {
-        /** customerized context */
+
+        /**
+         * customerized context
+         */
         private Map<String, String> custCtx = new HashMap<String, String>();
 
         /**
          * Constructor
-         * 
-         * @param remotingCtx
          */
         public MyBizContext(RemotingContext remotingCtx) {
             super(remotingCtx);

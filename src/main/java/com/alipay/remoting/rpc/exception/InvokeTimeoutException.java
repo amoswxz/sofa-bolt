@@ -20,13 +20,15 @@ import com.alipay.remoting.exception.RemotingException;
 
 /**
  * Exception when invoke timeout
- * 
+ *
  * @author jiangping
  * @version $Id: InvokeTimeoutException.java, v 0.1 2015-9-28 PM3:35:53 tao Exp $
  */
 public class InvokeTimeoutException extends RemotingException {
 
-    /** For serialization  */
+    /**
+     * For serialization
+     */
     private static final long serialVersionUID = -7772633244795043476L;
 
     /**

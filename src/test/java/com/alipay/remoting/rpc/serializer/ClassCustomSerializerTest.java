@@ -16,18 +16,6 @@
  */
 package com.alipay.remoting.rpc.serializer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alipay.remoting.ConnectionEventType;
 import com.alipay.remoting.CustomSerializerManager;
 import com.alipay.remoting.InvokeCallback;
@@ -45,36 +33,47 @@ import com.alipay.remoting.rpc.common.RequestBody;
 import com.alipay.remoting.rpc.common.SimpleClientUserProcessor;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
 import com.alipay.remoting.serialization.SerializerManager;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Custom Serializer Test: Normal, Exception included
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: ClassCustomSerializerTest.java, v 0.1 Apr 11, 2016 10:42:59 PM xiaomin.cxm Exp $
  */
 public class ClassCustomSerializerTest {
-    Logger                    logger                    = LoggerFactory
-                                                            .getLogger(ClassCustomSerializerTest.class);
-    BoltServer                server;
-    RpcClient                 client;
 
-    int                       port                      = PortScan.select();
-    String                    ip                        = "127.0.0.1";
-    String                    addr                      = "127.0.0.1:" + port;
+    Logger logger = LoggerFactory
+            .getLogger(ClassCustomSerializerTest.class);
+    BoltServer server;
+    RpcClient client;
 
-    int                       invokeTimes               = 5;
+    int port = PortScan.select();
+    String ip = "127.0.0.1";
+    String addr = "127.0.0.1:" + port;
 
-    SimpleServerUserProcessor serverUserProcessor       = new SimpleServerUserProcessor();
-    SimpleClientUserProcessor clientUserProcessor       = new SimpleClientUserProcessor();
-    CONNECTEventProcessor     clientConnectProcessor    = new CONNECTEventProcessor();
-    CONNECTEventProcessor     serverConnectProcessor    = new CONNECTEventProcessor();
-    DISCONNECTEventProcessor  clientDisConnectProcessor = new DISCONNECTEventProcessor();
-    DISCONNECTEventProcessor  serverDisConnectProcessor = new DISCONNECTEventProcessor();
+    int invokeTimes = 5;
 
-    boolean                   flag1_RequestBody         = false;
-    boolean                   flag2_RequestBody         = false;
-    boolean                   flag1_String              = false;
-    boolean                   flag2_String              = false;
+    SimpleServerUserProcessor serverUserProcessor = new SimpleServerUserProcessor();
+    SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor();
+    CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+    DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
+
+    boolean flag1_RequestBody = false;
+    boolean flag2_RequestBody = false;
+    boolean flag1_String = false;
+    boolean flag2_String = false;
 
     @Before
     public void init() {
@@ -104,7 +103,6 @@ public class ClassCustomSerializerTest {
 
     /**
      * normal test
-     * @throws Exception
      */
     @Test
     public void testNormalCustomSerializer() throws Exception {
@@ -124,12 +122,11 @@ public class ClassCustomSerializerTest {
 
     /**
      * test SerializationException when serial request
-     * @throws Exception
      */
     @Test
     public void testRequestSerialException() throws Exception {
         ExceptionRequestBodyCustomSerializer s1 = new ExceptionRequestBodyCustomSerializer(true,
-            false, false, false);
+                false, false, false);
         NormalStringCustomSerializer s2 = new NormalStringCustomSerializer();
         CustomSerializerManager.registerCustomSerializer(RequestBody.class.getName(), s1);
         CustomSerializerManager.registerCustomSerializer(String.class.getName(), s2);
@@ -154,12 +151,11 @@ public class ClassCustomSerializerTest {
 
     /**
      * test RuntimeException when serial request
-     * @throws Exception
      */
     @Test
     public void testRequestSerialRuntimeException() throws Exception {
         ExceptionRequestBodyCustomSerializer s1 = new ExceptionRequestBodyCustomSerializer(false,
-            true, false, false);
+                true, false, false);
         NormalStringCustomSerializer s2 = new NormalStringCustomSerializer();
         CustomSerializerManager.registerCustomSerializer(RequestBody.class.getName(), s1);
         CustomSerializerManager.registerCustomSerializer(String.class.getName(), s2);
@@ -184,13 +180,12 @@ public class ClassCustomSerializerTest {
 
     /**
      * test DeserializationException when deserial request
-     * @throws Exception
      */
     @Test
     public void testRequestDeserialException() throws Exception {
         System.setProperty(Configs.SERIALIZER, Byte.toString(SerializerManager.Hessian2));
         ExceptionRequestBodyCustomSerializer s1 = new ExceptionRequestBodyCustomSerializer(false,
-            false, true, false);
+                false, true, false);
         NormalStringCustomSerializer s2 = new NormalStringCustomSerializer();
         CustomSerializerManager.registerCustomSerializer(RequestBody.class.getName(), s1);
         CustomSerializerManager.registerCustomSerializer(String.class.getName(), s2);
@@ -215,13 +210,12 @@ public class ClassCustomSerializerTest {
 
     /**
      * test RuntimeException when deserial request
-     * @throws Exception
      */
     @Test
     public void testRequestDeserialRuntimeException() throws Exception {
         System.setProperty(Configs.SERIALIZER, Byte.toString(SerializerManager.Hessian2));
         ExceptionRequestBodyCustomSerializer s1 = new ExceptionRequestBodyCustomSerializer(false,
-            false, false, true);
+                false, false, true);
         NormalStringCustomSerializer s2 = new NormalStringCustomSerializer();
         CustomSerializerManager.registerCustomSerializer(RequestBody.class.getName(), s1);
         CustomSerializerManager.registerCustomSerializer(String.class.getName(), s2);
@@ -246,13 +240,12 @@ public class ClassCustomSerializerTest {
 
     /**
      * test SerializationException when serial response
-     * @throws Exception
      */
     @Test
     public void testResponseSerialException() throws Exception {
         NormalRequestBodyCustomSerializer s1 = new NormalRequestBodyCustomSerializer();
         ExceptionStringCustomSerializer s2 = new ExceptionStringCustomSerializer(true, false,
-            false, false);
+                false, false);
         CustomSerializerManager.registerCustomSerializer(RequestBody.class.getName(), s1);
         CustomSerializerManager.registerCustomSerializer(String.class.getName(), s2);
 
@@ -276,13 +269,12 @@ public class ClassCustomSerializerTest {
 
     /**
      * test RuntimeException when serial response
-     * @throws Exception
      */
     @Test
     public void testResponseSerialRuntimeException() throws Exception {
         NormalRequestBodyCustomSerializer s1 = new NormalRequestBodyCustomSerializer();
         ExceptionStringCustomSerializer s2 = new ExceptionStringCustomSerializer(false, true,
-            false, false);
+                false, false);
         CustomSerializerManager.registerCustomSerializer(RequestBody.class.getName(), s1);
         CustomSerializerManager.registerCustomSerializer(String.class.getName(), s2);
 
@@ -306,13 +298,12 @@ public class ClassCustomSerializerTest {
 
     /**
      * test DeserializationException when deserial response
-     * @throws Exception
      */
     @Test
     public void testResponseDeserialzeException() throws Exception {
         NormalRequestBodyCustomSerializer s1 = new NormalRequestBodyCustomSerializer();
         ExceptionStringCustomSerializer s2 = new ExceptionStringCustomSerializer(false, false,
-            true, false);
+                true, false);
         CustomSerializerManager.registerCustomSerializer(RequestBody.class.getName(), s1);
         CustomSerializerManager.registerCustomSerializer(String.class.getName(), s2);
 
@@ -336,13 +327,12 @@ public class ClassCustomSerializerTest {
 
     /**
      * test RuntimeException when deserial response
-     * @throws Exception
      */
     @Test
     public void testResponseDeserialzeRuntimeException() throws Exception {
         NormalRequestBodyCustomSerializer s1 = new NormalRequestBodyCustomSerializer();
         ExceptionStringCustomSerializer s2 = new ExceptionStringCustomSerializer(false, false,
-            false, true);
+                false, true);
         CustomSerializerManager.registerCustomSerializer(RequestBody.class.getName(), s1);
         CustomSerializerManager.registerCustomSerializer(String.class.getName(), s2);
 
@@ -366,8 +356,6 @@ public class ClassCustomSerializerTest {
 
     /**
      * test custom serializer using invoke contxt in sync
-     *
-     * @throws Exception
      */
     @Test
     public void testInvokeContextCustomSerializer_SYNC() throws Exception {
@@ -379,7 +367,7 @@ public class ClassCustomSerializerTest {
         RequestBody body = new RequestBody(1, "hello world!");
         InvokeContext invokeContext = new InvokeContext();
         invokeContext.putIfAbsent(NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE_KEY,
-            NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE1_value);
+                NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE1_value);
         String ret = (String) client.invokeSync(addr, body, invokeContext, 1000);
         Assert.assertEquals(RequestBody.DEFAULT_SERVER_RETURN_STR + "RANDOM", ret);
         Assert.assertTrue(s1.isSerialized());
@@ -387,7 +375,7 @@ public class ClassCustomSerializerTest {
 
         invokeContext.clear();
         invokeContext.putIfAbsent(NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE_KEY,
-            NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE2_value);
+                NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE2_value);
         ret = (String) client.invokeSync(addr, body, invokeContext, 1000);
         Assert.assertEquals(NormalStringCustomSerializer_InvokeContext.UNIVERSAL_RESP, ret);
         Assert.assertTrue(s1.isSerialized());
@@ -396,7 +384,6 @@ public class ClassCustomSerializerTest {
 
     /**
      * test custom serializer using invoke contxt in future
-     * @throws Exception
      */
     @Test
     public void testInvokeContextCustomSerializer_FUTURE() throws Exception {
@@ -408,7 +395,7 @@ public class ClassCustomSerializerTest {
         RequestBody body = new RequestBody(1, "hello world!");
         InvokeContext invokeContext = new InvokeContext();
         invokeContext.putIfAbsent(NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE_KEY,
-            NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE1_value);
+                NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE1_value);
         RpcResponseFuture future = client.invokeWithFuture(addr, body, invokeContext, 1000);
         String ret = (String) future.get(1000);
         Assert.assertEquals(RequestBody.DEFAULT_SERVER_RETURN_STR + "RANDOM", ret);
@@ -417,7 +404,7 @@ public class ClassCustomSerializerTest {
 
         invokeContext.clear();
         invokeContext.putIfAbsent(NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE_KEY,
-            NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE2_value);
+                NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE2_value);
         future = client.invokeWithFuture(addr, body, invokeContext, 1000);
         ret = (String) future.get(1000);
         Assert.assertEquals(NormalStringCustomSerializer_InvokeContext.UNIVERSAL_RESP, ret);
@@ -427,7 +414,6 @@ public class ClassCustomSerializerTest {
 
     /**
      * test custom serializer using invoke contxt in callback
-     * @throws Exception
      */
     @Test
     public void testInvokeContextCustomSerializer_CALLBACK() throws Exception {
@@ -439,7 +425,7 @@ public class ClassCustomSerializerTest {
         RequestBody body = new RequestBody(1, "hello world!");
         InvokeContext invokeContext = new InvokeContext();
         invokeContext.putIfAbsent(NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE_KEY,
-            NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE1_value);
+                NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE1_value);
 
         final List<Object> rets = new ArrayList<Object>();
         final CountDownLatch latch = new CountDownLatch(1);
@@ -469,7 +455,7 @@ public class ClassCustomSerializerTest {
 
         invokeContext.clear();
         invokeContext.putIfAbsent(NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE_KEY,
-            NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE2_value);
+                NormalRequestBodyCustomSerializer_InvokeContext.SERIALTYPE2_value);
         final CountDownLatch latch1 = new CountDownLatch(1);
         client.invokeWithCallback(addr, body, invokeContext, new InvokeCallback() {
             @Override

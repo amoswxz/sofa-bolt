@@ -16,58 +16,64 @@
  */
 package com.alipay.remoting.rpc.common;
 
+import com.alipay.remoting.BizContext;
+import com.alipay.remoting.InvokeContext;
+import com.alipay.remoting.NamedThreadFactory;
+import com.alipay.remoting.rpc.protocol.SyncUserProcessor;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alipay.remoting.BizContext;
-import com.alipay.remoting.InvokeContext;
-import com.alipay.remoting.NamedThreadFactory;
-import com.alipay.remoting.rpc.protocol.SyncUserProcessor;
-
 /**
  * a demo user processor for rpc server
- * 
+ *
  * @author xiaomin.cxm
  * @version $Id: SimpleServerUserProcessor.java, v 0.1 Jan 7, 2016 3:01:49 PM xiaomin.cxm Exp $
  */
 public class ConcurrentServerUserProcessor extends SyncUserProcessor<RequestBody> {
 
-    /** logger */
-    private static final Logger logger        = LoggerFactory
-                                                  .getLogger(ConcurrentServerUserProcessor.class);
+    /**
+     * logger
+     */
+    private static final Logger logger = LoggerFactory
+            .getLogger(ConcurrentServerUserProcessor.class);
 
-    /** delay milliseconds */
-    private long                delayMs;
+    /**
+     * delay milliseconds
+     */
+    private long delayMs;
 
-    /** whether delay or not */
-    private boolean             delaySwitch;
+    /**
+     * whether delay or not
+     */
+    private boolean delaySwitch;
 
-    /** executor */
-    private ThreadPoolExecutor  executor;
+    /**
+     * executor
+     */
+    private ThreadPoolExecutor executor;
 
-    private AtomicInteger       invokeTimes   = new AtomicInteger();
+    private AtomicInteger invokeTimes = new AtomicInteger();
 
-    private AtomicInteger       onewayTimes   = new AtomicInteger();
-    private AtomicInteger       syncTimes     = new AtomicInteger();
-    private AtomicInteger       futureTimes   = new AtomicInteger();
-    private AtomicInteger       callbackTimes = new AtomicInteger();
+    private AtomicInteger onewayTimes = new AtomicInteger();
+    private AtomicInteger syncTimes = new AtomicInteger();
+    private AtomicInteger futureTimes = new AtomicInteger();
+    private AtomicInteger callbackTimes = new AtomicInteger();
 
-    private String              remoteAddr;
-    private CountDownLatch      latch         = new CountDownLatch(1);
+    private String remoteAddr;
+    private CountDownLatch latch = new CountDownLatch(1);
 
     public ConcurrentServerUserProcessor() {
         this.delaySwitch = false;
         this.delayMs = 0;
         this.executor = new ThreadPoolExecutor(50, 100, 60, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(1000), new NamedThreadFactory("Request-process-pool"));
+                new ArrayBlockingQueue<Runnable>(1000), new NamedThreadFactory("Request-process-pool"));
     }
 
     public ConcurrentServerUserProcessor(long delay) {
@@ -80,10 +86,10 @@ public class ConcurrentServerUserProcessor extends SyncUserProcessor<RequestBody
     }
 
     public ConcurrentServerUserProcessor(long delay, int core, int max, int keepaliveSeconds,
-                                         int workQueue) {
+            int workQueue) {
         this(delay);
         this.executor = new ThreadPoolExecutor(core, max, keepaliveSeconds, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(workQueue), new NamedThreadFactory(
+                new ArrayBlockingQueue<Runnable>(workQueue), new NamedThreadFactory(
                 "Request-process-pool"));
     }
 
@@ -138,8 +144,8 @@ public class ConcurrentServerUserProcessor extends SyncUserProcessor<RequestBody
     }
 
     public int getInvokeTimesEachCallType(RequestBody.InvokeType type) {
-        return new int[] { this.onewayTimes.get(), this.syncTimes.get(), this.futureTimes.get(),
-                this.callbackTimes.get() }[type.ordinal()];
+        return new int[]{this.onewayTimes.get(), this.syncTimes.get(), this.futureTimes.get(),
+                this.callbackTimes.get()}[type.ordinal()];
     }
 
     public String getRemoteAddr() throws InterruptedException {
