@@ -61,11 +61,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
      * 具体还需自行测试验证。但是，IO优化中，这样的估算公式可能更适合：最佳线程数目 = （（线程等待时间+线程CPU时间）/线程CPU时间 ）* CPU数目因为很显然，线程等待时间所占比例越高，需要越多线程。
      * 线程CPU时间所占比例越高，需要越少线程。下面举个例子：比如平均每个线程CPU运行时间为0.5s，而线程等待时间（非CPU运行时间，比如IO）为1.5s，CPU核心数为8，
      * 那么根据上面这个公式估算得到：((0.5+1.5)/0.5)*8=32。这个公式进一步转化为：最佳线程数目 = （线程等待时间与线程CPU时间之比 + 1）* CPU数目
-     *
-     * 作者：zhangya
-     * 链接：https://www.zhihu.com/question/38128980/answer/75041041
-     * 来源：知乎
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     * 对于计算密集型的任务，在拥有N个处理器的系统上，当线程池的大小为N+1时，通常能实现最优的效率。(即使当计算密集型的线程偶尔由于缺失故障或者其他原因而暂停时，这个额外的线程也能确保CPU的时钟周期不会被浪费。)
      */
     private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime
                     .getRuntime().availableProcessors() + 1, new NamedThreadFactory("bolt-netty-client-worker", true));
