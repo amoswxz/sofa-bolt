@@ -25,29 +25,27 @@ import com.alipay.remoting.Protocol;
 import com.alipay.remoting.rpc.RpcCommandFactory;
 
 /**
- * Request command protocol for v2 0     1     2           4           6           8          10     11     12
- * 14         16 +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+------+-----+-----+-----+-----+
- * |proto| ver1|type | cmdcode   |ver2 |   requestId           |codec|switch|   timeout             |
+ * Request command protocol for v2 0     1     2           4           6           8          10     11     12 14
+ *  16 +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+------+-----+-----+-----+-----+ |proto|
+ * ver1|type | cmdcode   |ver2 |   requestId           |codec|switch|   timeout             |
  * +-----------+-----------+-----------+-----------+-----------+------------+-----------+-----------+ |classLen
  * |headerLen  |contentLen             |           ...                                  |
- * +-----------+-----------+-----------+-----------+                                                + |
- * className + header  + content  bytes                                             | +
- *                                                               + |                               ... ...
- * | CRC32(optional)       | +------------------------------------------------------------------------------------------------+
+ * +-----------+-----------+-----------+-----------+                                                + | className +
+ * header  + content  bytes                                             | + + |                               ... ... |
+ * CRC32(optional)       | +------------------------------------------------------------------------------------------------+
  *
  * proto: code for protocol ver1: version for protocol type: request/response/request oneway cmdcode: code for remoting
  * command ver2:version for remoting command requestId: id of request codec: code for codec switch: function switch for
  * protocol headerLen: length of header contentLen: length of content CRC32: CRC32 of the frame(Exists when ver1 > 1)
  *
- * Response command protocol for v2 0     1     2     3     4           6           8          10     11    12
- * 14          16 +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+------+-----+-----+-----+-----+
- * |proto| ver1| type| cmdcode   |ver2 |   requestId           |codec|switch|respstatus |  classLen |
+ * Response command protocol for v2 0     1     2     3     4           6           8          10     11    12 14
+ *   16 +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+------+-----+-----+-----+-----+ |proto| ver1|
+ * type| cmdcode   |ver2 |   requestId           |codec|switch|respstatus |  classLen |
  * +-----------+-----------+-----------+-----------+-----------+------------+-----------+-----------+ |headerLen  |
  * contentLen            |                      ...                                   |
- * +-----------------------------------+                                                            + |
- * className + header  + content  bytes                                             | +
- *                                                               + |                               ... ...
- *                    | CRC32(optional)       | +------------------------------------------------------------------------------------------------+
+ * +-----------------------------------+                                                            + | className +
+ * header  + content  bytes                                             | + + |                               ... ... |
+ * CRC32(optional)       | +------------------------------------------------------------------------------------------------+
  * respstatus: response status
  *
  * @author jiangping

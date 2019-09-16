@@ -32,7 +32,8 @@ import org.slf4j.LoggerFactory;
  */
 public class RpcServerDemoByMain {
 
-    static Logger logger = LoggerFactory.getLogger(RpcServerDemoByMain.class);
+    static Logger logger = LoggerFactory
+            .getLogger(RpcServerDemoByMain.class);
 
     BoltServer server;
 

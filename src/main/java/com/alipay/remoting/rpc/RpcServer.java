@@ -111,7 +111,11 @@ public class RpcServer extends AbstractRemotingServer {
      * boss event loop group, boss group should not be daemon, need shutdown manually
      */
     private final EventLoopGroup bossGroup = NettyEventLoopUtil
-            .newEventLoopGroup(1, new NamedThreadFactory("Rpc-netty-server-boss", false));
+            .newEventLoopGroup(
+                    1,
+                    new NamedThreadFactory(
+                            "Rpc-netty-server-boss",
+                            false));
     /**
      * rpc remoting
      */
@@ -176,8 +180,10 @@ public class RpcServer extends AbstractRemotingServer {
      * <ul>
      * <li>You can enable connection management feature by specify @param manageConnection true.</li>
      * <ul>
-     * <li>When connection management feature enabled, you can use all invoke methods with params {@link String}, {@link Url}, {@link Connection} methods.</li>
-     * <li>When connection management feature disabled, you can only use invoke methods with params {@link Connection}, otherwise {@link UnsupportedOperationException} will be thrown.</li>
+     * <li>When connection management feature enabled, you can use all invoke methods with params {@link String}, {@link
+     * Url}, {@link Connection} methods.</li>
+     * <li>When connection management feature disabled, you can only use invoke methods with params {@link Connection},
+     * otherwise {@link UnsupportedOperationException} will be thrown.</li>
      * </ul>
      * </ul>
      *
@@ -197,8 +203,10 @@ public class RpcServer extends AbstractRemotingServer {
      * <ul>
      * <li>You can enable connection management feature by specify @param manageConnection true.</li>
      * <ul>
-     * <li>When connection management feature enabled, you can use all invoke methods with params {@link String}, {@link Url}, {@link Connection} methods.</li>
-     * <li>When connection management feature disabled, you can only use invoke methods with params {@link Connection}, otherwise {@link UnsupportedOperationException} will be thrown.</li>
+     * <li>When connection management feature enabled, you can use all invoke methods with params {@link String}, {@link
+     * Url}, {@link Connection} methods.</li>
+     * <li>When connection management feature disabled, you can only use invoke methods with params {@link Connection},
+     * otherwise {@link UnsupportedOperationException} will be thrown.</li>
      * </ul>
      * </ul>
      *
@@ -395,7 +403,8 @@ public class RpcServer extends AbstractRemotingServer {
      * Notice:<br>
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
-     * <li>When do invocation, use the string address to find a available client connection, if none then throw exception</li>
+     * <li>When do invocation, use the string address to find a available client connection, if none then throw
+     * exception</li>
      * <li>Unlike rpc client, address arguments takes no effect here, for rpc server will not create connection.</li>
      * </ol>
      */
@@ -421,7 +430,8 @@ public class RpcServer extends AbstractRemotingServer {
      * Notice:<br>
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
-     * <li>When do invocation, use the parsed {@link Url} to find a available client connection, if none then throw exception</li>
+     * <li>When do invocation, use the parsed {@link Url} to find a available client connection, if none then throw
+     * exception</li>
      * </ol>
      */
     public void oneway(final Url url, final Object request) throws RemotingException,
@@ -466,7 +476,8 @@ public class RpcServer extends AbstractRemotingServer {
      * Notice:<br>
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
-     * <li>When do invocation, use the string address to find a available client connection, if none then throw exception</li>
+     * <li>When do invocation, use the string address to find a available client connection, if none then throw
+     * exception</li>
      * <li>Unlike rpc client, address arguments takes no effect here, for rpc server will not create connection.</li>
      * </ol>
      *
@@ -497,7 +508,8 @@ public class RpcServer extends AbstractRemotingServer {
      * Notice:<br>
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
-     * <li>When do invocation, use the parsed {@link Url} to find a available client connection, if none then throw exception</li>
+     * <li>When do invocation, use the parsed {@link Url} to find a available client connection, if none then throw
+     * exception</li>
      * </ol>
      *
      * @return Object
@@ -552,7 +564,8 @@ public class RpcServer extends AbstractRemotingServer {
      * Notice:<br>
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
-     * <li>When do invocation, use the string address to find a available client connection, if none then throw exception</li>
+     * <li>When do invocation, use the string address to find a available client connection, if none then throw
+     * exception</li>
      * <li>Unlike rpc client, address arguments takes no effect here, for rpc server will not create connection.</li>
      * </ol>
      *
@@ -583,7 +596,8 @@ public class RpcServer extends AbstractRemotingServer {
      * Notice:<br>
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
-     * <li>When do invocation, use the parsed {@link Url} to find a available client connection, if none then throw exception</li>
+     * <li>When do invocation, use the parsed {@link Url} to find a available client connection, if none then throw
+     * exception</li>
      * </ol>
      *
      * @return RpcResponseFuture
@@ -637,7 +651,8 @@ public class RpcServer extends AbstractRemotingServer {
      * Notice:<br>
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
-     * <li>When do invocation, use the string address to find a available client connection, if none then throw exception</li>
+     * <li>When do invocation, use the string address to find a available client connection, if none then throw
+     * exception</li>
      * <li>Unlike rpc client, address arguments takes no effect here, for rpc server will not create connection.</li>
      * </ol>
      */
@@ -670,7 +685,8 @@ public class RpcServer extends AbstractRemotingServer {
      * Notice:<br>
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
-     * <li>When do invocation, use the parsed {@link Url} to find a available client connection, if none then throw exception</li>
+     * <li>When do invocation, use the parsed {@link Url} to find a available client connection, if none then throw
+     * exception</li>
      * </ol>
      */
     public void invokeWithCallback(final Url url, final Object request,

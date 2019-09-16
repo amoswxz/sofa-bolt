@@ -56,10 +56,19 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
     private static final Logger logger = BoltLoggerFactory
             .getLogger(AbstractConnectionFactory.class);
 
+    /**
+     * 如果是CPU密集型应用，则线程池大小设置为N+1如果是IO密集型应用，则线程池大小设置为2N+1如果一台服务器上只部署这一个应用并且只有这一个线程池，那么这种估算或许合理，
+     * 具体还需自行测试验证。但是，IO优化中，这样的估算公式可能更适合：最佳线程数目 = （（线程等待时间+线程CPU时间）/线程CPU时间 ）* CPU数目因为很显然，线程等待时间所占比例越高，需要越多线程。
+     * 线程CPU时间所占比例越高，需要越少线程。下面举个例子：比如平均每个线程CPU运行时间为0.5s，而线程等待时间（非CPU运行时间，比如IO）为1.5s，CPU核心数为8，
+     * 那么根据上面这个公式估算得到：((0.5+1.5)/0.5)*8=32。这个公式进一步转化为：最佳线程数目 = （线程等待时间与线程CPU时间之比 + 1）* CPU数目
+     *
+     * 作者：zhangya
+     * 链接：https://www.zhihu.com/question/38128980/answer/75041041
+     * 来源：知乎
+     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     */
     private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime
-                    .getRuntime().availableProcessors() + 1,
-            new NamedThreadFactory(
-                    "bolt-netty-client-worker", true));
+                    .getRuntime().availableProcessors() + 1, new NamedThreadFactory("bolt-netty-client-worker", true));
 
     private final ConfigurableInstance confInstance;
     private final Codec codec;

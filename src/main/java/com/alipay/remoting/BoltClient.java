@@ -40,11 +40,14 @@ public interface BoltClient extends Configurable, LifeCycle {
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
      * <li>When do invocation, use the string address to find a available connection, if none then create one.</li>
-     *    <ul>
-     *      <li>You can use {@link RpcConfigs#CONNECT_TIMEOUT_KEY} to specify connection timeout, time unit is milliseconds, e.g [127.0.0.1:12200?_CONNECTTIMEOUT=3000]
-     *      <li>You can use {@link RpcConfigs#CONNECTION_NUM_KEY} to specify connection number for each ip and port, e.g [127.0.0.1:12200?_CONNECTIONNUM=30]
-     *      <li>You can use {@link RpcConfigs#CONNECTION_WARMUP_KEY} to specify whether need warmup all connections for the first time you call this method, e.g [127.0.0.1:12200?_CONNECTIONWARMUP=false]
-     *    </ul>
+     * <ul>
+     * <li>You can use {@link RpcConfigs#CONNECT_TIMEOUT_KEY} to specify connection timeout, time unit is milliseconds,
+     * e.g [127.0.0.1:12200?_CONNECTTIMEOUT=3000]
+     * <li>You can use {@link RpcConfigs#CONNECTION_NUM_KEY} to specify connection number for each ip and port, e.g
+     * [127.0.0.1:12200?_CONNECTIONNUM=30]
+     * <li>You can use {@link RpcConfigs#CONNECTION_WARMUP_KEY} to specify whether need warmup all connections for the
+     * first time you call this method, e.g [127.0.0.1:12200?_CONNECTIONWARMUP=false]
+     * </ul>
      * <li>You should use {@link #closeConnection(String addr)} to close it if you want.
      * </ol>
      *
@@ -72,11 +75,12 @@ public interface BoltClient extends Configurable, LifeCycle {
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
      * <li>When do invocation, use the parsed {@link Url} to find a available connection, if none then create one.</li>
-     *    <ul>
-     *      <li>You can use {@link Url#setConnectTimeout} to specify connection timeout, time unit is milliseconds.
-     *      <li>You can use {@link Url#setConnNum} to specify connection number for each ip and port.
-     *      <li>You can use {@link Url#setConnWarmup} to specify whether need warmup all connections for the first time you call this method.
-     *    </ul>
+     * <ul>
+     * <li>You can use {@link Url#setConnectTimeout} to specify connection timeout, time unit is milliseconds.
+     * <li>You can use {@link Url#setConnNum} to specify connection number for each ip and port.
+     * <li>You can use {@link Url#setConnWarmup} to specify whether need warmup all connections for the first time you
+     * call this method.
+     * </ul>
      * <li>You should use {@link #closeConnection(Url url)} to close it if you want.
      * </ol>
      *
@@ -125,11 +129,14 @@ public interface BoltClient extends Configurable, LifeCycle {
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
      * <li>When do invocation, use the string address to find a available connection, if none then create one.</li>
-     *    <ul>
-     *      <li>You can use {@link RpcConfigs#CONNECT_TIMEOUT_KEY} to specify connection timeout, time unit is milliseconds, e.g [127.0.0.1:12200?_CONNECTTIMEOUT=3000]
-     *      <li>You can use {@link RpcConfigs#CONNECTION_NUM_KEY} to specify connection number for each ip and port, e.g [127.0.0.1:12200?_CONNECTIONNUM=30]
-     *      <li>You can use {@link RpcConfigs#CONNECTION_WARMUP_KEY} to specify whether need warmup all connections for the first time you call this method, e.g [127.0.0.1:12200?_CONNECTIONWARMUP=false]
-     *    </ul>
+     * <ul>
+     * <li>You can use {@link RpcConfigs#CONNECT_TIMEOUT_KEY} to specify connection timeout, time unit is milliseconds,
+     * e.g [127.0.0.1:12200?_CONNECTTIMEOUT=3000]
+     * <li>You can use {@link RpcConfigs#CONNECTION_NUM_KEY} to specify connection number for each ip and port, e.g
+     * [127.0.0.1:12200?_CONNECTIONNUM=30]
+     * <li>You can use {@link RpcConfigs#CONNECTION_WARMUP_KEY} to specify whether need warmup all connections for the
+     * first time you call this method, e.g [127.0.0.1:12200?_CONNECTIONWARMUP=false]
+     * </ul>
      * <li>You should use {@link #closeConnection(String addr)} to close it if you want.
      * </ol>
      *
@@ -164,11 +171,12 @@ public interface BoltClient extends Configurable, LifeCycle {
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
      * <li>When do invocation, use the parsed {@link Url} to find a available connection, if none then create one.</li>
-     *    <ul>
-     *      <li>You can use {@link Url#setConnectTimeout} to specify connection timeout, time unit is milliseconds.
-     *      <li>You can use {@link Url#setConnNum} to specify connection number for each ip and port.
-     *      <li>You can use {@link Url#setConnWarmup} to specify whether need warmup all connections for the first time you call this method.
-     *    </ul>
+     * <ul>
+     * <li>You can use {@link Url#setConnectTimeout} to specify connection timeout, time unit is milliseconds.
+     * <li>You can use {@link Url#setConnNum} to specify connection number for each ip and port.
+     * <li>You can use {@link Url#setConnWarmup} to specify whether need warmup all connections for the first time you
+     * call this method.
+     * </ul>
      * <li>You should use {@link #closeConnection(Url url)} to close it if you want.
      * </ol>
      *
@@ -232,11 +240,14 @@ public interface BoltClient extends Configurable, LifeCycle {
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
      * <li>When do invocation, use the string address to find a available connection, if none then create one.</li>
-     *    <ul>
-     *      <li>You can use {@link RpcConfigs#CONNECT_TIMEOUT_KEY} to specify connection timeout, time unit is milliseconds, e.g [127.0.0.1:12200?_CONNECTTIMEOUT=3000]
-     *      <li>You can use {@link RpcConfigs#CONNECTION_NUM_KEY} to specify connection number for each ip and port, e.g [127.0.0.1:12200?_CONNECTIONNUM=30]
-     *      <li>You can use {@link RpcConfigs#CONNECTION_WARMUP_KEY} to specify whether need warmup all connections for the first time you call this method, e.g [127.0.0.1:12200?_CONNECTIONWARMUP=false]
-     *    </ul>
+     * <ul>
+     * <li>You can use {@link RpcConfigs#CONNECT_TIMEOUT_KEY} to specify connection timeout, time unit is milliseconds,
+     * e.g [127.0.0.1:12200?_CONNECTTIMEOUT=3000]
+     * <li>You can use {@link RpcConfigs#CONNECTION_NUM_KEY} to specify connection number for each ip and port, e.g
+     * [127.0.0.1:12200?_CONNECTIONNUM=30]
+     * <li>You can use {@link RpcConfigs#CONNECTION_WARMUP_KEY} to specify whether need warmup all connections for the
+     * first time you call this method, e.g [127.0.0.1:12200?_CONNECTIONWARMUP=false]
+     * </ul>
      * <li>You should use {@link #closeConnection(String addr)} to close it if you want.
      * </ol>
      *
@@ -271,11 +282,12 @@ public interface BoltClient extends Configurable, LifeCycle {
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
      * <li>When do invocation, use the parsed {@link Url} to find a available connection, if none then create one.</li>
-     *    <ul>
-     *      <li>You can use {@link Url#setConnectTimeout} to specify connection timeout, time unit is milliseconds.
-     *      <li>You can use {@link Url#setConnNum} to specify connection number for each ip and port.
-     *      <li>You can use {@link Url#setConnWarmup} to specify whether need warmup all connections for the first time you call this method.
-     *    </ul>
+     * <ul>
+     * <li>You can use {@link Url#setConnectTimeout} to specify connection timeout, time unit is milliseconds.
+     * <li>You can use {@link Url#setConnNum} to specify connection number for each ip and port.
+     * <li>You can use {@link Url#setConnWarmup} to specify whether need warmup all connections for the first time you
+     * call this method.
+     * </ul>
      * <li>You should use {@link #closeConnection(Url url)} to close it if you want.
      * </ol>
      *
@@ -339,11 +351,14 @@ public interface BoltClient extends Configurable, LifeCycle {
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
      * <li>When do invocation, use the string address to find a available connection, if none then create one.</li>
-     *    <ul>
-     *      <li>You can use {@link RpcConfigs#CONNECT_TIMEOUT_KEY} to specify connection timeout, time unit is milliseconds, e.g [127.0.0.1:12200?_CONNECTTIMEOUT=3000]
-     *      <li>You can use {@link RpcConfigs#CONNECTION_NUM_KEY} to specify connection number for each ip and port, e.g [127.0.0.1:12200?_CONNECTIONNUM=30]
-     *      <li>You can use {@link RpcConfigs#CONNECTION_WARMUP_KEY} to specify whether need warmup all connections for the first time you call this method, e.g [127.0.0.1:12200?_CONNECTIONWARMUP=false]
-     *    </ul>
+     * <ul>
+     * <li>You can use {@link RpcConfigs#CONNECT_TIMEOUT_KEY} to specify connection timeout, time unit is milliseconds,
+     * e.g [127.0.0.1:12200?_CONNECTTIMEOUT=3000]
+     * <li>You can use {@link RpcConfigs#CONNECTION_NUM_KEY} to specify connection number for each ip and port, e.g
+     * [127.0.0.1:12200?_CONNECTIONNUM=30]
+     * <li>You can use {@link RpcConfigs#CONNECTION_WARMUP_KEY} to specify whether need warmup all connections for the
+     * first time you call this method, e.g [127.0.0.1:12200?_CONNECTIONWARMUP=false]
+     * </ul>
      * <li>You should use {@link #closeConnection(String addr)} to close it if you want.
      * </ol>
      *
@@ -379,11 +394,12 @@ public interface BoltClient extends Configurable, LifeCycle {
      * <ol>
      * <li><b>DO NOT modify the request object concurrently when this method is called.</b></li>
      * <li>When do invocation, use the parsed {@link Url} to find a available connection, if none then create one.</li>
-     *    <ul>
-     *      <li>You can use {@link Url#setConnectTimeout} to specify connection timeout, time unit is milliseconds.
-     *      <li>You can use {@link Url#setConnNum} to specify connection number for each ip and port.
-     *      <li>You can use {@link Url#setConnWarmup} to specify whether need warmup all connections for the first time you call this method.
-     *    </ul>
+     * <ul>
+     * <li>You can use {@link Url#setConnectTimeout} to specify connection timeout, time unit is milliseconds.
+     * <li>You can use {@link Url#setConnNum} to specify connection number for each ip and port.
+     * <li>You can use {@link Url#setConnWarmup} to specify whether need warmup all connections for the first time you
+     * call this method.
+     * </ul>
      * <li>You should use {@link #closeConnection(Url url)} to close it if you want.
      * </ol>
      *
@@ -500,11 +516,14 @@ public interface BoltClient extends Configurable, LifeCycle {
      * Notice:<br>
      * <ol>
      * <li>Get a connection, if none then create.</li>
-     *    <ul>
-     *      <li>You can use {@link RpcConfigs#CONNECT_TIMEOUT_KEY} to specify connection timeout, time unit is milliseconds, e.g [127.0.0.1:12200?_CONNECTTIMEOUT=3000]
-     *      <li>You can use {@link RpcConfigs#CONNECTION_NUM_KEY} to specify connection number for each ip and port, e.g [127.0.0.1:12200?_CONNECTIONNUM=30]
-     *      <li>You can use {@link RpcConfigs#CONNECTION_WARMUP_KEY} to specify whether need warmup all connections for the first time you call this method, e.g [127.0.0.1:12200?_CONNECTIONWARMUP=false]
-     *    </ul>
+     * <ul>
+     * <li>You can use {@link RpcConfigs#CONNECT_TIMEOUT_KEY} to specify connection timeout, time unit is milliseconds,
+     * e.g [127.0.0.1:12200?_CONNECTTIMEOUT=3000]
+     * <li>You can use {@link RpcConfigs#CONNECTION_NUM_KEY} to specify connection number for each ip and port, e.g
+     * [127.0.0.1:12200?_CONNECTIONNUM=30]
+     * <li>You can use {@link RpcConfigs#CONNECTION_WARMUP_KEY} to specify whether need warmup all connections for the
+     * first time you call this method, e.g [127.0.0.1:12200?_CONNECTIONWARMUP=false]
+     * </ul>
      * <li>Bolt will control this connection in {@link ConnectionPool}
      * <li>You should use {@link #closeConnection(String addr)} to close it.
      * </ol>
