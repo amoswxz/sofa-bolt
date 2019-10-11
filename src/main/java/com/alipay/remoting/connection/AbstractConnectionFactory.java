@@ -105,7 +105,6 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
         } else {
             this.bootstrap.option(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT);
         }
-
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
 
             @Override
@@ -113,7 +112,6 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
                 ChannelPipeline pipeline = channel.pipeline();
                 pipeline.addLast("decoder", codec.newDecoder());
                 pipeline.addLast("encoder", codec.newEncoder());
-
                 boolean idleSwitch = ConfigManager.tcp_idle_switch();
                 if (idleSwitch) {
                     pipeline.addLast("idleStateHandler",
@@ -121,7 +119,6 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
                                     TimeUnit.MILLISECONDS));
                     pipeline.addLast("heartbeatHandler", heartbeatHandler);
                 }
-
                 pipeline.addLast("connectionEventHandler", connectionEventHandler);
                 pipeline.addLast("handler", handler);
             }

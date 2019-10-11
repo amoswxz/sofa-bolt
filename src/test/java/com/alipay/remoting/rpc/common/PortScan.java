@@ -27,6 +27,10 @@ public class PortScan {
 
     private static final Logger logger = LoggerFactory.getLogger(PortScan.class);
 
+    /**
+     * 这块逻辑就是自动寻出一个可用端口
+     * @return
+     */
     static public int select() {
         int port = -1;
         ServerSocket ss = null;

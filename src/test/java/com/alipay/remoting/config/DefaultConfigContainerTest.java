@@ -36,7 +36,7 @@ public class DefaultConfigContainerTest {
         int expected_int = 123;
         configContainer.set(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK,
                 expected_int);
-        Assert.assertEquals(expected_int,
+        Assert.assertEquals(java.util.Optional.of(expected_int),
                 configContainer.get(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
         Assert.assertNull(configContainer.get(ConfigType.CLIENT_SIDE,
                 ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
@@ -75,13 +75,13 @@ public class DefaultConfigContainerTest {
         int expected_int_overwrite = 456;
         configContainer.set(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK,
                 expected_int_overwrite);
-        Assert.assertEquals(expected_int_overwrite,
+        Assert.assertEquals(java.util.Optional.of(expected_int_overwrite),
                 configContainer.get(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
-        Assert.assertEquals(expected_int,
+        Assert.assertEquals(java.util.Optional.of(expected_int),
                 configContainer.get(ConfigType.CLIENT_SIDE, ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
-        Assert.assertEquals(expected_int,
+        Assert.assertEquals(java.util.Optional.of(expected_int),
                 configContainer.get(ConfigType.SERVER_SIDE, ConfigItem.NETTY_BUFFER_LOW_WATER_MARK));
-        Assert.assertEquals(expected_int,
+        Assert.assertEquals(java.util.Optional.of(expected_int),
                 configContainer.get(ConfigType.SERVER_SIDE, ConfigItem.NETTY_BUFFER_HIGH_WATER_MARK));
     }
 

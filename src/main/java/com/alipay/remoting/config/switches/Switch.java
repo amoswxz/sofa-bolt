@@ -22,25 +22,29 @@ package com.alipay.remoting.config.switches;
  * @author tsui
  * @version $Id: Switch.java, v 0.1 2018-04-08 11:26 tsui Exp $
  */
+
+/**
+ * 开关接口
+ */
 public interface Switch {
 
     /**
      * api for user to turn on a feature
-     *
+     *   打开
      * @param index the switch index of feature
      */
     void turnOn(int index);
 
     /**
      * api for user to turn off a feature
-     *
+     *  关闭
      * @param index the switch index of feature
      */
     void turnOff(int index);
 
     /**
      * check switch whether on
-     *
+     *  检查开关是否打开
      * @param index the switch index of feature
      * @return true if either system setting is on or user setting is on
      */

@@ -229,8 +229,7 @@ public class RpcRequestProcessor extends AbstractRemotingProcessor<RpcRequestCom
                 processor.handleRequest(processor.preHandleRequest(ctx, cmd.getRequestObject()),
                         new RpcAsyncContext(ctx, cmd, this), cmd.getRequestObject());
             } catch (RejectedExecutionException e) {
-                logger
-                        .warn("RejectedExecutionException occurred when do ASYNC process in RpcRequestProcessor");
+                logger.warn("RejectedExecutionException occurred when do ASYNC process in RpcRequestProcessor");
                 sendResponseIfNecessary(ctx, type, this.getCommandFactory()
                         .createExceptionResponse(id, ResponseStatus.SERVER_THREADPOOL_BUSY));
             } catch (Throwable t) {

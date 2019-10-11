@@ -111,11 +111,7 @@ public class RpcServer extends AbstractRemotingServer {
      * boss event loop group, boss group should not be daemon, need shutdown manually
      */
     private final EventLoopGroup bossGroup = NettyEventLoopUtil
-            .newEventLoopGroup(
-                    1,
-                    new NamedThreadFactory(
-                            "Rpc-netty-server-boss",
-                            false));
+            .newEventLoopGroup(1, new NamedThreadFactory("Rpc-netty-server-boss", false));
     /**
      * rpc remoting
      */
@@ -236,7 +232,6 @@ public class RpcServer extends AbstractRemotingServer {
             this.switches().turnOn(GlobalSwitch.SERVER_SYNC_STOP);
         }
     }
-
     @Override
     protected void doInit() {
         if (this.addressParser == null) {
@@ -244,6 +239,7 @@ public class RpcServer extends AbstractRemotingServer {
         }
         if (this.switches().isOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH)) {
             // in server side, do not care the connection service state, so use null instead of global switch
+            //在服务器端，不关心连接服务状态，所以使用null而不是全局开关
             ConnectionSelectStrategy connectionSelectStrategy = new RandomSelectStrategy(null);
             this.connectionManager = new DefaultServerConnectionManager(connectionSelectStrategy);
             this.connectionManager.startup();
@@ -259,15 +255,37 @@ public class RpcServer extends AbstractRemotingServer {
         this.bootstrap = new ServerBootstrap();
         this.bootstrap.group(bossGroup, workerGroup)
                 .channel(NettyEventLoopUtil.getServerSocketChannelClass())
+                /**
+                 * ChannelOption.SO_BACKLOG对应的是tcp/ip协议listen函数中的backlog参数，函数listen(int socketfd,int backlog)
+                 * 用来初始化服务端可连接队列，服务端处理客户端连接请求是顺序处理的，所以同一时间只能处理一个客户端连接，多个客户端来的时候，
+                 * 服务端将不能处理的客户端连接请求放在队列中等待处理，backlog参数指定了队列的大小
+                 */
                 .option(ChannelOption.SO_BACKLOG, ConfigManager.tcp_so_backlog())
+                /**
+                 * ChanneOption.SO_REUSEADDR对应于套接字选项中的SO_REUSEADDR，这个参数表示允许重复使用本地地址和端口， 比如，某个服务器进程占用了TCP的80端口进行监听，
+                 * 此时再次监听该端口就会返回错误，使用该参数就可以解决问题，该参数允许共用该端口，这个在服务器程序中比较常使用， 比如某个进程非正常退出
+                 * 该程序占用的端口可能要被占用一段时间才能允许其他进程使用，
+                 * 而且程序死掉以后，内核一需要一定的时间才能够释放此端口，不设置SO_REUSEADDR就无法正常使用该端口。
+                 */
                 .option(ChannelOption.SO_REUSEADDR, ConfigManager.tcp_so_reuseaddr())
+                /**
+                 *   ChannelOption.TCP_NODELAY参数对应于套接字选项中的TCP_NODELAY,该参数的使用与Nagle算法有关,Nagle算法是将小的数据包组装为更大的帧然后进行发送，
+                 *   而不是输入一次发送一次,因此在数据包不足的时候会等待其他数据的到了，组装成大的数据包进行发送，虽然该方式有效提高网络的有效负载，但是却造成了延时，
+                 *   而该参数的作用就是禁止使用Nagle算法，使用于小数据即时传输，于TCP_NODELAY相对应的是TCP_CORK，该选项是需要等到发送的数据量最大的时候，一次性发送数据，适用于文件传输。
+                 */
                 .childOption(ChannelOption.TCP_NODELAY, ConfigManager.tcp_nodelay())
+                /**
+                 * Channeloption.SO_KEEPALIVE参数对应于套接字选项中的SO_KEEPALIVE，该参数用于设置TCP连接，当设置该选项以后，连接会测试链接的状态，这个选项用于可能长时间没有数据交流的连接。
+                 * 当设置该选项以后，如果在两小时内没有数据的通信时，TCP会自动发送一个活动探测数据报文。
+                 */
                 .childOption(ChannelOption.SO_KEEPALIVE, ConfigManager.tcp_so_keepalive());
 
         // set write buffer water mark
+        //这里就是设置 write的buffer的大小
         initWriteBufferWaterMark();
 
         // init byte buf allocator
+        //初始化字节buf分配器 判断是否使用池化
         if (ConfigManager.netty_buffer_pooled()) {
             this.bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                     .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
@@ -277,14 +295,17 @@ public class RpcServer extends AbstractRemotingServer {
         }
 
         // enable trigger mode for epoll if need
+        //如果是epoll,这里需要一个什么触发器
         NettyEventLoopUtil.enableTriggeredMode(bootstrap);
-
+        //心跳检测开关
         final boolean idleSwitch = ConfigManager.tcp_idle_switch();
+        //服务端心跳检测时间
         final int idleTime = ConfigManager.tcp_server_idle();
+        //这里就是没有收到心疼触发的逻辑userEventTriggered
         final ChannelHandler serverIdleHandler = new ServerIdleHandler();
+        //这里自定义了一个handler 注意这个rpcHandler
         final RpcHandler rpcHandler = new RpcHandler(true, this.userProcessors);
         this.bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
-
             @Override
             protected void initChannel(SocketChannel channel) {
                 ChannelPipeline pipeline = channel.pipeline();
@@ -353,8 +374,7 @@ public class RpcServer extends AbstractRemotingServer {
      * init rpc remoting
      */
     protected void initRpcRemoting() {
-        this.rpcRemoting = new RpcServerRemoting(new RpcCommandFactory(), this.addressParser,
-                this.connectionManager);
+        this.rpcRemoting = new RpcServerRemoting(new RpcCommandFactory(), this.addressParser, this.connectionManager);
     }
 
     /**
@@ -773,13 +793,11 @@ public class RpcServer extends AbstractRemotingServer {
         int highWaterMark = this.netty_buffer_high_watermark();
         if (lowWaterMark > highWaterMark) {
             throw new IllegalArgumentException(
-                    String
-                            .format(
-                                    "[server side] bolt netty high water mark {%s} should not be smaller than low water mark {%s} bytes)",
-                                    highWaterMark, lowWaterMark));
+                    String.format(
+                            "[server side] bolt netty high water mark {%s} should not be smaller than low water mark {%s} bytes)",
+                            highWaterMark, lowWaterMark));
         } else {
-            logger.warn(
-                    "[server side] bolt netty low water mark is {} bytes, high water mark is {} bytes",
+            logger.warn("[server side] bolt netty low water mark is {} bytes, high water mark is {} bytes",
                     lowWaterMark, highWaterMark);
         }
         this.bootstrap.childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(

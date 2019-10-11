@@ -52,8 +52,7 @@ import org.slf4j.LoggerFactory;
  */
 public class BasicUsageDemoByJunit {
 
-    static Logger logger = LoggerFactory
-            .getLogger(BasicUsageDemoByJunit.class);
+    static Logger logger = LoggerFactory.getLogger(BasicUsageDemoByJunit.class);
 
     BoltServer server;
     RpcClient client;

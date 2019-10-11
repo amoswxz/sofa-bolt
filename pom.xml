@@ -54,8 +54,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <encoding>${project.encoding}</encoding>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <source>8</source>
+          <target>8</target>
         </configuration>
         <groupId>org.apache.maven.plugins</groupId>
         <version>${maven.compiler.plugin}</version>

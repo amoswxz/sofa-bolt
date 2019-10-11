@@ -20,6 +20,7 @@ import com.alipay.remoting.config.ConfigManager;
 import java.util.BitSet;
 
 /**
+ * 全局开关
  * Global switches used in client or server
  * <p>
  * NOTICE:<br> 1. system settings will take effect in all bolt client or server instances in one process<br> 2. user
