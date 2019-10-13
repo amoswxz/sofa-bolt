@@ -175,11 +175,11 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
     @Override
     public void startup() throws LifeCycleException {
         super.startup();
-
         long keepAliveTime = ConfigManager.conn_create_tp_keepalive();
         int queueSize = ConfigManager.conn_create_tp_queue_size();
         int minPoolSize = ConfigManager.conn_create_tp_min_size();
         int maxPoolSize = ConfigManager.conn_create_tp_max_size();
+        //用来异步创建连接
         this.asyncCreateConnectionExecutor = new ThreadPoolExecutor(minPoolSize, maxPoolSize,
                 keepAliveTime, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(queueSize),
                 new NamedThreadFactory("Bolt-conn-warmup-executor", true));
@@ -232,6 +232,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
         ConnectionPool pool = null;
         try {
             // get or create an empty connection pool
+            // 获取或者创建一个空的连接池
             pool = this.getConnectionPoolAndCreateIfAbsent(poolKey, new ConnectionPoolCall());
         } catch (Exception e) {
             // should not reach here.
@@ -320,12 +321,10 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
             pool.removeAndTryClose(connection);
             if (pool.isEmpty()) {
                 this.removeTask(poolKey);
-                logger.warn(
-                        "Remove and close the last connection in ConnectionPool with poolKey {}",
+                logger.warn("Remove and close the last connection in ConnectionPool with poolKey {}",
                         poolKey);
             } else {
-                logger
-                        .warn(
+                logger.warn(
                                 "Remove and close a connection in ConnectionPool with poolKey {}, {} connections left.",
                                 poolKey, pool.size());
             }
@@ -407,7 +406,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
     }
 
     /**
-     * in case of cache pollution and connection leak, to do schedule scan
+     * in case of cache pollution and connection leak, to do schedule scan 防止连接泄露。获取检查连接是否可用
      */
     @Override
     public void scan() {
@@ -417,6 +416,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                 String poolKey = iter.next();
                 ConnectionPool pool = this.getConnectionPool(this.connTasks.get(poolKey));
                 if (null != pool) {
+                    //这里就是检查连接是否可用active .如果连接未使用的时间大于10分钟移除
                     pool.scan();
                     if (pool.isEmpty()) {
                         if ((System.currentTimeMillis() - pool.getLastAccessTimestamp())
@@ -539,7 +539,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
 
     /**
      * Get the mapping instance of {@link ConnectionPool} with the specified poolKey, or create one if there is none
-     * mapping in connTasks.
+     * mapping in connTasks. 它负责连接池的创建、连接池的初始化等操作，是其它方法操作的基础。
      *
      * @param poolKey mapping key of {@link ConnectionPool}
      * @param callable the callable task
@@ -552,25 +552,29 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
             InterruptedException {
         RunStateRecordedFutureTask<ConnectionPool> initialTask;
         ConnectionPool pool = null;
-
+        //重试次数
         int retry = Constants.DEFAULT_RETRY_TIMES;
 
         int timesOfResultNull = 0;
         int timesOfInterrupt = 0;
 
         for (int i = 0; (i < retry) && (pool == null); ++i) {
+            //根据poolkey从连接池的初始化任务中获取任务，如果任务为null说明该key对应的连接池还没有被初始化
             initialTask = this.connTasks.get(poolKey);
             if (null == initialTask) {
-                RunStateRecordedFutureTask<ConnectionPool> newTask = new RunStateRecordedFutureTask<ConnectionPool>(
-                        callable);
+                //创建新的连接池初始化任务，并赋予initialTask；
+                RunStateRecordedFutureTask<ConnectionPool> newTask = new RunStateRecordedFutureTask<ConnectionPool>(callable);
                 initialTask = this.connTasks.putIfAbsent(poolKey, newTask);
+                //这里为什么还要继续判断呢，是因为可能别的地方初始化了这个连接池
                 if (null == initialTask) {
                     initialTask = newTask;
+                    //去执行ConnectionPoolCall call() 然后docreate()创建连接
                     initialTask.run();
                 }
             }
 
             try {
+                //获取连接池，下面并且重试，如果超过retry次数则移除这个key对应的连接池任务
                 pool = initialTask.get();
                 if (null == pool) {
                     if (i + 1 < retry) {
@@ -578,8 +582,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                         continue;
                     }
                     this.connTasks.remove(poolKey);
-                    String errMsg = "Get future task result null for poolKey [" + poolKey
-                            + "] after [" + (timesOfResultNull + 1) + "] times try.";
+                    String errMsg = "Get future task result null for poolKey [" + poolKey + "] after [" + (timesOfResultNull + 1) + "] times try.";
                     throw new RemotingException(errMsg);
                 }
             } catch (InterruptedException e) {
@@ -588,15 +591,12 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                     continue;// retry if interrupted
                 }
                 this.connTasks.remove(poolKey);
-                logger
-                        .warn(
-                                "Future task of poolKey {} interrupted {} times. InterruptedException thrown and stop retry.",
-                                poolKey, (timesOfInterrupt + 1), e);
+                logger.warn("Future task of poolKey {} interrupted {} times. InterruptedException thrown and stop retry.",
+                        poolKey, (timesOfInterrupt + 1), e);
                 throw e;
             } catch (ExecutionException e) {
                 // DO NOT retry if ExecutionException occurred
                 this.connTasks.remove(poolKey);
-
                 Throwable cause = e.getCause();
                 if (cause instanceof RemotingException) {
                     throw (RemotingException) cause;
@@ -667,7 +667,6 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
             this.healTasks.remove(poolKey);
         }
     }
-
     /**
      * do create connections
      *
@@ -679,8 +678,11 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
      */
     private void doCreate(final Url url, final ConnectionPool pool, final String taskName,
             final int syncCreateNumWhenNotWarmup) throws RemotingException {
+        //连接池中的链接数量
         final int actualNum = pool.size();
+        //期望的连接池数量
         final int expectNum = url.getConnNum();
+        //如果创建的连接池数量大于期望的连接池数据直接返回
         if (actualNum >= expectNum) {
             return;
         }
@@ -688,6 +690,10 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
             logger.debug("actual num {}, expect num {}, task name {}", actualNum, expectNum,
                     taskName);
         }
+        /**
+         * 如果在Url中设置connWarmup（连接预热，即创建完连接池，同时同步创建连接）为true，则表示需要初始化连接池中的连接。
+         * 此时，则循环调用create方法，通过连接工厂ConnectionFactory的createConnection方法，创建连接，并置入连接池；
+         */
         if (url.isConnWarmup()) {
             for (int i = actualNum; i < expectNum; ++i) {
                 Connection connection = create(url);
@@ -699,8 +705,10 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                         "sync create number when not warmup should be [0," + url.getConnNum() + "]");
             }
             // create connection in sync way
+            //同步创建连接
             if (syncCreateNumWhenNotWarmup > 0) {
                 for (int i = 0; i < syncCreateNumWhenNotWarmup; ++i) {
+                    //这里就是创建连接。注意
                     Connection connection = create(url);
                     pool.add(connection);
                 }
@@ -708,7 +716,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                     return;
                 }
             }
-
+            //异步创建连接的标识
             pool.markAsyncCreationStart();// mark the start of async
             try {
                 this.asyncCreateConnectionExecutor.execute(new Runnable() {
@@ -720,9 +728,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                                 try {
                                     conn = create(url);
                                 } catch (RemotingException e) {
-                                    logger
-                                            .error(
-                                                    "Exception occurred in async create connection thread for {}, taskName {}",
+                                    logger.error("Exception occurred in async create connection thread for {}, taskName {}",
                                                     url.getUniqueKey(), taskName, e);
                                 }
                                 pool.add(conn);

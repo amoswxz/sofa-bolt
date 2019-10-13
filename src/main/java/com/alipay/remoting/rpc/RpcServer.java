@@ -239,11 +239,10 @@ public class RpcServer extends AbstractRemotingServer {
         }
         if (this.switches().isOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH)) {
             // in server side, do not care the connection service state, so use null instead of global switch
-            //在服务器端，不关心连接服务状态，所以使用null而不是全局开关
+            //在服务器端，不关心连接服务状态，所以使用null而不是全局开关 随机选择策略RandomSelectStrategy
             ConnectionSelectStrategy connectionSelectStrategy = new RandomSelectStrategy(null);
             this.connectionManager = new DefaultServerConnectionManager(connectionSelectStrategy);
             this.connectionManager.startup();
-
             this.connectionEventHandler = new RpcConnectionEventHandler(switches());
             this.connectionEventHandler.setConnectionManager(this.connectionManager);
             this.connectionEventHandler.setConnectionEventListener(this.connectionEventListener);
@@ -251,6 +250,7 @@ public class RpcServer extends AbstractRemotingServer {
             this.connectionEventHandler = new ConnectionEventHandler(switches());
             this.connectionEventHandler.setConnectionEventListener(this.connectionEventListener);
         }
+        //初始化了协议配置
         initRpcRemoting();
         this.bootstrap = new ServerBootstrap();
         this.bootstrap.group(bossGroup, workerGroup)
@@ -293,7 +293,6 @@ public class RpcServer extends AbstractRemotingServer {
             this.bootstrap.option(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT)
                     .childOption(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT);
         }
-
         // enable trigger mode for epoll if need
         //如果是epoll,这里需要一个什么触发器
         NettyEventLoopUtil.enableTriggeredMode(bootstrap);
@@ -320,7 +319,6 @@ public class RpcServer extends AbstractRemotingServer {
                 pipeline.addLast("handler", rpcHandler);
                 createConnection(channel);
             }
-
             /**
              * create connection operation<br>
              * <ul>
@@ -329,12 +327,15 @@ public class RpcServer extends AbstractRemotingServer {
              * </ul>
              */
             private void createConnection(SocketChannel channel) {
+                //RemotingUtil.parseRemoteAddress(channel) 解析出来就是 127.0.0.1:8080
+                //parse 就是根据ip port 组装了参数
                 Url url = addressParser.parse(RemotingUtil.parseRemoteAddress(channel));
                 if (switches().isOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH)) {
                     connectionManager.add(new Connection(channel, url), url.getUniqueKey());
                 } else {
                     new Connection(channel, url);
                 }
+                //这里就是去触发一下所有handler的fireUserEventTriggered 方法
                 channel.pipeline().fireUserEventTriggered(ConnectionEventType.CONNECT);
             }
         });
@@ -793,8 +794,7 @@ public class RpcServer extends AbstractRemotingServer {
         int highWaterMark = this.netty_buffer_high_watermark();
         if (lowWaterMark > highWaterMark) {
             throw new IllegalArgumentException(
-                    String.format(
-                            "[server side] bolt netty high water mark {%s} should not be smaller than low water mark {%s} bytes)",
+                    String.format("[server side] bolt netty high water mark {%s} should not be smaller than low water mark {%s} bytes)",
                             highWaterMark, lowWaterMark));
         } else {
             logger.warn("[server side] bolt netty low water mark is {} bytes, high water mark is {} bytes",

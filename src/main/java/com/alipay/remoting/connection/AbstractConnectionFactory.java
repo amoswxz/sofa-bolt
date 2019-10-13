@@ -88,6 +88,10 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
         this.handler = handler;
     }
 
+    /**
+     *
+     * @param connectionEventHandler 是RpcConnectionEventHandler
+     */
     @Override
     public void init(final ConnectionEventHandler connectionEventHandler) {
         bootstrap = new Bootstrap();
@@ -97,9 +101,11 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
                 .option(ChannelOption.SO_KEEPALIVE, ConfigManager.tcp_so_keepalive());
 
         // init netty write buffer water mark
+        //这里就是设置 write的buffer的大小 也可以说成设置水位大小
         initWriteBufferWaterMark();
 
         // init byte buf allocator
+        //判断是否是用池化
         if (ConfigManager.netty_buffer_pooled()) {
             this.bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
         } else {
@@ -112,13 +118,14 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
                 ChannelPipeline pipeline = channel.pipeline();
                 pipeline.addLast("decoder", codec.newDecoder());
                 pipeline.addLast("encoder", codec.newEncoder());
+                //判断是否开启连接检测开关
                 boolean idleSwitch = ConfigManager.tcp_idle_switch();
                 if (idleSwitch) {
                     pipeline.addLast("idleStateHandler",
-                            new IdleStateHandler(ConfigManager.tcp_idle(), ConfigManager.tcp_idle(), 0,
-                                    TimeUnit.MILLISECONDS));
+                            new IdleStateHandler(ConfigManager.tcp_idle(), ConfigManager.tcp_idle(), 0, TimeUnit.MILLISECONDS));
                     pipeline.addLast("heartbeatHandler", heartbeatHandler);
                 }
+                //todo 这里的RpcConnectionEventHandler 有什么作用
                 pipeline.addLast("connectionEventHandler", connectionEventHandler);
                 pipeline.addLast("handler", handler);
             }

@@ -85,12 +85,11 @@ public class ScheduledDisconnectStrategy implements ConnectionMonitorStrategy {
             if (connPools == null || connPools.size() == 0) {
                 return;
             }
-
             for (Map.Entry<String, RunStateRecordedFutureTask<ConnectionPool>> entry : connPools
                     .entrySet()) {
                 String poolKey = entry.getKey();
                 ConnectionPool pool = FutureTaskUtil.getFutureTaskResult(entry.getValue(), logger);
-
+                //按照每个连接的状态值bolt.conn.service.status进行分组（on（连接可用）和off（连接不可用）），分别为serviceOnConnections和serviceOffConnections。
                 List<Connection> serviceOnConnections = new ArrayList<Connection>();
                 List<Connection> serviceOffConnections = new ArrayList<Connection>();
                 for (Connection connection : pool.getAll()) {
@@ -100,12 +99,13 @@ public class ScheduledDisconnectStrategy implements ConnectionMonitorStrategy {
                         serviceOffConnections.add(connection);
                     }
                 }
-
+                /**
+                 * 如果可用连接数大于可用最大连接数，则从serviceOnConnections中随机选择一个连接，
+                 * 把其状态bolt.conn.service.status设置为off，并置入serviceOffConnections。
+                 */
                 if (serviceOnConnections.size() > connectionThreshold) {
-                    Connection freshSelectConnect = serviceOnConnections.get(random
-                            .nextInt(serviceOnConnections.size()));
-                    freshSelectConnect.setAttribute(Configs.CONN_SERVICE_STATUS,
-                            Configs.CONN_SERVICE_STATUS_OFF);
+                    Connection freshSelectConnect = serviceOnConnections.get(random.nextInt(serviceOnConnections.size()));
+                    freshSelectConnect.setAttribute(Configs.CONN_SERVICE_STATUS, Configs.CONN_SERVICE_STATUS_OFF);
                     serviceOffConnections.add(freshSelectConnect);
                 } else {
                     if (logger.isInfoEnabled()) {
@@ -113,7 +113,7 @@ public class ScheduledDisconnectStrategy implements ConnectionMonitorStrategy {
                                 poolKey, serviceOnConnections.size(), connectionThreshold);
                     }
                 }
-
+                //关闭连接
                 for (Connection offConn : serviceOffConnections) {
                     if (offConn.isInvokeFutureMapFinish()) {
                         if (offConn.isFine()) {

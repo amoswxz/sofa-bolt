@@ -31,10 +31,22 @@ import org.slf4j.Logger;
 public class ConnectionPool implements Scannable {
 
     private static final Logger logger = BoltLoggerFactory.getLogger("CommonDefault");
-
+    /**
+     * 要用来缓存已经创建的连接；
+     */
     private CopyOnWriteArrayList<Connection> connections;
+    /**
+     * 类型为ConnectionSelectStrategy，主要用来从缓存的连接中按照某种策略选择一个连接。通过实现ConnectionSelectStrategy接口，提供不同的连接选择策略。
+     * 例如：RandomSelectStrategy，实现从conns中随机选择一个连接；
+     */
     private ConnectionSelectStrategy strategy;
+    /**
+     * 类型为long，主要用来记录最后一次访问连接池的时间。同时声明为volatile，在多线程环境下，保证内存的可见性，但不能保证操作的原子性；
+     */
     private volatile long lastAccessTimestamp;
+    /**
+     * 类型为boolean，表示是否异步创建连接。同时声明为volatile，意义同上。
+     */
     private volatile boolean asyncCreationDone;
 
     /**
@@ -192,9 +204,9 @@ public class ConnectionPool implements Scannable {
     public void scan() {
         if (null != connections && !connections.isEmpty()) {
             for (Connection conn : connections) {
+                //检查连接是否可用
                 if (!conn.isFine()) {
-                    logger.warn(
-                            "Remove bad connection when scanning conns of ConnectionPool - {}:{}",
+                    logger.warn("Remove bad connection when scanning conns of ConnectionPool - {}:{}",
                             conn.getRemoteIP(), conn.getRemotePort());
                     conn.close();
                     removeAndTryClose(conn);

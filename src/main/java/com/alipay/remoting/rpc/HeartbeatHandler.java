@@ -40,6 +40,7 @@ public class HeartbeatHandler extends ChannelDuplexHandler {
      */
     @Override
     public void userEventTriggered(final ChannelHandlerContext ctx, Object evt) throws Exception {
+        System.out.println("HeartbeatHandlerUserEventTriggered");
         if (evt instanceof IdleStateEvent) {
             ProtocolCode protocolCode = ctx.channel().attr(Connection.PROTOCOL).get();
             Protocol protocol = ProtocolManager.getProtocol(protocolCode);

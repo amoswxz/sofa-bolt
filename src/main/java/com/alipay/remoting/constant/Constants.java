@@ -24,12 +24,12 @@ package com.alipay.remoting.constant;
 public class Constants {
 
     /**
-     * default expire time to remove connection pool, time unit: milliseconds
+     * default expire time to remove connection pool, time unit: milliseconds 10分钟
      */
     public static final int DEFAULT_EXPIRE_TIME = 10 * 60 * 1000;
 
     /**
-     * default retry times when failed to get result of FutureTask
+     * default retry times when failed to get result of FutureTask  默认重试2次
      */
     public static final int DEFAULT_RETRY_TIMES = 2;
 

@@ -80,15 +80,23 @@ public class Connection {
     private final ConcurrentHashMap<String/* attr key*/, Object /*attr value*/> attributes = new ConcurrentHashMap<String, Object>();
     /**
      * the reference count used for this connection. If equals 2, it means this connection has been referenced 2 times
+     * 类型为AtomicInteger，表示该Connection被使用的次数。使用原子操作，保证线程安全。
+     * 当把Connection增加到连接池时，加1；当从连接池删除Connection时，减1。当referenceCount为0时，才可以关闭Connection。
      */
+
     private final AtomicInteger referenceCount = new AtomicInteger();
+    /**
+     * 代表客户端到服务端的一个实际连接通道，负责实际的读、写操作；
+     */
     private Channel channel;
     private ProtocolCode protocolCode;
     private byte version = RpcProtocolV2.PROTOCOL_VERSION_1;
     private Url url;
+    /**
+     * 连接池对应的key的集合，key的格式为：IP:PORT；
+     */
     private Set<String> poolKeys = new ConcurrentHashSet<String>();
-    private AtomicBoolean closed = new AtomicBoolean(
-            false);
+    private AtomicBoolean closed = new AtomicBoolean(false);
 
     /**
      * Constructor

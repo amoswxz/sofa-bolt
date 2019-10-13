@@ -29,7 +29,7 @@ import java.util.Map;
 public interface ConnectionManager extends Scannable, LifeCycle {
 
     /**
-     * Deprecated, use startup instead.
+     * Deprecated, use startup instead.h
      */
     @Deprecated
     void init();

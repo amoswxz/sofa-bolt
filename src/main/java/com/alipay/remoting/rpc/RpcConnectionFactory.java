@@ -28,6 +28,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class RpcConnectionFactory extends DefaultConnectionFactory {
 
+    /**
+     * 连接工厂 客户端发起的连接自带心跳
+     * @param userProcessors
+     * @param configInstance
+     */
     public RpcConnectionFactory(ConcurrentHashMap<String, UserProcessor<?>> userProcessors,
             ConfigurableInstance configInstance) {
         super(new RpcCodec(), new HeartbeatHandler(), new RpcHandler(userProcessors),

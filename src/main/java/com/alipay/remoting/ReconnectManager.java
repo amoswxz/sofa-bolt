@@ -36,6 +36,7 @@ public class ReconnectManager extends AbstractLifeCycle implements Reconnector {
     private static final int HEAL_CONNECTION_INTERVAL = 1000;
 
     private final ConnectionManager connectionManager;
+    //这个里面存的是url对应的task
     private final LinkedBlockingQueue<ReconnectTask> tasks;
     private final List<Url> canceled;
 
@@ -65,7 +66,6 @@ public class ReconnectManager extends AbstractLifeCycle implements Reconnector {
     @Override
     public void startup() throws LifeCycleException {
         super.startup();
-
         this.healConnectionThreads = new Thread(new HealConnectionRunner());
         this.healConnectionThreads.start();
     }
@@ -111,6 +111,9 @@ public class ReconnectManager extends AbstractLifeCycle implements Reconnector {
         shutdown();
     }
 
+    /**
+     * 创建修复连接线程healConnectionThreads，修复任务为HealConnectionRunner；
+     */
     private final class HealConnectionRunner implements Runnable {
 
         private long lastConnectTime = -1;
@@ -121,11 +124,15 @@ public class ReconnectManager extends AbstractLifeCycle implements Reconnector {
                 long start = -1;
                 ReconnectTask task = null;
                 try {
+                    //  修复连接间隔时间healConnectionInterval，单位毫米，默认1000），避免过度浪费CPU资源：
                     if (this.lastConnectTime < HEAL_CONNECTION_INTERVAL) {
                         Thread.sleep(HEAL_CONNECTION_INTERVAL);
                     }
-
                     try {
+                        /**
+                         *  从tasks中获取重连连接任务。如果有任务，则调用DefaultConnectionManager的createConnectionAndHealIfNeed()
+                         *  为指定Url对应的连接池执行连接修复操作，以满足连接池的初始需求。如果没有任务，则阻塞该线程，等待任务。
+                         */
                         task = ReconnectManager.this.tasks.take();
                     } catch (InterruptedException e) {
                         // ignore
@@ -134,7 +141,6 @@ public class ReconnectManager extends AbstractLifeCycle implements Reconnector {
                     if (task == null) {
                         continue;
                     }
-
                     start = System.currentTimeMillis();
                     if (!canceled.contains(task.url)) {
                         task.run();

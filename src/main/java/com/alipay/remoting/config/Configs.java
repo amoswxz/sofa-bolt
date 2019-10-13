@@ -186,7 +186,7 @@ public class Configs {
      * Reconnection switch
      */
     public static final String CONN_RECONNECT_SWITCH = "bolt.conn.reconnect.switch";
-    public static final String CONN_RECONNECT_SWITCH_DEFAULT = "false";
+    public static final String CONN_RECONNECT_SWITCH_DEFAULT = "true";
 
     // ~~~ configs and default values for connection monitor
 
@@ -198,7 +198,7 @@ public class Configs {
      * </p>
      */
     public static final String CONN_MONITOR_SWITCH = "bolt.conn.monitor.switch";
-    public static final String CONN_MONITOR_SWITCH_DEFAULT = "false";
+    public static final String CONN_MONITOR_SWITCH_DEFAULT = "true";
 
     /**
      * Initial delay to execute schedule task for connection monitor

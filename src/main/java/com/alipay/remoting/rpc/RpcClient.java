@@ -115,28 +115,30 @@ public class RpcClient extends AbstractBoltClient {
         if (this.addressParser == null) {
             this.addressParser = new RpcAddressParser();
         }
-
+        //连接选择策略 什么意思呢，就是从连接池中随便选一个连接出来
         ConnectionSelectStrategy connectionSelectStrategy = option(BoltGenericOption.CONNECTION_SELECT_STRATEGY);
         if (connectionSelectStrategy == null) {
             connectionSelectStrategy = new RandomSelectStrategy(switches());
         }
+        //一个默认的连接管理器 客户端通过连接管理器创建连接池，初始化连接、获取连接等操作。
         this.connectionManager = new DefaultClientConnectionManager(connectionSelectStrategy,
                 new RpcConnectionFactory(userProcessors, this), connectionEventHandler,
                 connectionEventListener, switches());
         this.connectionManager.setAddressParser(this.addressParser);
+        //这里去设置了netty的group属性
         this.connectionManager.startup();
         this.rpcRemoting = new RpcClientRemoting(new RpcCommandFactory(), this.addressParser,
                 this.connectionManager);
+        //这里就是启动ScheduledThreadPoolExecutor去检查连接是否可用，然后是否移除
         this.taskScanner.add(this.connectionManager);
         this.taskScanner.startup();
 
         if (switches().isOn(GlobalSwitch.CONN_MONITOR_SWITCH)) {
+            //客户端连接池的策略 默认是threshold=3 就是说一个连接池有3个连接
             if (monitorStrategy == null) {
-                connectionMonitor = new DefaultConnectionMonitor(new ScheduledDisconnectStrategy(),
-                        this.connectionManager);
+                connectionMonitor = new DefaultConnectionMonitor(new ScheduledDisconnectStrategy(), this.connectionManager);
             } else {
-                connectionMonitor = new DefaultConnectionMonitor(monitorStrategy,
-                        this.connectionManager);
+                connectionMonitor = new DefaultConnectionMonitor(monitorStrategy, this.connectionManager);
             }
             connectionMonitor.startup();
             logger.warn("Switch on connection monitor");
@@ -144,7 +146,6 @@ public class RpcClient extends AbstractBoltClient {
         if (switches().isOn(GlobalSwitch.CONN_RECONNECT_SWITCH)) {
             reconnectManager = new ReconnectManager(connectionManager);
             reconnectManager.startup();
-
             connectionEventHandler.setReconnector(reconnectManager);
             logger.warn("Switch on reconnect manager");
         }

@@ -140,9 +140,8 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
         super.channelInactive(ctx);
         Attribute attr = ctx.channel().attr(Connection.CONNECTION);
         if (null != attr) {
-            // add reconnect task
-            if (this.globalSwitch != null
-                    && this.globalSwitch.isOn(GlobalSwitch.CONN_RECONNECT_SWITCH)) {
+            // add reconnect task 添加连接重新连接的task
+            if (this.globalSwitch != null && this.globalSwitch.isOn(GlobalSwitch.CONN_RECONNECT_SWITCH)) {
                 Connection conn = (Connection) attr.get();
                 if (reconnectManager != null) {
                     reconnectManager.reconnect(conn.getUrl());
@@ -155,17 +154,16 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object event) throws Exception {
+        System.out.println("ConnectionEventHandlerUserEventTriggered");
         if (event instanceof ConnectionEventType) {
             switch ((ConnectionEventType) event) {
                 case CONNECT:
                     Channel channel = ctx.channel();
                     if (null != channel) {
                         Connection connection = channel.attr(Connection.CONNECTION).get();
-                        this.onEvent(connection, connection.getUrl().getOriginUrl(),
-                                ConnectionEventType.CONNECT);
+                        this.onEvent(connection, connection.getUrl().getOriginUrl(), ConnectionEventType.CONNECT);
                     } else {
-                        logger
-                                .warn("channel null when handle user triggered event in ConnectionEventHandler!");
+                        logger.warn("channel null when handle user triggered event in ConnectionEventHandler!");
                     }
                     break;
                 default:
@@ -180,9 +178,7 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         final String remoteAddress = RemotingUtil.parseRemoteAddress(ctx.channel());
         final String localAddress = RemotingUtil.parseLocalAddress(ctx.channel());
-        logger
-                .warn(
-                        "ExceptionCaught in connection: local[{}], remote[{}], close the connection! Cause[{}:{}]",
+        logger.warn("ExceptionCaught in connection: local[{}], remote[{}], close the connection! Cause[{}:{}]",
                         localAddress, remoteAddress, cause.getClass().getSimpleName(), cause.getMessage());
         ctx.channel().close();
     }

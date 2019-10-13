@@ -33,8 +33,14 @@ import java.util.BitSet;
 public class GlobalSwitch implements Switch {
 
     // switches
+    /**
+     *  连接重新连接开关
+     */
     public static final int CONN_RECONNECT_SWITCH = 0;
     public static final int CONN_MONITOR_SWITCH = 1;
+    /**
+     *  服务端管理多个连接开关
+     */
     public static final int SERVER_MANAGE_CONNECTION_SWITCH = 2;
     public static final int SERVER_SYNC_STOP = 3;
 

@@ -59,9 +59,11 @@ public class DefaultConnectionMonitor extends AbstractLifeCycle {
         super.startup();
 
         /* initial delay to execute schedule task, unit: ms */
+        //第一次执行任务的延迟周期 10s
         long initialDelay = ConfigManager.conn_monitor_initial_delay();
 
         /* period of schedule task, unit: ms*/
+        //执行任务的间隔周期
         long period = ConfigManager.conn_monitor_period();
 
         this.executor = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory(
@@ -70,8 +72,7 @@ public class DefaultConnectionMonitor extends AbstractLifeCycle {
             @Override
             public void run() {
                 try {
-                    Map<String, RunStateRecordedFutureTask<ConnectionPool>> connPools = connectionManager
-                            .getConnPools();
+                    Map<String, RunStateRecordedFutureTask<ConnectionPool>> connPools = connectionManager.getConnPools();
                     strategy.monitor(connPools);
                 } catch (Exception e) {
                     logger.warn("MonitorTask error", e);
