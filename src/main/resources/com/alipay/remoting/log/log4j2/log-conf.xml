@@ -11,8 +11,8 @@
     </Console>
 
     <RollingRandomAccessFile append="true"
-      fileName="${LOG_HOME}/connection-event.log"
-      filePattern="${LOG_HOME}/connection-event.log.%d{yyyy-MM-dd}"
+      fileName="/Users/mujourney/logs/connection-event.log"
+      filePattern="/Users/mujourney/logs/connection-event.log.%d{yyyy-MM-dd}"
       immediateFlush="false"
       name="ConnectionEventAppender">
       <Filters>
@@ -28,8 +28,8 @@
     </RollingRandomAccessFile>
 
     <RollingRandomAccessFile append="true"
-      fileName="${LOG_HOME}/remoting-rpc.log"
-      filePattern="${LOG_HOME}/remoting-rpc.log.%d{yyyy-MM-dd}"
+      fileName="/Users/mujourney/logs/remoting-rpc.log"
+      filePattern="/Users/mujourney/logs/remoting-rpc.log.%d{yyyy-MM-dd}"
       immediateFlush="false"
       name="RpcRemotingAppender">
       <Filters>
@@ -45,8 +45,8 @@
     </RollingRandomAccessFile>
 
     <RollingRandomAccessFile append="true"
-      fileName="${LOG_HOME}/remoting-tr-adapter.log"
-      filePattern="${LOG_HOME}/remoting-tr-adapter.log.%d{yyyy-MM-dd}"
+      fileName="/Users/mujourney/logs/remoting-tr-adapter.log"
+      filePattern="/Users/mujourney/logs/remoting-tr-adapter.log.%d{yyyy-MM-dd}"
       immediateFlush="false"
       name="TrAdapterRemotingAppender">
       <Filters>
@@ -62,8 +62,8 @@
     </RollingRandomAccessFile>
 
     <RollingRandomAccessFile append="true"
-      fileName="${LOG_HOME}/remoting-msg.log"
-      filePattern="${LOG_HOME}/remoting-msg.log.%d{yyyy-MM-dd}"
+      fileName="/Users/mujourney/logs/remoting-msg.log"
+      filePattern="/Users/mujourney/logs/remoting-msg.log.%d{yyyy-MM-dd}"
       immediateFlush="false"
       name="MsgRemotingAppender">
       <Filters>
@@ -79,8 +79,8 @@
     </RollingRandomAccessFile>
 
     <RollingRandomAccessFile append="true"
-      fileName="${LOG_HOME}/remoting-http.log"
-      filePattern="${LOG_HOME}/remoting-http.log.%d{yyyy-MM-dd}"
+      fileName="/Users/mujourney/logs/remoting-http.log"
+      filePattern="/Users/mujourney/logs/remoting-http.log.%d{yyyy-MM-dd}"
       immediateFlush="false"
       name="HttpRemotingAppender">
       <Filters>
@@ -96,8 +96,8 @@
     </RollingRandomAccessFile>
 
     <RollingRandomAccessFile append="true"
-      fileName="${LOG_HOME}/common-error.log"
-      filePattern="${LOG_HOME}/common-error.log.%d{yyyy-MM-dd}"
+      fileName="/Users/mujourney/logs/common-error.log"
+      filePattern="/Users/mujourney/logs/common-error.log.%d{yyyy-MM-dd}"
       immediateFlush="false"
       name="ERROR-APPENDER">
       <!-- only print error log -->
@@ -111,8 +111,8 @@
     </RollingRandomAccessFile>
 
     <RollingRandomAccessFile append="true"
-      fileName="${LOG_HOME}/common-default.log"
-      filePattern="${LOG_HOME}/common-default.log.%d{yyyy-MM-dd}"
+      fileName="/Users/mujourney/logs/common-default.log"
+      filePattern="/Users/mujourney/logs/common-default.log.%d{yyyy-MM-dd}"
       immediateFlush="false"
       name="CommonDefaultAppender">
       <Filters>

@@ -118,7 +118,7 @@ public class BasicUsageDemoByJunit {
     public void testSync() throws InterruptedException {
         RequestBody req = new RequestBody(1, "hello world sync");
             try {
-                String res = (String) client.invokeSync(addr, req, 3000);
+                String res = (String) client.invokeSync(addr, req, 300000000);
                 logger.warn("Result received in sync: " + res);
                 Assert.assertEquals(RequestBody.DEFAULT_SERVER_RETURN_STR, res);
             } catch (RemotingException e) {

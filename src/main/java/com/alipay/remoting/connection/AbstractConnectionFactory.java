@@ -42,8 +42,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.WriteBufferWaterMark;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
+
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 
 /**
@@ -64,7 +66,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
      * 对于计算密集型的任务，在拥有N个处理器的系统上，当线程池的大小为N+1时，通常能实现最优的效率。(即使当计算密集型的线程偶尔由于缺失故障或者其他原因而暂停时，这个额外的线程也能确保CPU的时钟周期不会被浪费。)
      */
     private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime
-                    .getRuntime().availableProcessors() + 1, new NamedThreadFactory("bolt-netty-client-worker", true));
+            .getRuntime().availableProcessors() + 1, new NamedThreadFactory("bolt-netty-client-worker", true));
 
     private final ConfigurableInstance confInstance;
     private final Codec codec;
@@ -74,7 +76,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
     protected Bootstrap bootstrap;
 
     public AbstractConnectionFactory(Codec codec, ChannelHandler heartbeatHandler,
-            ChannelHandler handler, ConfigurableInstance confInstance) {
+                                     ChannelHandler handler, ConfigurableInstance confInstance) {
         if (codec == null) {
             throw new IllegalArgumentException("null codec");
         }
@@ -89,7 +91,6 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
     }
 
     /**
-     *
      * @param connectionEventHandler 是RpcConnectionEventHandler
      */
     @Override
@@ -155,7 +156,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
 
     @Override
     public Connection createConnection(String targetIP, int targetPort, byte version,
-            int connectTimeout) throws Exception {
+                                       int connectTimeout) throws Exception {
         Channel channel = doCreateConnection(targetIP, targetPort, connectTimeout);
         Connection conn = new Connection(channel,
                 ProtocolCode.fromBytes(RpcProtocolV2.PROTOCOL_CODE), version, new Url(targetIP,

@@ -8,7 +8,7 @@
       <charset>${LOG_ENCODE}</charset>
       <pattern>%d %-5p [%C{0}#%L] [%t] %m%n</pattern>
     </encoder>
-    <file>${LOG_HOME}/common-default.log</file>
+    <file>/Users/mujourney/logs/common-default.log</file>
     <filters>
       <filter class="ch.qos.logback.classic.filter.LevelFilter">
         <level>ERROR</level>
@@ -20,7 +20,7 @@
       </filter>
     </filters>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <FileNamePattern>${LOG_HOME}/common-default.log.%d{yyyy-MM-dd}</FileNamePattern>
+      <FileNamePattern>/Users/mujourney/logs/common-default.log.%d{yyyy-MM-dd}</FileNamePattern>
       <MaxHistory>30</MaxHistory>
     </rollingPolicy>
   </appender>
@@ -30,7 +30,7 @@
       <charset>${LOG_ENCODE}</charset>
       <pattern>%d %-5p [%C{0}#%L] [%t] %m%n</pattern>
     </encoder>
-    <file>${LOG_HOME}/connection-event.log</file>
+    <file>/Users/mujourney/logs/connection-event.log</file>
     <filters>
       <filter class="ch.qos.logback.classic.filter.LevelFilter">
         <level>ERROR</level>
@@ -42,7 +42,7 @@
       </filter>
     </filters>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <FileNamePattern>${LOG_HOME}/connection-event.log.%d{yyyy-MM-dd}</FileNamePattern>
+      <FileNamePattern>/Users/mujourney/logs/connection-event.log.%d{yyyy-MM-dd}</FileNamePattern>
       <MaxHistory>30</MaxHistory>
     </rollingPolicy>
   </appender>
@@ -52,7 +52,7 @@
       <charset>${LOG_ENCODE}</charset>
       <pattern>%d %-5p [%C{0}#%L] [%t] %m%n</pattern>
     </encoder>
-    <file>${LOG_HOME}/remoting-rpc.log</file>
+    <file>/Users/mujourney/logs/remoting-rpc.log</file>
     <filters>
       <filter class="ch.qos.logback.classic.filter.LevelFilter">
         <level>ERROR</level>
@@ -64,7 +64,7 @@
       </filter>
     </filters>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <FileNamePattern>${LOG_HOME}/remoting-rpc.log.%d{yyyy-MM-dd}</FileNamePattern>
+      <FileNamePattern>/Users/mujourney/logs/remoting-rpc.log.%d{yyyy-MM-dd}</FileNamePattern>
       <MaxHistory>30</MaxHistory>
     </rollingPolicy>
   </appender>
@@ -76,7 +76,7 @@
       <charset>${LOG_ENCODE}</charset>
       <pattern>%d %-5p [%C{0}#%L] [%t] %m%n</pattern>
     </encoder>
-    <file>${LOG_HOME}/remoting-tr-adapter.log</file>
+    <file>/Users/mujourney/logs/remoting-tr-adapter.log</file>
     <filters>
       <filter class="ch.qos.logback.classic.filter.LevelFilter">
         <level>ERROR</level>
@@ -88,7 +88,7 @@
       </filter>
     </filters>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <FileNamePattern>${LOG_HOME}/remoting-tr-adapter.log.%d{yyyy-MM-dd}</FileNamePattern>
+      <FileNamePattern>/Users/mujourney/logs/remoting-tr-adapter.log.%d{yyyy-MM-dd}</FileNamePattern>
       <MaxHistory>30</MaxHistory>
     </rollingPolicy>
   </appender>
@@ -99,7 +99,7 @@
       <charset>${LOG_ENCODE}</charset>
       <pattern>%d %-5p [%C{0}#%L] [%t] %m%n</pattern>
     </encoder>
-    <file>${LOG_HOME}/remoting-msg.log</file>
+    <file>/Users/mujourney/logs/remoting-msg.log</file>
     <filters>
       <filter class="ch.qos.logback.classic.filter.LevelFilter">
         <level>ERROR</level>
@@ -111,7 +111,7 @@
       </filter>
     </filters>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <FileNamePattern>${LOG_HOME}/remoting-msg.log.%d{yyyy-MM-dd}</FileNamePattern>
+      <FileNamePattern>/Users/mujourney/logs/remoting-msg.log.%d{yyyy-MM-dd}</FileNamePattern>
       <MaxHistory>30</MaxHistory>
     </rollingPolicy>
   </appender>
@@ -122,7 +122,7 @@
       <charset>${LOG_ENCODE}</charset>
       <pattern>%d %-5p [%C{0}#%L] [%t] %m%n</pattern>
     </encoder>
-    <file>${LOG_HOME}/remoting-http.log</file>
+    <file>/Users/mujourney/logs/remoting-http.log</file>
     <filters>
       <filter class="ch.qos.logback.classic.filter.LevelFilter">
         <level>ERROR</level>
@@ -134,7 +134,7 @@
       </filter>
     </filters>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <FileNamePattern>${LOG_HOME}/remoting-http.log.%d{yyyy-MM-dd}</FileNamePattern>
+      <FileNamePattern>/Users/mujourney/logs/remoting-http.log.%d{yyyy-MM-dd}</FileNamePattern>
       <MaxHistory>30</MaxHistory>
     </rollingPolicy>
   </appender>
@@ -145,14 +145,14 @@
       <charset>${LOG_ENCODE}</charset>
       <pattern>%d %-5p [%C{0}#%L] [%t] %m%n</pattern>
     </encoder>
-    <file>${LOG_HOME}/common-error.log</file>
+    <file>/Users/mujourney/logs/common-error.log</file>
     <filter class="ch.qos.logback.classic.filter.LevelFilter">
       <level>ERROR</level>
       <onMatch>ACCEPT</onMatch>
       <onMismatch>DENY</onMismatch>
     </filter>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <FileNamePattern>${LOG_HOME}/common-error.log.%d{yyyy-MM-dd}</FileNamePattern>
+      <FileNamePattern>/Users/mujourney/logs/common-error.log.%d{yyyy-MM-dd}</FileNamePattern>
       <MaxHistory>30</MaxHistory>
     </rollingPolicy>
   </appender>
