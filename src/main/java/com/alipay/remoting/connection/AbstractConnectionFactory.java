@@ -137,6 +137,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
         Channel channel = doCreateConnection(url.getIp(), url.getPort(), url.getConnectTimeout());
         Connection conn = new Connection(channel, ProtocolCode.fromBytes(url.getProtocol()),
                 url.getVersion(), url);
+        System.out.println("断点");
         channel.pipeline().fireUserEventTriggered(ConnectionEventType.CONNECT);
         return conn;
     }
