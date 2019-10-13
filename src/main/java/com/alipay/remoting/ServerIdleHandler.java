@@ -43,6 +43,7 @@ public class ServerIdleHandler extends ChannelDuplexHandler {
      */
     @Override
     public void userEventTriggered(final ChannelHandlerContext ctx, Object evt) throws Exception {
+        System.out.println(Thread.currentThread().getName()+"ServerIdleHandler");
         if (evt instanceof IdleStateEvent) {
             try {
                 logger.warn("Connection idle, close it from server side: {}",

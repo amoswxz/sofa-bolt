@@ -154,7 +154,7 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object event) throws Exception {
-        System.out.println("ConnectionEventHandlerUserEventTriggered");
+        System.out.println(Thread.currentThread().getName()+"ConnectionEventHandler");
         if (event instanceof ConnectionEventType) {
             switch ((ConnectionEventType) event) {
                 case CONNECT:

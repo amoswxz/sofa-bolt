@@ -117,7 +117,6 @@ public class BasicUsageDemoByJunit {
     @Test
     public void testSync() throws InterruptedException {
         RequestBody req = new RequestBody(1, "hello world sync");
-        for (int i = 0; i < invokeTimes; i++) {
             try {
                 String res = (String) client.invokeSync(addr, req, 3000);
                 logger.warn("Result received in sync: " + res);
@@ -131,8 +130,6 @@ public class BasicUsageDemoByJunit {
                 logger.error(errMsg, e);
                 Assert.fail(errMsg);
             }
-        }
-
         Assert.assertTrue(serverConnectProcessor.isConnected());
         Assert.assertEquals(1, serverConnectProcessor.getConnectTimes());
         Assert.assertEquals(invokeTimes, serverUserProcessor.getInvokeTimes());
