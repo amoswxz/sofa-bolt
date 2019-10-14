@@ -127,7 +127,7 @@
       </Policies>
     </RollingRandomAccessFile>
 
-    <Console name="Console" target="SYSTEM_OUT">
+    <Console name="Console">
       <ThresholdFilter level="${LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
       <PatternLayout charset="${LOG_ENCODE}">
         <pattern>%d %-5p [%C{1}#%L] [%t] %m%n</pattern>
