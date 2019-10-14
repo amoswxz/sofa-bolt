@@ -26,11 +26,13 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.util.Attribute;
+
 import java.net.SocketAddress;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 
 /**
@@ -68,7 +70,7 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
      */
     @Override
     public void connect(ChannelHandlerContext ctx, SocketAddress remoteAddress,
-            SocketAddress localAddress, ChannelPromise promise) throws Exception {
+                        SocketAddress localAddress, ChannelPromise promise) throws Exception {
         if (logger.isInfoEnabled()) {
             final String local = localAddress == null ? null : RemotingUtil
                     .parseSocketAddressToString(localAddress);
@@ -140,7 +142,7 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
         super.channelInactive(ctx);
         Attribute attr = ctx.channel().attr(Connection.CONNECTION);
         if (null != attr) {
-            // add reconnect task 添加连接重新连接的task
+            // add reconnect task 添加连接重新连接的task 这里只有client才会使用
             if (this.globalSwitch != null && this.globalSwitch.isOn(GlobalSwitch.CONN_RECONNECT_SWITCH)) {
                 Connection conn = (Connection) attr.get();
                 if (reconnectManager != null) {
@@ -154,7 +156,7 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object event) throws Exception {
-        System.out.println(Thread.currentThread().getName()+"ConnectionEventHandler");
+        System.out.println(Thread.currentThread().getName() + "ConnectionEventHandler");
         if (event instanceof ConnectionEventType) {
             switch ((ConnectionEventType) event) {
                 case CONNECT:
@@ -179,12 +181,12 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
         final String remoteAddress = RemotingUtil.parseRemoteAddress(ctx.channel());
         final String localAddress = RemotingUtil.parseLocalAddress(ctx.channel());
         logger.warn("ExceptionCaught in connection: local[{}], remote[{}], close the connection! Cause[{}:{}]",
-                        localAddress, remoteAddress, cause.getClass().getSimpleName(), cause.getMessage());
+                localAddress, remoteAddress, cause.getClass().getSimpleName(), cause.getMessage());
         ctx.channel().close();
     }
 
     private void onEvent(final Connection conn, final String remoteAddress,
-            final ConnectionEventType type) {
+                         final ConnectionEventType type) {
         if (this.eventListener != null) {
             this.eventExecutor.onEvent(new Runnable() {
                 @Override

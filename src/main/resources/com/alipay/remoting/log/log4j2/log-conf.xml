@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="GBK"?>
-
 <!-- Log4j 2.x config -->
 <Configuration status="OFF">
   <Appenders>
@@ -161,16 +160,11 @@
       <appender-ref ref="ERROR-APPENDER"/>
     </AsyncLogger>
 
-    <root level="${LOG_LEVEL}">
+    <root level="info">
       <appender-ref ref="CommonDefaultAppender"/>
+      <appender-ref ref="Console"/>
       <appender-ref ref="ERROR-APPENDER"/>
     </root>
   </Loggers>
 
-  <!-- loggers -->
-  <properties>
-    <Property name="LOG_LEVEL">${sys:com.alipay.remoting.client.log.level}</Property>
-    <Property name="LOG_ENCODE">${sys:com.alipay.remoting.client.log.encode}</Property>
-    <property name="LOG_HOME">${sys:logging.path}/bolt</property>
-  </properties>
 </Configuration>

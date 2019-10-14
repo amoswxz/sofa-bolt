@@ -136,8 +136,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
     @Override
     public Connection createConnection(Url url) throws Exception {
         Channel channel = doCreateConnection(url.getIp(), url.getPort(), url.getConnectTimeout());
-        Connection conn = new Connection(channel, ProtocolCode.fromBytes(url.getProtocol()),
-                url.getVersion(), url);
+        Connection conn = new Connection(channel, ProtocolCode.fromBytes(url.getProtocol()), url.getVersion(), url);
         System.out.println("断点");
         channel.pipeline().fireUserEventTriggered(ConnectionEventType.CONNECT);
         return conn;
@@ -173,13 +172,10 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
         int highWaterMark = this.confInstance.netty_buffer_high_watermark();
         if (lowWaterMark > highWaterMark) {
             throw new IllegalArgumentException(
-                    String
-                            .format(
-                                    "[client side] bolt netty high water mark {%s} should not be smaller than low water mark {%s} bytes)",
+                    String.format("[client side] bolt netty high water mark {%s} should not be smaller than low water mark {%s} bytes)",
                                     highWaterMark, lowWaterMark));
         } else {
-            logger.warn(
-                    "[client side] bolt netty low water mark is {} bytes, high water mark is {} bytes",
+            logger.warn("[client side] bolt netty low water mark is {} bytes, high water mark is {} bytes",
                     lowWaterMark, highWaterMark);
         }
         this.bootstrap.option(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(

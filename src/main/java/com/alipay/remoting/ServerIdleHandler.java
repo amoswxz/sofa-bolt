@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 
 /**
  * Server Idle handler.
- *
+ * <p>
  * In the server side, the connection will be closed if it is idle for a certain period of time.
  *
  * @author jiangping
@@ -43,11 +43,10 @@ public class ServerIdleHandler extends ChannelDuplexHandler {
      */
     @Override
     public void userEventTriggered(final ChannelHandlerContext ctx, Object evt) throws Exception {
-        System.out.println(Thread.currentThread().getName()+"ServerIdleHandler");
+        System.out.println(Thread.currentThread().getName() + "ServerIdleHandler");
         if (evt instanceof IdleStateEvent) {
             try {
-                logger.warn("Connection idle, close it from server side: {}",
-                        RemotingUtil.parseRemoteAddress(ctx.channel()));
+                logger.warn("Connection idle, close it from server side: {}", RemotingUtil.parseRemoteAddress(ctx.channel()));
                 ctx.close();
             } catch (Exception e) {
                 logger.warn("Exception caught when closing connection in ServerIdleHandler.", e);

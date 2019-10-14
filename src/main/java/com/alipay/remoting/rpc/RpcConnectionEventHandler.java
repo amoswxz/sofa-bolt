@@ -38,6 +38,7 @@ public class RpcConnectionEventHandler extends ConnectionEventHandler {
     }
 
     /**
+     * 连接关闭才会调用
      * @see com.alipay.remoting.ConnectionEventHandler#channelInactive(io.netty.channel.ChannelHandlerContext)
      */
     @Override
