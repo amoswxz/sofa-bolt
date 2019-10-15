@@ -35,8 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RpcClientDemoByMain {
 
-    static Logger logger = LoggerFactory
-            .getLogger(RpcClientDemoByMain.class);
+    static Logger logger = LoggerFactory.getLogger(RpcClientDemoByMain.class);
 
     static RpcClient client;
 
