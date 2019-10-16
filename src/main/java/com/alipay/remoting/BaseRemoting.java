@@ -56,13 +56,11 @@ public abstract class BaseRemoting {
         final int requestId = request.getId();
         try {
             conn.getChannel().writeAndFlush(request).addListener(new ChannelFutureListener() {
-
                 @Override
                 public void operationComplete(ChannelFuture f) throws Exception {
                     if (!f.isSuccess()) {
                         conn.removeInvokeFuture(requestId);
-                        future.putResponse(commandFactory.createSendFailedResponse(
-                                conn.getRemoteAddress(), f.cause()));
+                        future.putResponse(commandFactory.createSendFailedResponse(conn.getRemoteAddress(), f.cause()));
                         logger.error("Invoke send failed, id={}", requestId, f.cause());
                     }
                 }

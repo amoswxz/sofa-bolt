@@ -84,10 +84,8 @@ public abstract class AbstractRemotingServer extends AbstractLifeCycle implement
     @Override
     public void startup() throws LifeCycleException {
         super.startup();
-
         try {
             doInit();
-
             logger.warn("Prepare to start server on port {} ", port);
             if (doStart()) {
                 logger.warn("Server started on port {}", port);

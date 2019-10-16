@@ -22,6 +22,7 @@ import com.alipay.remoting.config.Configs;
 import com.alipay.remoting.rpc.protocol.RpcProtocol;
 import com.alipay.remoting.rpc.protocol.RpcProtocolV2;
 import com.alipay.remoting.util.StringUtils;
+
 import java.lang.ref.SoftReference;
 import java.util.Properties;
 
@@ -215,7 +216,7 @@ public class RpcAddressParser implements RemotingAddressParser {
         url.setConnectTimeout(connTimeout);
 
         String protocolStr = url.getProperty(RpcConfigs.URL_PROTOCOL);
-        byte protocol = RpcProtocol.PROTOCOL_CODE;
+        byte protocol = RpcProtocolV2.PROTOCOL_CODE;
         if (StringUtils.isNotBlank(protocolStr)) {
             if (StringUtils.isNumeric(protocolStr)) {
                 protocol = Byte.parseByte(protocolStr);

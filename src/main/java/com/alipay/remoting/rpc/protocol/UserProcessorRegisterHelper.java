@@ -41,8 +41,7 @@ public class UserProcessorRegisterHelper {
             if (StringUtils.isBlank(processor.interest())) {
                 throw new RuntimeException("Processor interest should not be blank!");
             }
-            UserProcessor<?> preProcessor = userProcessors.putIfAbsent(processor.interest(),
-                    processor);
+            UserProcessor<?> preProcessor = userProcessors.putIfAbsent(processor.interest(), processor);
             if (preProcessor != null) {
                 String errMsg = "Processor with interest key ["
                         + processor.interest()

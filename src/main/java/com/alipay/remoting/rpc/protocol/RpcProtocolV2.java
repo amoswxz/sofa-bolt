@@ -54,6 +54,9 @@ import com.alipay.remoting.rpc.RpcCommandFactory;
 public class RpcProtocolV2 implements Protocol {
 
     /* because the design defect, the version is neglected in RpcProtocol, so we design RpcProtocolV2 and add protocol version. */
+    /**
+     * 设计V2是因为在V1的时候没有考虑version
+     */
     public static final byte PROTOCOL_CODE = (byte) 2;
     /**
      * version 1, is the same with RpcProtocol

@@ -310,7 +310,6 @@ public class RpcServer extends AbstractRemotingServer {
         this.bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel channel) {
-                System.out.println(Thread.currentThread().getName() + "server initChannel");
                 ChannelPipeline pipeline = channel.pipeline();
                 pipeline.addLast("decoder", codec.newDecoder());
                 pipeline.addLast("encoder", codec.newEncoder());

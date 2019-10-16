@@ -82,7 +82,6 @@ public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
         }
         return DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH;
     }
-
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         in.markReaderIndex();
@@ -97,6 +96,7 @@ public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
             }
             Protocol protocol = ProtocolManager.getProtocol(protocolCode);
             if (null != protocol) {
+                //复位readIndex的指针
                 in.resetReaderIndex();
                 protocol.getDecoder().decode(ctx, in, out);
             } else {

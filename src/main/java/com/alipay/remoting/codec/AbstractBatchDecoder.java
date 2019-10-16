@@ -25,6 +25,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.DecoderException;
 import io.netty.util.internal.RecyclableArrayList;
 import io.netty.util.internal.StringUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,8 +59,8 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     public static final Cumulator MERGE_CUMULATOR = new Cumulator() {
         @Override
         public ByteBuf cumulate(ByteBufAllocator alloc,
-                ByteBuf cumulation,
-                ByteBuf in) {
+                                ByteBuf cumulation,
+                                ByteBuf in) {
             ByteBuf buffer;
             if (cumulation.writerIndex() > cumulation
                     .maxCapacity()
@@ -92,8 +93,8 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     public static final Cumulator COMPOSITE_CUMULATOR = new Cumulator() {
         @Override
         public ByteBuf cumulate(ByteBufAllocator alloc,
-                ByteBuf cumulation,
-                ByteBuf in) {
+                                ByteBuf cumulation,
+                                ByteBuf in) {
             ByteBuf buffer;
             if (cumulation.refCnt() > 1) {
                 // Expand cumulation (by replace it) when the refCnt is greater then 1 which may happen when the user
@@ -150,7 +151,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     /**
      * If {@code true} then only one message is decoded on each {@link #channelRead(ChannelHandlerContext, Object)}
      * call.
-     *
+     * <p>
      * Default is {@code false} as this has performance impacts.
      */
     public boolean isSingleDecode() {
@@ -160,7 +161,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     /**
      * If set then only one message is decoded on each {@link #channelRead(ChannelHandlerContext, Object)} call. This
      * may be useful if you need to do some protocol upgrade and want to make sure nothing is mixed up.
-     *
+     * <p>
      * Default is {@code false} as this has performance impacts.
      */
     public void setSingleDecode(boolean singleDecode) {
@@ -357,7 +358,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
      * #decode(ChannelHandlerContext, ByteBuf, List)} as long as decoding should take place.
      *
      * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
-     * @param in the {@link ByteBuf} from which to read data
+     * @param in  the {@link ByteBuf} from which to read data
      * @param out the {@link List} to which decoded messages should be added
      */
     protected void callDecode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
@@ -403,7 +404,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     /**
      * Is called one last time when the {@link ChannelHandlerContext} goes in-active. Which means the {@link
      * #channelInactive(ChannelHandlerContext)} was triggered.
-     *
+     * <p>
      * By default this will just call {@link #decode(ChannelHandlerContext, ByteBuf, List)} but sub-classes may override
      * this for some special cleanup operation.
      */
@@ -417,7 +418,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
      * has nothing to read when return from this method or till nothing was read from the input {@link ByteBuf}.
      *
      * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
-     * @param in the {@link ByteBuf} from which to read data
+     * @param in  the {@link ByteBuf} from which to read data
      * @param out the {@link List} to which decoded messages should be added
      * @throws Exception is thrown if an error accour
      */

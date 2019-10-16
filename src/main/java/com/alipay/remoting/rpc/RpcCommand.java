@@ -44,7 +44,9 @@ public abstract class RpcCommand implements RemotingCommand {
      * Code which stands for the command.
      */
     private CommandCode cmdCode;
-    /* command version */
+    /**
+     * command version
+     */
     private byte version = 0x1;
     private byte type;
     /**

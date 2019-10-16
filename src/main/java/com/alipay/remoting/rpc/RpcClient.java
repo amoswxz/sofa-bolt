@@ -128,6 +128,7 @@ public class RpcClient extends AbstractBoltClient {
         this.connectionManager.setAddressParser(this.addressParser);
         //这里去设置了netty的group属性
         this.connectionManager.startup();
+        //初始化rpc 远程配置
         this.rpcRemoting = new RpcClientRemoting(new RpcCommandFactory(), this.addressParser,
                 this.connectionManager);
         //这里就是启动ScheduledThreadPoolExecutor去检查连接是否可用，然后是否移除

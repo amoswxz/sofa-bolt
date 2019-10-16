@@ -73,6 +73,7 @@ public class Connection {
      * no reference of the current connection
      */
     private static final int NO_REFERENCE = 0;
+    //这里就是用来存储组装的请求future
     private final ConcurrentHashMap<Integer, InvokeFuture> invokeFutureMap = new ConcurrentHashMap<Integer, InvokeFuture>(
             4);
     private final ConcurrentHashMap<Integer/* id */, String/* poolKey */> id2PoolKey = new ConcurrentHashMap<Integer, String>(
